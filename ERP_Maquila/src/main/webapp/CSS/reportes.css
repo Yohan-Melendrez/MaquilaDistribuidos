@@ -1,0 +1,133 @@
+/*
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css to edit this template
+*/
+/* 
+    Created on : 21 abr 2025, 4:22:14 p.m.
+    Author     : Gabriel
+*/
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f6f6f6;
+}
+
+.barraSuperior {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #2C5D75;
+    padding: 10px 30px;
+    color: white;
+}
+
+.tituloBarra {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.tituloBarra img {
+    height: 40px;
+}
+
+.iconosBarra {
+    display: flex;
+    gap: 20px;
+}
+
+.iconoNav img {
+    width: 30px;
+    height: 30px;
+    opacity: 0.6;
+    transition: transform 0.3s, opacity 0.3s;
+}
+
+.iconoNav:hover img {
+    transform: scale(1.1);
+    opacity: 0.8;
+}
+
+.iconoNav.activo img {
+    opacity: 1;
+    filter: drop-shadow(0 0 6px #F5F2EC);
+}
+
+
+.logo {
+    height: 40px;
+    margin-right: 15px;
+}
+
+.titulo {
+    font-size: 18px;
+    font-weight: normal;
+    margin: 0;
+}
+
+.contenedorReportes {
+    padding: 20px;
+}
+
+h2 {
+    color: #2C5D75;
+}
+
+.listaReportes {
+    margin-top: 20px;
+    border-radius: 10px;
+    background-color: #F5F2EC;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 15px ;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.reporte-item {
+    background-color: white;
+    padding: 12px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid #ccc;
+    font-weight: bold;
+}
+
+.reporte-item:last-child {
+    border-bottom: none;
+}
+
+.ver-btn {
+    background-color: #2C5D75;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.ver-btn:hover {
+    background-color: #3b6d83;
+}
+
+.nuevo {
+    display: inline-block;
+    margin-top: 20px;
+    background-color: #2C5D75;
+    color: white;
+    padding: 10px 16px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: bold;
+}
+.menu{
+    display: inline-block;
+    margin-top: 20px;
+    background-color: #2C5D75;
+    color: white;
+    padding: 10px 16px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: bold;
+}
+
