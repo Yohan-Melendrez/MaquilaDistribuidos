@@ -2,55 +2,72 @@
 <!--
 Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
 Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit this template
---><!DOCTYPE html>
+-->
+<!DOCTYPE html>
 <html lang="es">
     <head>
         <meta charset="UTF-8">
-        <title>Detalle del Reporte</title>
-        <link rel="stylesheet" href="CSS/detalleReporte.css">
+        <title>Detalle del Lote</title>
+        <link rel="stylesheet" href="CSS/detalleLote.css">
+        <link rel="stylesheet" href="CSS/notificaciones.css">
+        <script src="JS/notificaciones.js" defer></script>
+        <script src="JS/detalleLote.js" defer></script>
     </head>
     <body>
-      <div class="barraSuperior">
+        <div class="barraSuperior">
             <div class="tituloBarra">
                 <img src="img/logo.png" alt="Logo" class="logo">
-                <h1 class="titulo">Enterprise Performance Management</h1>
+                <h1 class="titulo">Cleansify departamento QA</h1>
             </div>
-
             <div class="iconosBarra">
-                <a href="reportes.html" class="iconoNav activo">
-                    <img src="data:image/svg+xml;utf8,<svg width='64' height='64' viewBox='0 0 64 64' fill='none' xmlns='http://www.w3.org/2000/svg'><path d='M21.3333 45.3333C22.0889 45.3333 22.7227 45.0773 23.2347 44.5653C23.7467 44.0533 24.0018 43.4204 24 42.6667C23.9982 41.9129 23.7422 41.28 23.232 40.768C22.7218 40.256 22.0889 40 21.3333 40C20.5778 40 19.9449 40.256 19.4347 40.768C18.9244 41.28 18.6684 41.9129 18.6667 42.6667C18.6649 43.4204 18.9209 44.0542 19.4347 44.568C19.9484 45.0818 20.5813 45.3369 21.3333 45.3333ZM21.3333 34.6667C22.0889 34.6667 22.7227 34.4107 23.2347 33.8987C23.7467 33.3867 24.0018 32.7538 24 32C23.9982 31.2462 23.7422 30.6133 23.232 30.1013C22.7218 29.5893 22.0889 29.3333 21.3333 29.3333C20.5778 29.3333 19.9449 29.5893 19.4347 30.1013C18.9244 30.6133 18.6684 31.2462 18.6667 32C18.6649 32.7538 18.9209 33.3876 19.4347 33.9013C19.9484 34.4151 20.5813 34.6702 21.3333 34.6667ZM21.3333 24C22.0889 24 22.7227 23.744 23.2347 23.232C23.7467 22.72 24.0018 22.0871 24 21.3333C23.9982 20.5796 23.7422 19.9467 23.232 19.4347C22.7218 18.9227 22.0889 18.6667 21.3333 18.6667C20.5778 18.6667 19.9449 18.9227 19.4347 19.4347C18.9244 19.9467 18.6684 20.5796 18.6667 21.3333C18.6649 22.0871 18.9209 22.7209 19.4347 23.2347C19.9484 23.7484 20.5813 24.0036 21.3333 24ZM29.3333 45.3333H45.3333V40H29.3333V45.3333ZM29.3333 34.6667H45.3333V29.3333H29.3333V34.6667ZM29.3333 24H45.3333V18.6667H29.3333V24ZM13.3333 56C11.8667 56 10.6116 55.4782 9.568 54.4347C8.52444 53.3911 8.00178 52.1351 8 50.6667V13.3333C8 11.8667 8.52267 10.6116 9.568 9.568C10.6133 8.52444 11.8684 8.00178 13.3333 8H50.6667C52.1333 8 53.3893 8.52267 54.4347 9.568C55.48 10.6133 56.0018 11.8684 56 13.3333V50.6667C56 52.1333 55.4782 53.3893 54.4347 54.4347C53.3911 55.48 52.1351 56.0018 50.6667 56H13.3333ZM13.3333 50.6667H50.6667V13.3333H13.3333V50.6667Z' fill='%23F5F2EC'/></svg>" alt="Reportes">
+                <a href="atencionFallos.html" class="iconoNav">
+                    <img src="img/fallo.svg" alt="Fallo">
                 </a>
-                <a href="envioLotes.html" class="iconoNav">
-                    <img src="data:image/svg+xml;utf8,<svg width='64' height='64' viewBox='0 0 64 64' fill='none' xmlns='http://www.w3.org/2000/svg'><path d='M52.8 34.4667L11.7333 51.8C10.8444 52.1555 10 52.0773 9.2 51.5653C8.4 51.0533 8 50.3093 8 49.3333V14.6667C8 13.6889 8.4 12.9449 9.2 12.4347C10 11.9244 10.8444 11.8462 11.7333 12.2L52.8 29.5333C53.9111 30.0222 54.4667 30.8444 54.4667 32C54.4667 33.1555 53.9111 33.9778 52.8 34.4667ZM13.3333 45.3333L44.9333 32L13.3333 18.6667V28L29.3333 32L13.3333 36V45.3333Z' fill='%23FFFFFF'/></svg>" alt="Envío de Lotes">
+                <a href="lotesDisponibles.html" class="iconoNav activo">
+                    <img src="img/lotes.svg" alt="Lotes">
+                </a>
+                <a class="iconoNav">
+                    <img src="img/noti.svg" alt="Notificaciones">
                 </a>
             </div>
         </div>
-        <div class="contenedorDetalle">
-            <h2>Lote </h2>
-            <div class="detalleInfo" id="detalleInfo">
-                <!-- Los campos del reporte se cargarán dinámicamente mediante JavaScript -->
-                <!-- Estructura básica que se llenará con JS -->
-                <div class="campo">
-                    <label>Tipo de Defecto:</label>
-                    <span id="tipo"></span>
-                </div>
 
-                <div class="campo">
-                    <label class="etiqueta">Total de lotes rechazados según el tipo de defecto</label>
-                    <input type="text" class="valor">
-                </div>
+        <div class="contenedor">
+            <h2>Detalle del Lote</h2>
+            <div class="tarjeta">
+                <label for="loteId">Número de Lote</label>
+                <input type="text" id="loteId" readonly>
 
-                <div class="campo">
-                    <label class="etiqueta">Costo total de las piezas rechazadas</label>
-                    <input type="text" class="valor">
-                </div>
+                <label for="loteNombre">Nombre del Lote</label>
+                <input type="text" id="loteNombre" readonly>
 
-                <div class="campo">
-                    <label class="etiqueta">Detalles de las piezas rechazadas</label>
-                    <textarea class="valor"></textarea>
+                <label for="loteCantidad">Cantidad de Lotes</label>
+                <input type="text" id="loteCantidad" readonly>
+
+                <label for="loteDescripcion">Descripción Breve</label>
+                <textarea id="loteDescripcion" rows="3" readonly></textarea>
+            </div>
+
+            <div class="botones">
+                <button class="asignar">Asignar a Empleado</button>
+                <a href="lotesDisponibles.html" class="volver">Volver a Lotes Disponibles</a>
+            </div>
+        </div>
+        <div id="modalAsignar" class="modal">
+            <div class="modal-content">
+                <h3>Asignar a Empleado</h3>
+                <select id="selectEmpleado">
+                    <option value="" disabled selected>Selecciona un empleado</option>
+                    <option value="1">Carlos Ramírez</option>
+                    <option value="2">Ana Torres</option>
+                    <option value="3">Luis Gómez</option>
+                    <option value="4">María Pérez</option>
+                </select>
+                <div class="modal-botones">
+                    <button class="btn-cancelar" id="cancelarAsignacion">Cancelar</button>
+                    <button class="btn-confirmar" id="confirmarAsignacion">Asignar</button>
                 </div>
             </div>
-            <a href="reportes.html" class="volver">Volver a Reportes</a>
         </div>
-        <script src="JS/detalleReporte.js"></script>
     </body>
+</html>
