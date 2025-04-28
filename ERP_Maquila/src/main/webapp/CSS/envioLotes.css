@@ -107,9 +107,22 @@ h2 {
 .ver-btn:hover {
     background-color: #3b6d83;
 }
-.menu{
-    display: inline-block;
+.botones-container {
+    display: flex;
+    justify-content: space-between;
     margin-top: 20px;
+}
+
+.menu {
+    background-color: #2C5D75;
+    color: white;
+    padding: 10px 16px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.crearLote {
     background-color: #2C5D75;
     color: white;
     padding: 10px 16px;

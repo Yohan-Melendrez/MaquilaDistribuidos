@@ -1,0 +1,68 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f8f8f8;
+    margin: 0;
+    padding: 0;
+}
+
+.barraSuperior {
+    background-color: #2d6073;
+    padding: 15px;
+    color: white;
+    text-align: center;
+}
+
+.contenedorProductos {
+    padding: 20px;
+    background: #fcfcfc;
+    min-height: 400px;
+}
+
+.producto {
+    background-color: #f5f5f5;
+    margin-bottom: 10px;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 8px;
+}
+
+.producto span {
+    font-size: 16px;
+}
+
+.botones button {
+    margin: 0 5px;
+    font-size: 18px;
+    width: 30px;
+    height: 30px;
+    border: none;
+    border-radius: 5px;
+    background-color: #2d6073;
+    color: white;
+    cursor: pointer;
+}
+
+.botones button:hover {
+    background-color: #1b4050;
+}
+
+.botonCrear {
+    text-align: center;
+    padding: 20px;
+}
+
+.botonCrear button {
+    padding: 10px 20px;
+    font-size: 18px;
+    background-color: #2d6073;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.botonCrear button:hover {
+    background-color: #1b4050;
+}
