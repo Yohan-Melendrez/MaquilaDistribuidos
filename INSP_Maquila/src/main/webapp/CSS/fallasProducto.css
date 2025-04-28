@@ -1,0 +1,60 @@
+body {
+    background: black;
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.app-container {
+    width: 390px;
+    height: 100vh;
+    background: #f7f7f7;
+    overflow-y: auto;
+    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    display: flex;
+    flex-direction: column;
+}
+
+.header {
+    background-color: #2d6073;
+    color: white;
+    padding: 15px;
+    text-align: center;
+}
+
+.subtitulo {
+    font-weight: bold;
+    padding: 10px 15px;
+}
+
+.fallas-container {
+    padding: 15px;
+}
+
+.falla {
+    background: white;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.footer {
+    text-align: center;
+    padding: 15px;
+}
+
+.boton {
+    background-color: #2d6073;
+    color: white;
+    border: none;
+    padding: 10px 25px;
+    border-radius: 10px;
+    font-size: 16px;
+    cursor: pointer;
+}
