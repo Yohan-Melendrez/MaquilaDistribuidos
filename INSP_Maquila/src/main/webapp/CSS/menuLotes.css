@@ -8,8 +8,13 @@ body {
     justify-content: center;
 }
 
+.footer {
+    text-align: center;
+    padding: 15px;
+}
+
 .app-container {
-    width: 390px; /* Tamaño aproximado de un celular */
+    width: 390px; 
     height: 100vh;
     background: #f7f7f7;
     overflow-y: auto;
@@ -56,4 +61,22 @@ body {
 .loteNombre {
     margin-top: 5px;
     font-size: 14px;
+}
+
+#salirBtn {
+    margin: 20px;
+    padding: 10px 20px;
+    background-color: #2d6073;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    align-self: flex-start;
+    transition: background-color 0.2s ease-in-out;
+}
+
+#salirBtn:hover {
+    background-color: #1b4050;
 }

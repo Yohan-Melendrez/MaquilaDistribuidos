@@ -16,5 +16,13 @@ lotes.forEach(lote => {
         <img src="img/box_icon.png" alt="Caja">
         <div class="loteNombre">${lote.id}</div>
     `;
+
+    div.addEventListener('click', () => {
+        window.location.href = 'productosLote.html';
+    });
     contenedor.appendChild(div);
+
+    document.getElementById('salirBtn').addEventListener('click', () => {
+        window.location.href = 'index.html';
+    });
 });

@@ -53,7 +53,7 @@ body {
 
 .footer {
     text-align: center;
-    padding: 15px;
+    padding: 30px;
 }
 
 .boton {
@@ -63,5 +63,12 @@ body {
     padding: 10px 25px;
     border-radius: 10px;
     font-size: 16px;
+    margin-left: 15px;
     cursor: pointer;
+}
+
+.producto.seleccionado {
+    border: 2px solid #2d6073;
+    background-color: #e6f0f3;
+    border-radius: 5px;
 }

@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <title>Notificar falla</title>
     <link rel="stylesheet" href="CSS/fallasProducto.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" />
+
 </head>
 <body>
     <div class="app-container">
@@ -20,10 +22,19 @@
         </div>
 
         <div class="footer">
-            <button class="boton">Reportar</button>
-        </div>
+            <button class="boton" id="reportarBtn" disabled>Reportar</button>
+            <button class="boton" id="cancelarBtn">Cancelar</button>
+        </div>        
     </div>
 
     <script src="JS/fallasProducto.js"></script>
+
+    <div id="modalConfirmacion" class="modal">
+        <div class="modal-contenido">
+          <i class="fas fa-circle-check fa-3x fa-bounce icono-confirmacion"></i>
+          <p class="mensaje">¡Falla reportada exitosamente!</p>
+        </div>
+      </div>
+      
 </body>
 </html>
