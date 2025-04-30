@@ -10,6 +10,12 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
         <link rel="stylesheet" href="CSS/envioLotes.css">
     </head>
     <body>
+        <script>
+            const usuario = sessionStorage.getItem('usuarioERP');
+            if (!usuario) {
+                window.location.href = 'index.html'; 
+            }
+        </script>
        <div class="barraSuperior">
             <div class="tituloBarra">
                 <img src="img/logo.png" alt="Logo" class="logo">
@@ -35,6 +41,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
             <a href="principal.html" class="menu">Volver al principio</a>
             <a href="crearLote.html" class="crearLote">Crear lote</a>
         </div>
-        <script src="JS/envioLotes.js"></script>
+        <script src="JS/envioLotes.js?v=1"></script>
+
     </body>
 </html>

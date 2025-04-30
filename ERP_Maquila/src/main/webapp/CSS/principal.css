@@ -28,6 +28,30 @@ body {
   margin-right: 15px;
 }
 
+.cerrar-sesion {
+  margin-left: auto;
+  background-color: #336a81;
+  border: none;
+  color: white;
+  padding: 6px 12px;
+  font-size: 14px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.cerrar-sesion:hover {
+  background-color: #c0392b;
+}
+
+
+#nombreUsuario {
+  font-weight: bold;
+  margin-left: 10px;
+  font-size: 14px;
+  color: #d6eaf8;
+}
+
+
 .titulo {
   font-size: 18px;
   font-weight: normal;

@@ -4,19 +4,36 @@
     <meta charset="UTF-8">
     <title>Creación de lote</title>
     <link rel="stylesheet" href="CSS/crearLote.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" />
 </head>
 <body>
+    <script>
+        const usuario = sessionStorage.getItem('usuarioERP');
+        if (!usuario) {
+            window.location.href = 'index.html'; 
+        }
+    </script>
+
     <div class="barraSuperior">
         <h2>Creacion de lote</h2>
     </div>
 
+    <div class="campoNombreLote" style="padding: 20px;">
+        <label for="nombreLote">Nombre del lote:</label>
+        <input type="text" id="nombreLote" placeholder="Ej. Lote de Línea 2" style="width: 100%; padding: 8px; margin-top: 5px;">
+    </div>
+    
+    
     <div class="contenedorProductos" id="contenedorProductos">
         <!-- Aquí se llenarán los productos dinámicamente -->
     </div>
 
-    <div class="botonCrear">
+    <div class="botonesLote">
+        <a href="envioLotes.html">Volver</a>
         <button id="crearLoteBtn">Crear lote</button>
+        
     </div>
+    
 
     <script src="JS/crearLote.js"></script>
 </body>

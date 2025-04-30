@@ -1,51 +1,53 @@
-/* 
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/JavaScript.js to edit this template
- */
 document.addEventListener('DOMContentLoaded', () => {
   const listaLotes = document.getElementById('listaLotes');
 
-  // Datos simulados de lotes
-  const lotes = [
+  // Lotes fijos simulados
+  const lotesFijos = [
     { id: 101, descripcion: 'Lote A - Línea 1' },
     { id: 102, descripcion: 'Lote B - Línea 2' },
     { id: 103, descripcion: 'Lote C - Empaque' },
     { id: 104, descripcion: 'Lote D - Auditoría' },
-    { id: 105, descripcion: 'Lote E - Presentación Especial' },
+    { id: 105, descripcion: 'Lote E - Presentación Especial' }
   ];
 
-  // Crear el modal de confirmación
+  // Lotes creados desde crearLote.html
+  const lotesCreados = JSON.parse(sessionStorage.getItem("lotesCreados")) || [];
+
+  // Combinar ambos
+  const todosLosLotes = [...lotesFijos, ...lotesCreados];
+
+  // Crear modal
   const modal = document.createElement('div');
   modal.className = 'modal';
   modal.style.display = 'none';
-  
+
   const modalContent = document.createElement('div');
   modalContent.className = 'modal-content';
-  
+
   const mensaje = document.createElement('p');
-  mensaje.textContent = 'Lote enviado exitosamente.';
-  
+  mensaje.textContent = '';
+
   const closeButton = document.createElement('button');
   closeButton.className = 'close-button';
   closeButton.textContent = 'Cerrar';
   closeButton.addEventListener('click', () => {
     modal.style.display = 'none';
   });
-  
+
   modalContent.appendChild(mensaje);
   modalContent.appendChild(closeButton);
   modal.appendChild(modalContent);
   document.body.appendChild(modal);
 
-  // También cerrar el modal si se hace clic fuera del contenido
+  // Cerrar modal al hacer clic fuera del contenido
   window.addEventListener('click', (event) => {
     if (event.target === modal) {
       modal.style.display = 'none';
     }
   });
 
-  // Generar los elementos de la lista de lotes
-  lotes.forEach(lote => {
+  // Renderizar todos los lotes
+  todosLosLotes.forEach(lote => {
     const item = document.createElement('div');
     item.className = 'lote-item';
 
@@ -55,9 +57,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const botonVer = document.createElement('button');
     botonVer.className = 'ver-btn';
     botonVer.textContent = 'Enviar lote';
+    botonVer.setAttribute('aria-label', `Enviar ${lote.descripcion}`);
     botonVer.addEventListener('click', () => {
-      // Mostrar el modal con el mensaje de confirmación
-      mensaje.textContent = `Lote ${lote.descripcion} enviado exitosamente.`;
+      mensaje.textContent = `Lote "${lote.descripcion}" enviado exitosamente.`;
       modal.style.display = 'flex';
     });
 

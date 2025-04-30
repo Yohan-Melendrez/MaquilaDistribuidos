@@ -27,7 +27,6 @@ function renderizarProductos() {
     });
 }
 
-// Funciones para aumentar/disminuir cantidad
 function aumentarCantidad(index) {
     productos[index].cantidad++;
     renderizarProductos();
@@ -40,14 +39,73 @@ function disminuirCantidad(index) {
     }
 }
 
-// Función para crear el lote (puedes personalizar qué quieres que haga)
+// Crear el lote y guardar en sessionStorage, luego mostrar modal
 function crearLote() {
     const loteFinal = productos.filter(p => p.cantidad > 0);
-    console.log("Lote creado:", loteFinal);
-    alert("¡Lote creado exitosamente!");
+    if (loteFinal.length === 0) {
+        alert("Agrega al menos un producto al lote.");
+        return;
+    }
+
+    const nombreLote = document.getElementById("nombreLote").value.trim();
+    if (!nombreLote) {
+        mostrarModalError("Debes ingresar un nombre para el lote.");
+        return;
+    }
+    
+
+    const lote = {
+        id: Date.now(),
+        descripcion: nombreLote,
+        productos: loteFinal
+    };
+
+
+    const lotesGuardados = JSON.parse(sessionStorage.getItem("lotesCreados")) || [];
+    lotesGuardados.push(lote);
+    sessionStorage.setItem("lotesCreados", JSON.stringify(lotesGuardados));
+
+    mostrarModalConfirmacion();
+}
+
+// Modal animado para confirmar creación (no envío)
+function mostrarModalConfirmacion() {
+    const modal = document.createElement('div');
+    modal.className = 'modal';
+    modal.innerHTML = `
+        <div class="modal-contenido">
+            <i class="fas fa-box-open fa-bounce fa-3x" style="color:#2d6073;"></i>
+            <p>¡Lote creado exitosamente!</p>
+        </div>
+    `;
+    document.body.appendChild(modal);
+    modal.style.display = 'flex';
+
+    setTimeout(() => {
+        modal.remove();
+        window.location.href = 'envioLotes.html';
+    }, 1800);
 }
 
 document.getElementById('crearLoteBtn').addEventListener('click', crearLote);
 
 // Inicializar
 renderizarProductos();
+
+function mostrarModalError(mensaje) {
+    const modal = document.createElement('div');
+    modal.className = 'modal';
+    modal.innerHTML = `
+        <div class="modal-contenido" style="background:#ffe6e6;">
+            <i class="fas fa-triangle-exclamation fa-shake fa-2x" style="color:#c0392b;"></i>
+            <p style="color:#c0392b; font-weight:bold;">${mensaje}</p>
+        </div>
+    `;
+    document.body.appendChild(modal);
+    modal.style.display = 'flex';
+
+    setTimeout(() => {
+        modal.remove();
+    }, 1400);
+}
+
