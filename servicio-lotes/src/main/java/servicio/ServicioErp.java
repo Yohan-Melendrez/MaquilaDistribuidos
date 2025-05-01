@@ -16,7 +16,7 @@ import repositorio.LoteRepositorio;
  *
  * @author Gabriel
  */
-public class ServicioLotes {
+public class ServicioErp {
 
     private LoteRepositorio loteRepositorio;
 
@@ -38,22 +38,7 @@ public class ServicioLotes {
         return convertToDTO(lote);
     }
 
-    /**
-     * Obtiene todos los lotees
-     */
-    public List<LotesDTO> obtenerTodosLotes() {
-        List<Lotes> lotes = loteRepositorio.findAll();
-        return lotes.stream()
-                .map(this::convertToDTO)
-                .collect(Collectors.toList());
-    }
 
-    public List<LotesDTO> obtenerLotesPorInspector(Long inspectorId) {
-        List<Lotes> lots = loteRepositorio.findByInspectorAsignadoId(inspectorId);
-        return lots.stream()
-                .map(this::convertToDTO)
-                .collect(Collectors.toList());
-    }
 
     /**
      * Convierte entidad Lot a DTO

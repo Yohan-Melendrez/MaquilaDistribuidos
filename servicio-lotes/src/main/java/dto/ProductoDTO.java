@@ -4,17 +4,15 @@
  */
 package dto;
 
-import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  *
- * @author Gabriel
+ * @author abelc
  */
-public class LotesDTO {
-
-    private Integer idLote;
-    private String nombreLote;
-    private String estado;
-    private List<LoteProductoDTO> productos;
-    
+public class ProductoDTO {
+    private Integer idProducto;
+    private String nombre;
+    private String descripcion;
+    private List<Integer> erroresIds; // Solo IDs para simplificar
 }

@@ -4,17 +4,10 @@
  */
 package dto;
 
-import java.time.LocalDateTime;
-
 /**
  *
- * @author Gabriel
+ * @author abelc
  */
-public class LotesDTO {
-
-    private Integer idLote;
-    private String nombreLote;
-    private String estado;
-    private List<LoteProductoDTO> productos;
+public class LoteProductoDTO {
     
 }

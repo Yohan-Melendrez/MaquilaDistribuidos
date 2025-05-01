@@ -10,7 +10,7 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import java.util.List;
-import servicio.ServicioLotes;
+import servicio.ServicioErp;
 
 /**
  *
@@ -22,7 +22,7 @@ import servicio.ServicioLotes;
 public class LotesControl {
 
     @Inject
-    private ServicioLotes servicioLotes;
+    private ServicioErp servicioLotes;
 
     @POST
     public Response crearLote(LotesDTO loteDTO) {
@@ -30,15 +30,6 @@ public class LotesControl {
         return Response.status(Response.Status.CREATED).entity(nuevoLote).build();
     }
 
-    @GET
-    public List<LotesDTO> obtenerTodosLotes() {
-        return servicioLotes.obtenerTodosLotes();
-    }
-
-    @GET
-    @Path("/inspector/{id}")
-    public List<LotesDTO> obtenerPorInspector(@PathParam("id") Long id) {
-        return servicioLotes.obtenerLotesPorInspector(id);
-    }
+    
 
 }
