@@ -10,6 +10,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
@@ -38,6 +40,14 @@ public class Lote {
     @ManyToOne
     @JoinColumn(name = "id_inspector")
     private Inspector inspector;
+
+    @ManyToMany
+    @JoinTable(
+            name = "lote_errores",
+            joinColumns = @JoinColumn(name = "id_lote"),
+            inverseJoinColumns = @JoinColumn(name = "id_error")
+    )
+    private List<ErrorProduccion> errores = new ArrayList<>();
 
     // Getters y Setters
     public Integer getIdLote() {
@@ -79,5 +89,13 @@ public class Lote {
     public void setInspector(Inspector inspector) {
         this.inspector = inspector;
     }
-    
+
+    public List<ErrorProduccion> getErrores() {
+        return errores;
+    }
+
+    public void setErrores(List<ErrorProduccion> errores) {
+        this.errores = errores;
+    }
+
 }

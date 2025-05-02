@@ -44,7 +44,6 @@ public class Producto {
     @OneToMany(mappedBy = "producto", cascade = CascadeType.ALL)
     private List<LoteProducto> loteProductos = new ArrayList<>();
 
-    // Getters y Setters
 
     public Integer getIdProducto() {
         return idProducto;

@@ -32,13 +32,10 @@ public class ProductorNotificaciones {
         try (Connection connection = factory.newConnection();
              Channel channel = connection.createChannel()) {
 
-            // Asegurarse de que la cola existe
             channel.queueDeclare(QUEUE_NAME, false, false, false, null);
 
-            // Convertir el DTO a un arreglo de bytes
             byte[] mensaje = serializar(dto);
 
-            // Enviar el mensaje
             channel.basicPublish("", QUEUE_NAME, null, mensaje);
 
             System.out.println(" [✔] Notificación enviada a la cola: " + QUEUE_NAME);

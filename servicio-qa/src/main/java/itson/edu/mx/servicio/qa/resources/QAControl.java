@@ -10,10 +10,12 @@ import dto.NotificacionDTO;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.POST;
+import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import modelo.Lote;
 import servicio.ServicioQA;
 
 /**
@@ -31,9 +33,16 @@ public class QAControl {
     // Endpoint para recibir notificación de defectos desde inspección
     @POST
     @Path("/notificarDefecto")
-    public Response notificarDefecto(EvaluacionDefectoDTO dto) {
-        servicioQA.recibirNotificacionDefecto(dto);
-        return Response.status(Response.Status.CREATED).entity("Defecto notificado").build();
+    public Response notificarDefecto(Lote lote) {
+        servicioQA.recibirNotificacionDefecto(lote);
+        return Response.status(Response.Status.CREATED).entity("Defecto Recibido").build();
+    }
+
+    @PUT
+    @Path("/asignarNivelAtencion")
+    public Response asignarNivelAtencion(EvaluacionDefectoDTO dto) {
+        servicioQA.asignarNivelAtencion(dto);
+        return Response.ok("Nivel de atención actualizado").build();
     }
 
     // Endpoint para asignar lotes a inspectores

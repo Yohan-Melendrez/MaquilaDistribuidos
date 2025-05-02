@@ -10,8 +10,10 @@ import dto.NotificacionDTO;
 import jakarta.ejb.Stateless;
 import jakarta.inject.Inject;
 import java.time.LocalDateTime;
+import modelo.ErrorProduccion;
 import modelo.Inspector;
 import modelo.Lote;
+import modelo.LoteProducto;
 import modelo.Notificacion;
 import repositorio.InspectorRepositorio;
 import repositorio.LoteRepositorio;
@@ -37,16 +39,22 @@ public class ServicioQA {
     @Inject
     private ProductorNotificaciones productor;
 
-    public void recibirNotificacionDefecto(EvaluacionDefectoDTO dto) {
-        if (dto.isRequiereAtencionInmediata()) {
-            System.out.println("El error " + dto.getIdError() + " requiere atención inmediata.");
+    public void recibirNotificacionDefecto(Lote lote) {
+        loteRepo.save(lote);
+    }
 
-            NotificacionDTO noti = new NotificacionDTO();
-            noti.setTitulo("Error crítico detectado");
-            noti.setMensaje("El error " + dto.getIdError() + " requiere atención inmediata");
-            noti.setTipo("DEFECTO_CRITICO");
-            noti.setFechaEnvio(LocalDateTime.now());
-            productor.enviarNotificacion(noti); // Enviar a la cola de RabbitMQ
+    public void asignarNivelAtencion(EvaluacionDefectoDTO dto) {
+        Lote lote = loteRepo.findById(dto.getIdLote());
+
+        if (lote != null) {
+            for (LoteProducto loteProducto : lote.getProductos()) {
+                for (ErrorProduccion error : loteProducto.getProducto().getErrores()) {
+                    if (error.getIdError().equals(dto.getIdError())) {
+                        error.setNivelAtencion(dto.getNivelAtencion());
+                        return;
+                    }
+                }
+            }
         }
     }
 
