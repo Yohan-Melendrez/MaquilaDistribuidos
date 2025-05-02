@@ -4,29 +4,14 @@
  */
 package repositorio;
 
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
 import modelo.Inspector;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 /**
  *
  * @author Gabriel
  */
-public class InspectorRepositorio {
-
-    @PersistenceContext
-    private EntityManager em;
-
-    public Inspector findById(Integer id) {
-        return em.find(Inspector.class, id);
-    }
-
-    public void save(Inspector inspector) {
-        em.persist(inspector);
-    }
-
-    public Inspector update(Inspector inspector) {
-        return em.merge(inspector);
-    }
+@Repository
+public interface InspectorRepositorio extends JpaRepository<Inspector, Integer> {
 }
-

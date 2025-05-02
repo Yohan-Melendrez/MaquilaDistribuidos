@@ -4,29 +4,14 @@
  */
 package repositorio;
 
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
 import modelo.Lote;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 /**
  *
  * @author Gabriel
  */
-public class LoteRepositorio {
-
-    @PersistenceContext
-    private EntityManager em;
-
-    public Lote findById(Integer id) {
-        return em.find(Lote.class, id);
-    }
-
-    public void save(Lote lote) {
-        em.persist(lote);
-    }
-
-    public Lote update(Lote lote) {
-        return em.merge(lote);
-    }
-    
+@Repository
+public interface LoteRepositorio extends JpaRepository<Lote, Integer> {
 }

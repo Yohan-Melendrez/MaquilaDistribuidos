@@ -7,45 +7,49 @@ package servicio;
 import dto.AsignacionLoteDTO;
 import dto.EvaluacionDefectoDTO;
 import dto.NotificacionDTO;
-import jakarta.ejb.Stateless;
-import jakarta.inject.Inject;
-import java.time.LocalDateTime;
-import java.util.List;
 import modelo.ErrorProduccion;
 import modelo.Inspector;
 import modelo.Lote;
 import modelo.LoteProducto;
 import modelo.Notificacion;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import rabbit.ProductorNotificaciones;
 import repositorio.InspectorRepositorio;
 import repositorio.LoteRepositorio;
 import repositorio.NotificacionRepositorio;
-import rabbit.ProductorNotificaciones;
+
+import java.time.LocalDateTime;
 
 /**
  *
  * @author Gabriel
  */
-@Stateless
+@Service
+@Transactional
 public class ServicioQA {
 
-    @Inject
-    private LoteRepositorio loteRepo;
+    private final LoteRepositorio loteRepo;
+    private final InspectorRepositorio inspectorRepo;
+    private final NotificacionRepositorio notificacionRepo;
+    private final ProductorNotificaciones productor;
 
-    @Inject
-    private InspectorRepositorio inspectorRepo;
-
-    @Inject
-    private NotificacionRepositorio notificacionRepo;
-
-    @Inject
-    private ProductorNotificaciones productor;
+    public ServicioQA(LoteRepositorio loteRepo,
+            InspectorRepositorio inspectorRepo,
+            NotificacionRepositorio notificacionRepo,
+            ProductorNotificaciones productor) {
+        this.loteRepo = loteRepo;
+        this.inspectorRepo = inspectorRepo;
+        this.notificacionRepo = notificacionRepo;
+        this.productor = productor;
+    }
 
     public void recibirNotificacionDefecto(Lote lote) {
         loteRepo.save(lote);
     }
 
     public void asignarNivelAtencion(EvaluacionDefectoDTO dto) {
-        Lote lote = loteRepo.findById(dto.getIdLote());
+        Lote lote = loteRepo.findById(dto.getIdLote()).orElse(null);
 
         if (lote != null) {
             for (LoteProducto loteProducto : lote.getProductos()) {
@@ -56,19 +60,18 @@ public class ServicioQA {
                     }
                 }
             }
+            System.out.println("Asignado nivel: " + dto.getNivelAtencion()
+                    + " al error: " + dto.getIdError() + " del lote: " + dto.getIdLote());
         }
-        System.out.println("Asignado nivel: " + dto.getNivelAtencion()
-                + " al error: " + dto.getIdError() + " del lote: " + dto.getIdLote());
-
     }
 
     public void asignarLoteAInspector(AsignacionLoteDTO dto) {
-        Lote lote = loteRepo.findById(dto.getIdLote());
-        Inspector inspector = inspectorRepo.findById(dto.getIdInspector());
+        Lote lote = loteRepo.findById(dto.getIdLote()).orElse(null);
+        Inspector inspector = inspectorRepo.findById(dto.getIdInspector()).orElse(null);
 
         if (lote != null && inspector != null) {
             inspector.getLotes().add(lote);
-            inspectorRepo.update(inspector);
+            inspectorRepo.save(inspector);
 
             NotificacionDTO notiDTO = new NotificacionDTO(
                     "Nuevo lote asignado",
@@ -91,7 +94,7 @@ public class ServicioQA {
     }
 
     public void guardarNotificacion(NotificacionDTO dto) {
-        Inspector inspector = inspectorRepo.findById(dto.getIdInspector());
+        Inspector inspector = inspectorRepo.findById(dto.getIdInspector()).orElse(null);
         if (inspector != null) {
             Notificacion noti = new Notificacion();
             noti.setTitulo(dto.getTitulo());
@@ -110,8 +113,4 @@ public class ServicioQA {
         dto.setIdLote(idLote);
         asignarLoteAInspector(dto);
     }
-
-//    public List<Lote> obtenerLotesConErrores() {
-//        return loteRepo.findAllConErrores(); // o como sea que lo tengas implementado
-//    }
 }

@@ -4,20 +4,14 @@
  */
 package repositorio;
 
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
 import modelo.Notificacion;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 /**
  *
  * @author Gabriel
  */
-public class NotificacionRepositorio {
-
-    @PersistenceContext
-    private EntityManager em;
-
-    public void save(Notificacion notificacion) {
-        em.persist(notificacion);
-    }
+@Repository
+public interface NotificacionRepositorio extends JpaRepository<Notificacion, Integer> {
 }
