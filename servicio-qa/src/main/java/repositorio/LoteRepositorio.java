@@ -28,4 +28,5 @@ public class LoteRepositorio {
     public Lote update(Lote lote) {
         return em.merge(lote);
     }
+    
 }

@@ -9,12 +9,14 @@ import dto.EvaluacionDefectoDTO;
 import dto.NotificacionDTO;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import java.util.List;
 import modelo.Lote;
 import servicio.ServicioQA;
 
@@ -44,6 +46,13 @@ public class QAControl {
         servicioQA.asignarNivelAtencion(dto);
         return Response.ok("Nivel de atención actualizado").build();
     }
+
+//    @GET
+//    @Path("/lotesConErrores")
+//    public Response obtenerLotesConErrores() {
+//        List<Lote> lotes = servicioQA.obtenerLotesConErrores();
+//        return Response.ok(lotes).build(); // Se serializa a JSON automáticamente
+//    }
 
     // Endpoint para asignar lotes a inspectores
     @POST

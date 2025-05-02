@@ -10,6 +10,7 @@ import dto.NotificacionDTO;
 import jakarta.ejb.Stateless;
 import jakarta.inject.Inject;
 import java.time.LocalDateTime;
+import java.util.List;
 import modelo.ErrorProduccion;
 import modelo.Inspector;
 import modelo.Lote;
@@ -56,6 +57,9 @@ public class ServicioQA {
                 }
             }
         }
+        System.out.println("Asignado nivel: " + dto.getNivelAtencion()
+                + " al error: " + dto.getIdError() + " del lote: " + dto.getIdLote());
+
     }
 
     public void asignarLoteAInspector(AsignacionLoteDTO dto) {
@@ -106,4 +110,8 @@ public class ServicioQA {
         dto.setIdLote(idLote);
         asignarLoteAInspector(dto);
     }
+
+//    public List<Lote> obtenerLotesConErrores() {
+//        return loteRepo.findAllConErrores(); // o como sea que lo tengas implementado
+//    }
 }
