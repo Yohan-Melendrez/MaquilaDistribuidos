@@ -41,7 +41,7 @@ body {
     width: 85%;
     padding: 10px;
     margin-top: 15px;
-    background-color: #2d6073;
+    background-color: rgb(45, 96, 115);
     color: white;
     border: none;
     border-radius: 5px;
@@ -51,4 +51,13 @@ body {
 
 .login-container button:hover {
     background-color: #1b4050;
+}
+
+.logo-login{
+    width: 150px;
+    height: 150px;
+    margin-bottom: 20px;
+    border-radius: 50%;
+    box-shadow: 0 0 10px rgb(45, 96, 115);
+    
 }
