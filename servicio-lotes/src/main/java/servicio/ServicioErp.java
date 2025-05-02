@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import modelo.Lotes;
 import java.util.stream.Collectors;
+import modelo.Lote;
 import repositorio.LoteRepositorio;
 
 /**
@@ -25,7 +26,7 @@ public class ServicioErp {
      */
     @Transactional
     public LotesDTO crearLote(LotesDTO loteDTO) {
-        Lotes lote = new Lotes(
+        Lote lote = new Lote(
                 loteDTO.getCodigoLote(),
                 loteDTO.getProducto(),
                 loteDTO.getCantidadTotal()

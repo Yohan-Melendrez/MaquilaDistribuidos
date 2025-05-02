@@ -5,17 +5,17 @@
 package repositorio;
 
 import java.util.List;
-import modelo.Lotes;
+import modelo.Lote;
 
 /**
  *
  * @author Gabriel
  */
 public interface LoteRepositorio {
-    List<Lotes> findByInspectorAsignadoId(Long inspectorId);
-    Lotes findByCodigoLote(String codigoLote);
-    Lotes save(Lotes lot);
-    List<Lotes> findAll();
-    void delete(Lotes lot);
+    List<Lote> findByInspectorAsignadoId(Long inspectorId);
+    Lote findByCodigoLote(String codigoLote);
+    Lote save(Lote lot);
+    List<Lote> findAll();
+    void delete(Lote lot);
 }  
 
