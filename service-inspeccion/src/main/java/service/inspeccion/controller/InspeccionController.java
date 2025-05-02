@@ -10,7 +10,9 @@ import service.inspeccion.dtos.AsignarLoteDTO;
 import service.inspeccion.dtos.ProductoDelLoteDTO;
 import service.inspeccion.dtos.RegistroInspeccionDTO;
 import service.inspeccion.modelo.Lote;
+import service.inspeccion.repositorio.ErrorRepositorio;
 import service.inspeccion.servicio.InspeccionService;
+import service.inspeccion.modelo.Error;
 
 @RestController
 @RequestMapping("/inspeccion")
@@ -43,4 +45,16 @@ public class InspeccionController {
         List<ProductoDelLoteDTO> productos = inspeccionService.obtenerProductosDeLote(idLote);
         return ResponseEntity.ok(productos);
     }
+
+    @GetMapping("/errores")
+    public ResponseEntity<List<Error>> obtenerErrores() {
+        return ResponseEntity.ok(inspeccionService.obtenerTodosLosErrores());
+    }
+
+    @GetMapping("/errores/{idProducto}")
+    public ResponseEntity<List<Error>> obtenerErroresPorProducto(@PathVariable Integer idProducto) {
+        List<Error> errores = inspeccionService.obtenerErroresPorProducto(idProducto);
+        return ResponseEntity.ok(errores);
+    }
+
 }

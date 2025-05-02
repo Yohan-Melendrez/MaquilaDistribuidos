@@ -36,6 +36,8 @@ public class InspeccionService {
     @Autowired
     private LoteProductoRepositorio loteProductoRepo;
 
+
+
     public void registrarInspeccion(RegistroInspeccionDTO dto) {
         Lote lote = loteRepo.findById(dto.getIdLote())
                 .orElseThrow(() -> new RuntimeException("Lote no encontrado"));
@@ -93,5 +95,15 @@ public class InspeccionService {
                     rel.getCantidad());
         }).collect(Collectors.toList());
     }
+
+    public List<Error> obtenerTodosLosErrores() {
+        return errorRepo.findAll();
+    }
+    
+    public List<Error> obtenerErroresPorProducto(Integer idProducto) {
+        return errorRepo.findErroresPorProducto(idProducto);
+    }
+    
+
 
 }
