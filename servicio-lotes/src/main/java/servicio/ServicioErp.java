@@ -5,12 +5,15 @@
 package servicio;
 
 import dto.LotesDTO;
+import dto.ProductoDTO;
 import jakarta.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
-import modelo.Lotes;
 import java.util.stream.Collectors;
 import modelo.Lote;
+
+import modelo.Producto;
+
 import repositorio.LoteRepositorio;
 
 /**
@@ -26,17 +29,7 @@ public class ServicioErp {
      */
     @Transactional
     public LotesDTO crearLote(LotesDTO loteDTO) {
-        Lote lote = new Lote(
-                loteDTO.getCodigoLote(),
-                loteDTO.getProducto(),
-                loteDTO.getCantidadTotal()
-        );
 
-        lote.setFechaCreacion(LocalDateTime.now());
-        lote = loteRepositorio.save(lote);
-
-        // Notificar al sistema ERP que se ha creado un lotee
-        return convertToDTO(lote);
     }
 
 
@@ -44,14 +37,12 @@ public class ServicioErp {
     /**
      * Convierte entidad Lot a DTO
      */
-    private LotesDTO convertToDTO(Lotes lote) {
-        return new LotesDTO(
-                lote.getId(),
-                lote.getCodigoLote(),
-                lote.getProducto(),
-                lote.getCantidadTotal(),
-                lote.getFechaCreacion(),
-                lote.getInspectorAsignadoId()
-        );
+    private LotesDTO convertToDTO(Lote lote) {
+      
     }
+    
+    private ProductoDTO convertTOProdDTO(Producto producto){
+    
+    }
+    
 }
