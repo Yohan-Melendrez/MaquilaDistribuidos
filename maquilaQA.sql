@@ -34,16 +34,11 @@ CREATE TABLE lotes (
     nombre_lote VARCHAR(100) NOT NULL,
     estado VARCHAR(50) DEFAULT 'En proceso',
     id_inspector INT,
+    nivel_atencion VARCHAR(20), -- BAJO, MEDIO, ALTO, CRITICO
     FOREIGN KEY (id_inspector) REFERENCES inspectores(id_inspector)
 );
 
-CREATE TABLE lote_errores (
-    id_lote INT,
-    id_error INT,
-    PRIMARY KEY (id_lote, id_error),
-    FOREIGN KEY (id_lote) REFERENCES lotes(id_lote),
-    FOREIGN KEY (id_error) REFERENCES errores(id_error)
-);
+
 
 CREATE TABLE lote_productos (
     id_lote INT,

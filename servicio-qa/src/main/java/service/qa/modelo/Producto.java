@@ -4,6 +4,9 @@
  */
 package service.qa.modelo;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -23,6 +26,10 @@ import java.util.List;
  */
 @Entity
 @Table(name = "productos")
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "idProducto"
+)
 public class Producto {
 
     @Id
@@ -35,15 +42,14 @@ public class Producto {
 
     @ManyToMany
     @JoinTable(
-        name = "producto_errores",
-        joinColumns = @JoinColumn(name = "id_producto"),
-        inverseJoinColumns = @JoinColumn(name = "id_error")
+            name = "producto_errores",
+            joinColumns = @JoinColumn(name = "id_producto"),
+            inverseJoinColumns = @JoinColumn(name = "id_error")
     )
     private List<ErrorProduccion> errores = new ArrayList<>();
 
     @OneToMany(mappedBy = "producto", cascade = CascadeType.ALL)
     private List<LoteProducto> loteProductos = new ArrayList<>();
-
 
     public Integer getIdProducto() {
         return idProducto;

@@ -17,4 +17,11 @@ import service.qa.modelo.LoteErrorId;
  */
 public interface LoteErrorRepositorio extends JpaRepository<LoteError, LoteErrorId> {
 
+    @Query(value = """
+    SELECT DISTINCT l.* 
+    FROM lotes l
+    JOIN lote_productos lp ON l.id_lote = lp.id_lote
+    JOIN producto_errores pe ON lp.id_producto = pe.id_producto
+    """, nativeQuery = true)
+    List<Lote> findLotesConProductosConErrores();
 }

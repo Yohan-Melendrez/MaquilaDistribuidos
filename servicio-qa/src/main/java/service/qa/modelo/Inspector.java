@@ -4,6 +4,7 @@
  */
 package service.qa.modelo;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -30,6 +31,7 @@ public class Inspector {
     private Boolean activo = true;  // Si está disponible para asignación
 
     @OneToMany(mappedBy = "inspector")
+    @JsonManagedReference
     private List<Lote> lotes = new ArrayList<>();
 
     public Integer getIdInspector() {

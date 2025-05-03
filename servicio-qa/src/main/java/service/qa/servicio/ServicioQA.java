@@ -76,8 +76,11 @@ public class ServicioQA {
         Inspector inspector = inspectorRepo.findById(dto.getIdInspector()).orElse(null);
 
         if (lote != null && inspector != null) {
-            inspector.getLotes().add(lote);
-            inspectorRepo.save(inspector);
+            if (!inspector.getLotes().contains(lote)) {
+                inspector.getLotes().add(lote);
+                lote.setInspector(inspector); // clave
+                loteRepo.save(lote); // guarda el lado propietario
+            }
 
             NotificacionDTO notiDTO = new NotificacionDTO(
                     "Nuevo lote asignado",
@@ -125,9 +128,6 @@ public class ServicioQA {
     }
 
     public List<Lote> obtenerLotesConErrores() {
-        return loteErrorRepo.findAll().stream()
-                .map(LoteError::getLote)
-                .distinct()
-                .collect(Collectors.toList());
+        return loteErrorRepo.findLotesConProductosConErrores();
     }
 }

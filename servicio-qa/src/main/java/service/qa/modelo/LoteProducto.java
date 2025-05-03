@@ -4,6 +4,7 @@
  */
 package service.qa.modelo;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
@@ -16,7 +17,8 @@ import jakarta.persistence.Table;
  * @author abelc
  */
 @Entity
-@Table(name = "lotDe_productos")
+@Table(name = "lote_productos")
+
 public class LoteProducto {
 
     @EmbeddedId
@@ -25,19 +27,18 @@ public class LoteProducto {
     @ManyToOne
     @MapsId("idLote")
     @JoinColumn(name = "id_lote")
+    @JsonBackReference // Evitar recursión
     private Lote lote;
 
     @ManyToOne
     @MapsId("idProducto")
     @JoinColumn(name = "id_producto")
+    
     private Producto producto;
 
     private Integer cantidad;
 
     // Getters y Setters
-
-  
-
     public Lote getLote() {
         return lote;
     }

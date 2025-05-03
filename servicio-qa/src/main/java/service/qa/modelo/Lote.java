@@ -4,6 +4,8 @@
  */
 package service.qa.modelo;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -35,19 +37,14 @@ public class Lote {
     private String estado = "En proceso";
 
     @OneToMany(mappedBy = "lote", cascade = CascadeType.ALL)
+    
     private List<LoteProducto> productos = new ArrayList<>();
 
     @ManyToOne
     @JoinColumn(name = "id_inspector")
+    @JsonBackReference
     private Inspector inspector;
 
-    @ManyToMany
-    @JoinTable(
-            name = "lote_errores",
-            joinColumns = @JoinColumn(name = "id_lote"),
-            inverseJoinColumns = @JoinColumn(name = "id_error")
-    )
-    private List<ErrorProduccion> errores = new ArrayList<>();
 
     // Getters y Setters
     public Integer getIdLote() {
@@ -90,12 +87,12 @@ public class Lote {
         this.inspector = inspector;
     }
 
-    public List<ErrorProduccion> getErrores() {
-        return errores;
-    }
-
-    public void setErrores(List<ErrorProduccion> errores) {
-        this.errores = errores;
-    }
+//    public List<ErrorProduccion> getErrores() {
+//        return errores;
+//    }
+//
+//    public void setErrores(List<ErrorProduccion> errores) {
+//        this.errores = errores;
+//    }
 
 }
