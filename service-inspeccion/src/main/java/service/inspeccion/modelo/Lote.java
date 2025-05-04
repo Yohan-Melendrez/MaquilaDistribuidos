@@ -16,6 +16,22 @@ public class Lote {
 
     private String estado;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "nivel_atencion")
+    private NivelAtencion nivelAtencion;
+
+    @ManyToOne
+    @JoinColumn(name = "id_inspector") 
+    private Inspector inspector;
+
+    public Inspector getInspector() {
+        return inspector;
+    }
+
+    public void setInspector(Inspector inspector) {
+        this.inspector = inspector;
+    }
+
     public Integer getIdLote() {
         return idLote;
     }
@@ -38,5 +54,13 @@ public class Lote {
 
     public void setEstado(String estado) {
         this.estado = estado;
+    }
+
+    public NivelAtencion getNivelAtencion() {
+        return nivelAtencion;
+    }
+
+    public void setNivelAtencion(NivelAtencion nivelAtencion) {
+        this.nivelAtencion = nivelAtencion;
     }
 }

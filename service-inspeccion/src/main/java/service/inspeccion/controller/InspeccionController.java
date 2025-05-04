@@ -7,9 +7,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import service.inspeccion.dtos.AsignarLoteDTO;
+import service.inspeccion.dtos.NotificacionDTO;
 import service.inspeccion.dtos.ProductoDelLoteDTO;
 import service.inspeccion.dtos.RegistroInspeccionDTO;
 import service.inspeccion.modelo.Lote;
+import service.inspeccion.rabbit.ProductorNotificaciones;
 import service.inspeccion.repositorio.ErrorRepositorio;
 import service.inspeccion.servicio.InspeccionService;
 import service.inspeccion.modelo.Error;
@@ -21,6 +23,9 @@ public class InspeccionController {
 
     @Autowired
     private InspeccionService inspeccionService;
+
+    @Autowired
+    private ProductorNotificaciones productor;
 
     @PostMapping("/registrar")
     public ResponseEntity<?> registrarInspeccion(@RequestBody RegistroInspeccionDTO dto) {
@@ -55,6 +60,12 @@ public class InspeccionController {
     public ResponseEntity<List<Error>> obtenerErroresPorProducto(@PathVariable Integer idProducto) {
         List<Error> errores = inspeccionService.obtenerErroresPorProducto(idProducto);
         return ResponseEntity.ok(errores);
+    }
+
+    @PostMapping("/probar-notificacion")
+    public ResponseEntity<?> probarNotificacion(@RequestBody NotificacionDTO dto) {
+        productor.enviarNotificacion(dto);
+        return ResponseEntity.ok("Notificacion enviada a la cola: " + dto.getTitulo() + " - " + dto.getMensaje());
     }
 
 }

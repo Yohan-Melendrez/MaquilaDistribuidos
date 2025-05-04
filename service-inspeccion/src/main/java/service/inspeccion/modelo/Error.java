@@ -16,6 +16,10 @@ public class Error {
     @Column(name = "costo_usd")
     private Double costoUsd;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "nivel_atencion")
+    private NivelAtencion nivelAtencion;
+
     public Integer getIdError() {
         return idError;
     }
@@ -46,5 +50,13 @@ public class Error {
 
     public void setCostoUsd(Double costoUsd) {
         this.costoUsd = costoUsd;
+    }
+
+    public NivelAtencion getNivelAtencion() {
+        return nivelAtencion;
+    }
+
+    public void setNivelAtencion(NivelAtencion nivelAtencion) {
+        this.nivelAtencion = nivelAtencion;
     }
 }
