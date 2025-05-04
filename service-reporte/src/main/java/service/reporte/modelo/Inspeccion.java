@@ -22,11 +22,13 @@ public class Inspeccion {
 
     @ManyToOne
     @JoinColumn(name = "id_error")
-    private Error error;
+    private ErrorDefecto errorDefecto;
 
     private String inspector;
 
     private LocalDateTime fecha;
+    
+    private String detalle_Error;
 
     @PrePersist
     public void setFechaPorDefecto() {
@@ -57,12 +59,12 @@ public class Inspeccion {
         this.producto = producto;
     }
 
-    public Error getError() {
-        return error;
+    public ErrorDefecto getError() {
+        return errorDefecto;
     }
 
-    public void setError(Error error) {
-        this.error = error;
+    public void setError(ErrorDefecto errorDefecto) {
+        this.errorDefecto = errorDefecto;
     }
 
     public String getInspector() {
@@ -80,4 +82,22 @@ public class Inspeccion {
     public void setFecha(LocalDateTime fecha) {
         this.fecha = fecha;
     }
+
+    public ErrorDefecto getErrorDefecto() {
+        return errorDefecto;
+    }
+
+    public void setErrorDefecto(ErrorDefecto errorDefecto) {
+        this.errorDefecto = errorDefecto;
+    }
+
+    public String getDetalle_Error() {
+        return detalle_Error;
+    }
+
+    public void setDetalle_Error(String detalle_Error) {
+        this.detalle_Error = detalle_Error;
+    }
+    
+    
 }

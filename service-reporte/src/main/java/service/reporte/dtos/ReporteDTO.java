@@ -9,6 +9,7 @@ package service.reporte.dtos;
  * @author USER
  */
 public class ReporteDTO {
+    private Long id;
     private String tipoDefecto;
     private Long totalPiezasRechazadas;
     private Double costoTotalUsd;
@@ -17,11 +18,27 @@ public class ReporteDTO {
     public ReporteDTO() {
     }
 
+    public ReporteDTO(Long id, String tipoDefecto, Long totalPiezasRechazadas, Double costoTotalUsd, String detallesRechazo) {
+        this.id = id;
+        this.tipoDefecto = tipoDefecto;
+        this.totalPiezasRechazadas = totalPiezasRechazadas;
+        this.costoTotalUsd = costoTotalUsd;
+        this.detallesRechazo = detallesRechazo;
+    }
+
     public ReporteDTO(String tipoDefecto, Long totalPiezasRechazadas, Double costoTotalUsd, String detallesRechazo) {
         this.tipoDefecto = tipoDefecto;
         this.totalPiezasRechazadas = totalPiezasRechazadas;
         this.costoTotalUsd = costoTotalUsd;
         this.detallesRechazo = detallesRechazo;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getTipoDefecto() {

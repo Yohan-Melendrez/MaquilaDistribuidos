@@ -17,8 +17,11 @@ import service.reporte.modelo.Reporte;
  * @author USER
  */
 public interface InspeccionRepository extends JpaRepository<Inspeccion, Integer> {
-    @Query("SELECT i FROM Inspeccion i WHERE i.error.nombre = :tipoError AND i.fecha BETWEEN :inicio AND :fin")
-    List<Inspeccion> findByErrorAndFechaBetween(@Param("tipoError") String tipoError,
+
+    @Query("SELECT i FROM Inspeccion i WHERE i.fecha BETWEEN :inicio AND :fin AND i.errorDefecto.id = :idError")
+    List<Inspeccion> findByFechaAndTipoError(
             @Param("inicio") LocalDateTime inicio,
-            @Param("fin") LocalDateTime fin);
+            @Param("fin") LocalDateTime fin,
+            @Param("idError") Integer idError
+    );
 }

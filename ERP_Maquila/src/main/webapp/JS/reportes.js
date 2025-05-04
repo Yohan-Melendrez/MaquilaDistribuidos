@@ -25,8 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
         botonVer.textContent = 'Ver';
         botonVer.addEventListener('click', () => {
           // Puedes almacenar el reporte en localStorage o pasar datos por URL si implementas un detalle
-          localStorage.setItem('reporteSeleccionado', JSON.stringify(reporte));
-          window.location.href = 'detalleReporte.html';
+          window.location.href = `detalleReporte.html?id=${reporte.id}`;
         });
 
         item.appendChild(nombre);
