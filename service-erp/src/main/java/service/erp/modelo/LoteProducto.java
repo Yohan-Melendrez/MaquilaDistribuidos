@@ -11,14 +11,15 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.MapsId;
 import jakarta.persistence.Table;
+import java.io.Serializable;
 
 /**
  *
  * @author abelc
  */
 @Entity
-@Table(name = "lote_productos")
-public class LoteProducto {
+@Table(name = "lote_producto")
+public class LoteProducto implements Serializable{
  @EmbeddedId
     private LoteProductoId id = new LoteProductoId();
 

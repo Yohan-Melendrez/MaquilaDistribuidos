@@ -4,16 +4,26 @@
  */
 package service.erp.dtos;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  *
  * @author abelc
  */
-public class CrearLoteDTO {
+public class CrearLoteDTO implements Serializable{
+    private Integer idLote;
     private String nombreLote;
+    private String estado;
     private List<LoteItemDTO> productos;
-    public String getNombreLote;
+
+    public Integer getIdLote() {
+        return idLote;
+    }
+
+    public void setIdLote(Integer idLote) {
+        this.idLote = idLote;
+    }
 
     public String getNombreLote() {
         return nombreLote;
@@ -23,6 +33,14 @@ public class CrearLoteDTO {
         this.nombreLote = nombreLote;
     }
 
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
+
     public List<LoteItemDTO> getProductos() {
         return productos;
     }
@@ -30,4 +48,5 @@ public class CrearLoteDTO {
     public void setProductos(List<LoteItemDTO> productos) {
         this.productos = productos;
     }
+
 }
