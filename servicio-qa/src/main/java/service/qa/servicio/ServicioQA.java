@@ -2,6 +2,7 @@ package service.qa.servicio;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Lazy;
@@ -18,9 +19,11 @@ import service.qa.dto.LotesDTO;
 import service.qa.dto.NotificacionDTO;
 import service.qa.modelo.Inspector;
 import service.qa.modelo.Lote;
+import service.qa.modelo.LoteInspector;
 import service.qa.modelo.Notificacion;
 import service.qa.rabbit.ProductorNotificaciones;
 import service.qa.repositorio.InspectorRepositorio;
+import service.qa.repositorio.LoteInspectorRepositorio;
 import service.qa.repositorio.LoteRepositorio;
 import service.qa.repositorio.NotificacionRepositorio;
 
@@ -38,12 +41,15 @@ public class ServicioQA {
 
     @Value("${erp.service.url:http://localhost:8082/erp}")
     private String erpServiceUrl;
+    
+    @Autowired
+    private LoteInspectorRepositorio loteInspectorRepo;
 
     public ServicioQA(
-        LoteRepositorio loteRepo,
-        InspectorRepositorio inspectorRepo,
-        NotificacionRepositorio notificacionRepo,
-        @Lazy ProductorNotificaciones productor
+            LoteRepositorio loteRepo,
+            InspectorRepositorio inspectorRepo,
+            NotificacionRepositorio notificacionRepo,
+            @Lazy ProductorNotificaciones productor
     ) {
         this.loteRepo = loteRepo;
         this.inspectorRepo = inspectorRepo;
@@ -79,22 +85,28 @@ public class ServicioQA {
 
     public void asignarLoteAInspector(AsignacionLoteDTO dto) {
         if (dto.getIdLote() == null || dto.getIdInspector() == null) {
-          throw new IllegalArgumentException("El ID del lote o del inspector no puede ser null");
+            throw new IllegalArgumentException("El ID del lote o del inspector no puede ser null");
         }
-    
-        // 1) Levantar ambas entidades
+
         Lote lote = loteRepo.findById(dto.getIdLote())
-            .orElseThrow(() -> new RuntimeException("No se encontró el lote " + dto.getIdLote()));
+                .orElseThrow(() -> new RuntimeException("No se encontró el lote " + dto.getIdLote()));
         Inspector insp = inspectorRepo.findById(dto.getIdInspector())
-            .orElseThrow(() -> new RuntimeException("No se encontró el inspector " + dto.getIdInspector()));
-    
-        // 2) Asignar y desactivar
+                .orElseThrow(() -> new RuntimeException("No se encontró el inspector " + dto.getIdInspector()));
+
+        // Guardar asignación en lote_inspector
+        LoteInspector li = new LoteInspector();
+        li.setLote(lote);
+        li.setInspector(insp.getNombre());
+        loteInspectorRepo.save(li);
+
+        // Asignar inspector al lote principal (opcional si quieres guardar última asignación)
         lote.setInspector(insp);
         loteRepo.save(lote);
-    
+
+        // Desactivar inspector
         insp.setActivo(false);
         inspectorRepo.save(insp);
-      }
+    }
 
     public void guardarNotificacion(NotificacionDTO dto) {
         Notificacion noti = new Notificacion();
@@ -104,7 +116,7 @@ public class ServicioQA {
         noti.setFechaEnvio(dto.getFechaEnvio());
         if (dto.getIdInspector() != null) {
             inspectorRepo.findById(dto.getIdInspector())
-                .ifPresent(noti::setInspector);
+                    .ifPresent(noti::setInspector);
         }
         notificacionRepo.save(noti);
     }
@@ -118,7 +130,7 @@ public class ServicioQA {
     public List<LotesDTO> obtenerLotesConErrores() {
         return loteRepo.findAll().stream()
                 .filter(l -> l.getProductos().stream()
-                        .anyMatch(lp -> !lp.getProducto().getErrores().isEmpty()))
+                .anyMatch(lp -> !lp.getProducto().getErrores().isEmpty()))
                 .map(LotesDTO::new)
                 .collect(Collectors.toList());
     }
@@ -126,12 +138,12 @@ public class ServicioQA {
     public List<NotificacionDTO> obtenerNotificaciones() {
         return notificacionRepo.findAll().stream()
                 .map(n -> new NotificacionDTO(
-                        n.getTitulo(),
-                        n.getMensaje(),
-                        n.getTipo(),
-                        n.getFechaEnvio(),
-                        n.getInspector() != null ? n.getInspector().getIdInspector() : null
-                ))
+                n.getTitulo(),
+                n.getMensaje(),
+                n.getTipo(),
+                n.getFechaEnvio(),
+                n.getInspector() != null ? n.getInspector().getIdInspector() : null
+        ))
                 .collect(Collectors.toList());
     }
 
@@ -140,4 +152,10 @@ public class ServicioQA {
                 .filter(Inspector::getActivo)
                 .collect(Collectors.toList());
     }
+    public LotesDTO obtenerLotePorId(Integer id) {
+    return loteRepo.findById(id)
+                   .map(LotesDTO::new)
+                   .orElse(null);
+}
+
 }

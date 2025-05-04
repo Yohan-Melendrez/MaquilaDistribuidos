@@ -54,7 +54,14 @@ btnCancelar.addEventListener('click', () => {
   window.location.href = 'productosLote.html';
 });
 
+let enviado = false;
+
 btnReportar.addEventListener('click', () => {
+  if (enviado) return; // prevenir reenvío
+  enviado = true;
+  btnReportar.disabled = true;
+  console.log('Enviando reporte...');
+
   const seleccionadas = Array
     .from(document.querySelectorAll('.falla-checkbox:checked'))
     .map(cb => parseInt(cb.dataset.id, 10));
@@ -73,12 +80,13 @@ btnReportar.addEventListener('click', () => {
   })
     .then(res => {
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      // aquí muestras tu modal de “Falla reportada…”
       document.getElementById('modalConfirmacion').style.display = 'flex';
       setTimeout(() => window.location.href = 'menuLotes.html', 1200);
     })
     .catch(err => {
       console.error('Error al reportar falla:', err);
       alert('Error al registrar inspección.');
+      enviado = false; // permitir reintento en caso de error
+      btnReportar.disabled = false;
     });
 });

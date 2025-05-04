@@ -42,9 +42,9 @@ public class QAControl {
     }
 
     @PostMapping("/asignarLote")
-    public ResponseEntity<?> asignarLote(@RequestBody AsignacionLoteDTO dto) {
+    public ResponseEntity<Map<String, String>> asignarLote(@RequestBody AsignacionLoteDTO dto) {
         servicioQA.asignarLoteAInspector(dto);
-        return ResponseEntity.ok("Lote asignado en QA");
+        return ResponseEntity.ok(Map.of("mensaje", "Lote asignado en QA"));
     }
 
     // Endpoint para guardar una notificación manual
@@ -89,4 +89,15 @@ public class QAControl {
     public List<Inspector> obtenerInspectoresActivos() {
         return servicioQA.obtenerInspectoresActivos();
     }
+
+    @GetMapping("/lote/{id}")
+    public ResponseEntity<LotesDTO> obtenerLotePorId(@PathVariable Integer id) {
+        LotesDTO loteDTO = servicioQA.obtenerLotePorId(id);
+        if (loteDTO != null) {
+            return ResponseEntity.ok(loteDTO);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
 }

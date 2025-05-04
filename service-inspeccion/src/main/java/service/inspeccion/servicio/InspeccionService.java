@@ -85,7 +85,7 @@ public class InspeccionService {
         noti.setNombreInspector(inspector.getNombre());
 
         // --- 1) RabbitMQ local ---
-        productorNotificaciones.enviarNotificacion(noti);
+//        productorNotificaciones.enviarNotificacion(noti);
 
         // --- 2) POST a QA para que registre la notificación ---
         try {

@@ -110,8 +110,16 @@ document.addEventListener('DOMContentLoaded', () => {
                     botonDetalles.className = 'ver-btn';
                     botonDetalles.textContent = 'Ver detalles';
                     botonDetalles.addEventListener('click', () => {
-                        localStorage.setItem('loteSeleccionado', JSON.stringify(lote));
-                        window.location.href = 'detalleLote.html';
+                        fetch(`http://localhost:8081/qa/lote/${lote.idLote}`) // Supongamos que existe este endpoint
+                                .then(resp => resp.ok ? resp.json() : Promise.reject('No se pudo cargar el lote'))
+                                .then(data => {
+                                    localStorage.setItem('loteSeleccionado', JSON.stringify(data));
+                                    window.location.href = 'detalleLote.html';
+                                })
+                                .catch(err => {
+                                    console.error(err);
+                                    mostrarModalError("Error al cargar el lote", err);
+                                });
                     });
 
                     botonesContainer.appendChild(botonNotificar);
@@ -144,7 +152,7 @@ function crearModalNotificacion() {
 
     // Asegúrate de que el modal tenga la estructura correcta
     Object.assign(modal.style, {
-        display: 'none',  // Inicialmente oculto
+        display: 'none', // Inicialmente oculto
         position: 'fixed',
         top: '0',
         left: '0',
@@ -165,7 +173,7 @@ function crearModalNotificacion() {
         padding: '20px',
         borderRadius: '10px',
         maxWidth: '400px',
-        width: '90%',  // Asegura que el modal no se vea muy pequeño en pantallas pequeñas
+        width: '90%', // Asegura que el modal no se vea muy pequeño en pantallas pequeñas
         boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
         textAlign: 'center'
     });
