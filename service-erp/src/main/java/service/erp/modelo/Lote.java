@@ -13,6 +13,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,22 +22,20 @@ import java.util.List;
  * @author abelc
  */
 @Entity
-@Table(name = "lotes")
 public class Lote {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idLote;
-    @Column(name = "nombre_lote")
+
     private String nombreLote;
-    
-    private String estado = "En proceso";
+    private String estado;
 
     @OneToMany(mappedBy = "lote", cascade = CascadeType.ALL)
-    @JsonManagedReference
     private List<LoteProducto> productos = new ArrayList<>();
 
     // Getters y setters
+
     public Integer getIdLote() {
         return idLote;
     }
@@ -67,6 +66,6 @@ public class Lote {
 
     public void setProductos(List<LoteProducto> productos) {
         this.productos = productos;
-
     }
+    
 }

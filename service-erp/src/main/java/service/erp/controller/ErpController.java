@@ -43,4 +43,10 @@ public class ErpController {
         erpService.crearLote(dto);
         return ResponseEntity.ok("Lote creado correctamente");
     }
+
+    @PostMapping("/lotes/{id}/enviar")
+    public ResponseEntity<?> enviarLoteAQa(@PathVariable Integer id) {
+        erpService.enviarLoteAQa(id);
+        return ResponseEntity.ok("Lote enviado a QA");
+    }
 }
