@@ -4,6 +4,8 @@
  */
 package dto;
 
+import modelo.NivelAtencion;
+
 /**
  *
  * @author Gabriel
@@ -11,7 +13,8 @@ package dto;
 public class EvaluacionDefectoDTO {
 
     private Integer idError;
-    private boolean requiereAtencionInmediata;
+    private Integer idLote;
+    private NivelAtencion nivelAtencion;
 
     public Integer getIdError() {
         return idError;
@@ -21,12 +24,19 @@ public class EvaluacionDefectoDTO {
         this.idError = idError;
     }
 
-    public boolean isRequiereAtencionInmediata() {
-        return requiereAtencionInmediata;
+    public Integer getIdLote() {
+        return idLote;
     }
 
-    public void setRequiereAtencionInmediata(boolean requiereAtencionInmediata) {
-        this.requiereAtencionInmediata = requiereAtencionInmediata;
+    public void setIdLote(Integer idLote) {
+        this.idLote = idLote;
     }
 
+    public NivelAtencion getNivelAtencion() {
+        return nivelAtencion;
+    }
+
+    public void setNivelAtencion(NivelAtencion nivelAtencion) {
+        this.nivelAtencion = nivelAtencion;
+    }
 }
