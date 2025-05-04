@@ -1,6 +1,8 @@
 // Lote.java
 package service.inspeccion.modelo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -21,6 +23,7 @@ public class Lote {
     private NivelAtencion nivelAtencion;
 
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "id_inspector") 
     private Inspector inspector;
 

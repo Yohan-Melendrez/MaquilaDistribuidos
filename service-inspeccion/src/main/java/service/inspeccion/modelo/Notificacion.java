@@ -2,8 +2,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package modelo;
+package service.inspeccion.modelo;
 
+import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -16,6 +17,7 @@ import java.time.LocalDateTime;
  *
  * @author Gabriel
  */
+@Entity
 @Table(name = "notificaciones")
 public class Notificacion {
 
@@ -24,6 +26,8 @@ public class Notificacion {
     private Integer id;
 
     private String titulo;  // Ej: "Nuevo lote asignado", "Defecto crítico"
+
+    private String origen;
 
     private String mensaje;
 
@@ -93,4 +97,11 @@ public class Notificacion {
         this.inspector = inspector;
     }
 
+    public String getOrigen() {
+        return origen;
+    }
+
+    public void setOrigen(String origen) {
+        this.origen = origen;
+    }
 }

@@ -86,7 +86,7 @@ public class InspeccionService {
             noti.setIdInspector(lote.getInspector().getIdInspector());
         }
         noti.setFechaEnvio(LocalDateTime.now());
-
+        noti.setOrigen("INSPECCION");
 
         productorNotificaciones.enviarNotificacion(noti);
 

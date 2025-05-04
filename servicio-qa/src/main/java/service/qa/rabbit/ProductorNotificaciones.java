@@ -1,32 +1,25 @@
 package service.qa.rabbit;
 
-import service.qa.dto.NotificacionDTO;
-import org.springframework.amqp.core.AmqpTemplate;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
+import service.qa.dto.NotificacionDTO;
 
-/**
- * Clase responsable de enviar notificaciones a RabbitMQ usando Spring Boot.
- */
 @Service
 public class ProductorNotificaciones {
 
-    private final AmqpTemplate amqpTemplate;
+    private final RabbitTemplate rabbitTemplate;
 
     @Value("${rabbitmq.queue}")
     private String queueName;
 
-    public ProductorNotificaciones(AmqpTemplate amqpTemplate) {
-        this.amqpTemplate = amqpTemplate;
+    public ProductorNotificaciones(@Lazy RabbitTemplate rabbitTemplate) {
+        this.rabbitTemplate = rabbitTemplate;
     }
 
-    /**
-     * Envía un objeto NotificacionDTO a la cola de RabbitMQ.
-     *
-     * @param dto el objeto NotificacionDTO a enviar
-     */
     public void enviarNotificacion(NotificacionDTO dto) {
-        amqpTemplate.convertAndSend(queueName, dto);
-        System.out.println(" [✔] Notificación enviada a la cola: " + queueName);
+        rabbitTemplate.convertAndSend(queueName, dto);
+        System.out.println("✅ Notificación enviada a la cola: " + queueName);
     }
 }

@@ -24,7 +24,7 @@ import service.qa.rabbit.ProductorNotificaciones;
 import service.qa.repositorio.InspectorRepositorio;
 import service.qa.repositorio.LoteRepositorio;
 import service.qa.repositorio.NotificacionRepositorio;
-
+import org.springframework.context.annotation.Lazy;
 import service.qa.modelo.Notificacion;
 
 /**
@@ -49,15 +49,19 @@ public class ServicioQA {
     @Value("${erp.integration.enabled:false}")
     private boolean erpIntegrationEnabled;
 
-    public ServicioQA(LoteRepositorio loteRepo, InspectorRepositorio inspectorRepo,
-            NotificacionRepositorio notificacionRepo, ProductorNotificaciones productor) {
-        this.loteRepo = loteRepo;
-        this.inspectorRepo = inspectorRepo;
-        this.notificacionRepo = notificacionRepo;
-        this.productor = productor;
-        this.restTemplate = new RestTemplate();
+  
 
-    }
+public ServicioQA(LoteRepositorio loteRepo,
+                  InspectorRepositorio inspectorRepo,
+                  NotificacionRepositorio notificacionRepo,
+                  @Lazy ProductorNotificaciones productor) {
+    this.loteRepo = loteRepo;
+    this.inspectorRepo = inspectorRepo;
+    this.notificacionRepo = notificacionRepo;
+    this.productor = productor;
+    this.restTemplate = new RestTemplate();
+}
+
 
     public void recibirNotificacionDefecto(Lote lote) {
         loteRepo.save(lote);
@@ -139,6 +143,7 @@ public class ServicioQA {
         noti.setTipo(notiDTO.getTipo());
         noti.setFechaEnvio(notiDTO.getFechaEnvio());
         noti.setInspector(inspector);
+        noti.setOrigen("QA");
         notificacionRepo.save(noti);
     }
 
@@ -153,9 +158,11 @@ public class ServicioQA {
             Inspector inspector = inspectorRepo.findById(dto.getIdInspector()).orElse(null);
             noti.setInspector(inspector); // si no hay, se guarda null
         }
+        noti.setOrigen(dto.getOrigen());
 
         notificacionRepo.save(noti);
-        productor.enviarNotificacion(dto); // sigue notificando en tiempo real
+        if("QA".equalsIgnoreCase(dto.getOrigen()))
+        {productor.enviarNotificacion(dto);} 
     }
 
     public void asignarLote(Integer idLote, Integer idInspector) {

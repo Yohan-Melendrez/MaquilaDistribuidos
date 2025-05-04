@@ -6,6 +6,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "BasicApplication",
+            "request": "launch",
+            "mainClass": "service.qa.BasicApplication",
+            "projectName": "servicio-qa"
+        },
+        {
+            "type": "java",
             "name": "ServiceInspeccionApplication",
             "request": "launch",
             "mainClass": "service.inspeccion.ServiceInspeccionApplication",

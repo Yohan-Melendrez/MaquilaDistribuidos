@@ -14,6 +14,7 @@ import java.time.LocalDateTime;
 public class NotificacionDTO implements Serializable {
 
     private String titulo;
+    private String origen;
     private String mensaje;
     private String tipo;
     private LocalDateTime fechaEnvio;
@@ -68,6 +69,14 @@ public class NotificacionDTO implements Serializable {
 
     public void setIdInspector(Integer idInspector) {
         this.idInspector = idInspector;
+    }
+
+    public String getOrigen() {
+        return origen;
+    }
+
+    public void setOrigen(String origen) {
+        this.origen = origen;
     }
 
 }

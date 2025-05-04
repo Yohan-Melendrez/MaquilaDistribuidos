@@ -6,6 +6,7 @@ const btnCancelar = document.getElementById('cancelarBtn');
 const idLote = sessionStorage.getItem("idLote");
 const idProducto = sessionStorage.getItem("idProducto");
 const inspector = sessionStorage.getItem("inspector");
+const origen = "INSPECCION";
 
 if (!idLote || !idProducto || !inspector) {
     alert("Faltan datos para registrar la inspección.");
@@ -49,7 +50,8 @@ btnReportar.addEventListener('click', () => {
         idLote: parseInt(idLote),
         idProducto: parseInt(idProducto),
         inspector,
-        erroresSeleccionados
+        erroresSeleccionados,
+        origen
     };
 
     fetch("http://localhost:9090/inspeccion/registrar", {
