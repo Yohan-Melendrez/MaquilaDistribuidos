@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import service.qa.dto.LotesDTO;
 import service.qa.servicio.ServicioQA;
 
 @RestController
@@ -50,14 +51,30 @@ public class QAControl {
     }
 
     @GetMapping("/lotes")
-    public ResponseEntity<List<Lote>> obtenerTodosLotes() {
-        List<Lote> lotes = servicioQA.obtenerTodosLosLotes();
+    public ResponseEntity<List<LotesDTO>> obtenerTodosLotes() {
+        List<LotesDTO> lotes = servicioQA.obtenerTodosLosLotes();
         return ResponseEntity.ok(lotes);
     }
 
     @GetMapping("/lotesConErrores")
-    public ResponseEntity<List<Lote>> obtenerLotesConErrores() {
-        List<Lote> lotes = servicioQA.obtenerLotesConErrores();
+    public ResponseEntity<List<LotesDTO>> obtenerLotesConErrores() {
+        List<LotesDTO> lotes = servicioQA.obtenerLotesConErrores();
         return ResponseEntity.ok(lotes);
+    }
+
+    @PostMapping("/externa")
+    public ResponseEntity<String> recibirNotificacionExterna(@RequestBody NotificacionDTO dto) {
+        servicioQA.guardarNotificacion(dto);
+        return ResponseEntity.ok("Notificación recibida y guardada.");
+    }
+
+    @GetMapping("/notificaciones")
+    public ResponseEntity<List<NotificacionDTO>> obtenerNotificaciones() {
+        return ResponseEntity.ok(servicioQA.obtenerNotificaciones());
+    }
+
+    @GetMapping
+    public ResponseEntity<?> obtenerTodas() {
+        return ResponseEntity.ok(servicioQA.obtenerNotificaciones());
     }
 }

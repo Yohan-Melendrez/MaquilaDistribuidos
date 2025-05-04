@@ -9,14 +9,18 @@ package service.qa.rabbit;
  * @author Gabriel
  */
 import org.springframework.amqp.core.Queue;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class RabbitMQConfig {
 
+    @Value("${cola.notificaciones}")
+    private String nombreCola;
+
     @Bean
     public Queue notificacionesQueue() {
-        return new Queue("notificacionesQueue", false);
+        return new Queue(nombreCola, true); // true = durable
     }
 }

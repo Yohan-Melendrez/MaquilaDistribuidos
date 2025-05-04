@@ -18,6 +18,4 @@ import service.qa.modelo.Lote;
 @Repository
 public interface InspectorRepositorio extends JpaRepository<Inspector, Integer> {
 
-    @Query("SELECT DISTINCT le.lote FROM LoteError le")
-    List<Lote> findLotesConErrores();
 }

@@ -39,7 +39,6 @@ CREATE TABLE lotes (
 );
 
 
-
 CREATE TABLE lote_productos (
     id_lote INT,
     id_producto INT,

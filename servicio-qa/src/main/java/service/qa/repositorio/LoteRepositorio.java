@@ -4,8 +4,10 @@
  */
 package service.qa.repositorio;
 
+import java.util.List;
 import service.qa.modelo.Lote;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -14,4 +16,6 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface LoteRepositorio extends JpaRepository<Lote, Integer> {
+
+  
 }

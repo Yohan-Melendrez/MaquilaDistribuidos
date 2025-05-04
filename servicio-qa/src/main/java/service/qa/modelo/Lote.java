@@ -7,7 +7,10 @@ package service.qa.modelo;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -37,14 +40,17 @@ public class Lote {
     private String estado = "En proceso";
 
     @OneToMany(mappedBy = "lote", cascade = CascadeType.ALL)
-    
-    private List<LoteProducto> productos = new ArrayList<>();
 
+    private List<LoteProducto> productos = new ArrayList<>();
+    
+    @Enumerated(EnumType.STRING)
+    @Column(name = "nivel_atencion")
+    private NivelAtencion nivelAtencion;
+    
     @ManyToOne
     @JoinColumn(name = "id_inspector")
     @JsonBackReference
     private Inspector inspector;
-
 
     // Getters y Setters
     public Integer getIdLote() {
@@ -95,4 +101,12 @@ public class Lote {
 //        this.errores = errores;
 //    }
 
+    public NivelAtencion getNivelAtencion() {
+        return nivelAtencion;
+    }
+
+    public void setNivelAtencion(NivelAtencion nivelAtencion) {
+        this.nivelAtencion = nivelAtencion;
+    }
+    
 }

@@ -7,11 +7,17 @@ package service.qa.servicio;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import service.qa.dto.EvaluacionDefectoDTO;
 import service.qa.modelo.Lote;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.RestTemplate;
 import service.qa.dto.AsignacionLoteDTO;
+import service.qa.dto.LotesDTO;
 import service.qa.dto.NotificacionDTO;
 import service.qa.modelo.Inspector;
 import service.qa.rabbit.ProductorNotificaciones;
@@ -19,10 +25,7 @@ import service.qa.repositorio.InspectorRepositorio;
 import service.qa.repositorio.LoteRepositorio;
 import service.qa.repositorio.NotificacionRepositorio;
 
-import service.qa.modelo.LoteError;
-import service.qa.modelo.LoteErrorId;
 import service.qa.modelo.Notificacion;
-import service.qa.repositorio.LoteErrorRepositorio;
 
 /**
  *
@@ -36,16 +39,24 @@ public class ServicioQA {
     private final InspectorRepositorio inspectorRepo;
     private final NotificacionRepositorio notificacionRepo;
     private final ProductorNotificaciones productor;
-    private LoteErrorRepositorio loteErrorRepo;
+    private final RestTemplate restTemplate;
+
+    // URL del servicio ERP para integración
+    @Value("${erp.service.url:http://localhost:8082/erp}")
+    private String erpServiceUrl;
+
+    // Flag para habilitar/deshabilitar integración con ERP
+    @Value("${erp.integration.enabled:false}")
+    private boolean erpIntegrationEnabled;
 
     public ServicioQA(LoteRepositorio loteRepo, InspectorRepositorio inspectorRepo,
-            NotificacionRepositorio notificacionRepo, ProductorNotificaciones productor,
-            LoteErrorRepositorio loteErrorRepo) {
+            NotificacionRepositorio notificacionRepo, ProductorNotificaciones productor) {
         this.loteRepo = loteRepo;
         this.inspectorRepo = inspectorRepo;
         this.notificacionRepo = notificacionRepo;
         this.productor = productor;
-        this.loteErrorRepo = loteErrorRepo;
+        this.restTemplate = new RestTemplate();
+
     }
 
     public void recibirNotificacionDefecto(Lote lote) {
@@ -53,21 +64,42 @@ public class ServicioQA {
     }
 
     public void asignarNivelAtencion(EvaluacionDefectoDTO dto) {
-        LoteErrorId id = new LoteErrorId();
-        id.setIdLote(dto.getIdLote());
-        id.setIdError(dto.getIdError());
+        Lote lote = loteRepo.findById(dto.getIdLote()).orElse(null);
 
-        LoteError loteError = loteErrorRepo.findById(id).orElse(null);
-
-        if (loteError != null) {
-            loteError.setNivelAtencion(dto.getNivelAtencion());
-            loteErrorRepo.save(loteError);
-
-            System.out.println("Asignado nivel: " + dto.getNivelAtencion()
-                    + " al error: " + dto.getIdError() + " del lote: " + dto.getIdLote());
+        if (lote != null) {
+            lote.setNivelAtencion(dto.getNivelAtencion());
+            loteRepo.save(lote);
+            System.out.println("Nivel de atención '" + dto.getNivelAtencion() + "' asignado al lote ID: " + dto.getIdLote());
+            // Integración con sistema ERP si está habilitado
+            if (erpIntegrationEnabled) {
+                enviarActualizacionAERP(dto);
+            }
         } else {
-            System.out.println("️ No se encontró el registro lote_error con idLote=" + dto.getIdLote()
-                    + " y idError=" + dto.getIdError() + ". Asegúrate de haberlo creado antes.");
+            System.out.println(" No se encontró el lote con ID: " + dto.getIdLote());
+        }
+    }
+
+    /**
+     * Envía información de actualización al sistema ERP externo
+     *
+     * @param dto Datos de evaluación a enviar al ERP
+     */
+    private void enviarActualizacionAERP(EvaluacionDefectoDTO dto) {
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+
+            HttpEntity<EvaluacionDefectoDTO> request = new HttpEntity<>(dto, headers);
+
+            // Endpoint para actualizar nivel de atención en el ERP
+            String endpoint = erpServiceUrl + "/actualizarNivelAtencion";
+
+            restTemplate.postForEntity(endpoint, request, String.class);
+
+            System.out.println("Actualización enviada al sistema ERP para el lote ID: " + dto.getIdLote());
+        } catch (Exception e) {
+            System.err.println("Error al enviar actualización al sistema ERP: " + e.getMessage());
+            // Aquí podrías implementar una cola de reintentos si es crítico que la actualización llegue al ERP
         }
     }
 
@@ -75,45 +107,55 @@ public class ServicioQA {
         Lote lote = loteRepo.findById(dto.getIdLote()).orElse(null);
         Inspector inspector = inspectorRepo.findById(dto.getIdInspector()).orElse(null);
 
-        if (lote != null && inspector != null) {
-            if (!inspector.getLotes().contains(lote)) {
-                inspector.getLotes().add(lote);
-                lote.setInspector(inspector); // clave
-                loteRepo.save(lote); // guarda el lado propietario
-            }
-
-            NotificacionDTO notiDTO = new NotificacionDTO(
-                    "Nuevo lote asignado",
-                    "Se te ha asignado el lote: " + lote.getNombreLote(),
-                    "ASIGNACION",
-                    LocalDateTime.now(),
-                    inspector.getIdInspector()
-            );
-
-            productor.enviarNotificacion(notiDTO);
-
-            Notificacion noti = new Notificacion();
-            noti.setTitulo(notiDTO.getTitulo());
-            noti.setMensaje(notiDTO.getMensaje());
-            noti.setTipo(notiDTO.getTipo());
-            noti.setFechaEnvio(notiDTO.getFechaEnvio());
-            noti.setInspector(inspector);
-            notificacionRepo.save(noti);
+        if (lote == null) {
+            System.err.println("No se encontró el lote con ID: " + dto.getIdLote());
+            return; // O manejar el error como prefieras
         }
+
+        if (inspector == null) {
+            System.err.println("No se encontró el inspector con ID: " + dto.getIdInspector());
+            return; // O manejar el error como prefieras
+        }
+
+        if (!inspector.getLotes().contains(lote)) {
+            inspector.getLotes().add(lote);
+            lote.setInspector(inspector); // clave
+            loteRepo.save(lote); // guarda el lado propietario
+        }
+
+        NotificacionDTO notiDTO = new NotificacionDTO(
+                "Nuevo lote asignado",
+                "Se te ha asignado el lote: " + lote.getNombreLote(),
+                "ASIGNACION",
+                LocalDateTime.now(),
+                inspector.getIdInspector()
+        );
+
+        productor.enviarNotificacion(notiDTO);
+
+        Notificacion noti = new Notificacion();
+        noti.setTitulo(notiDTO.getTitulo());
+        noti.setMensaje(notiDTO.getMensaje());
+        noti.setTipo(notiDTO.getTipo());
+        noti.setFechaEnvio(notiDTO.getFechaEnvio());
+        noti.setInspector(inspector);
+        notificacionRepo.save(noti);
     }
 
     public void guardarNotificacion(NotificacionDTO dto) {
-        Inspector inspector = inspectorRepo.findById(dto.getIdInspector()).orElse(null);
-        if (inspector != null) {
-            Notificacion noti = new Notificacion();
-            noti.setTitulo(dto.getTitulo());
-            noti.setMensaje(dto.getMensaje());
-            noti.setTipo(dto.getTipo());
-            noti.setFechaEnvio(dto.getFechaEnvio());
-            noti.setInspector(inspector);
-            notificacionRepo.save(noti);
-            productor.enviarNotificacion(dto);
+        Notificacion noti = new Notificacion();
+        noti.setTitulo(dto.getTitulo());
+        noti.setMensaje(dto.getMensaje());
+        noti.setTipo(dto.getTipo());
+        noti.setFechaEnvio(dto.getFechaEnvio());
+
+        if (dto.getIdInspector() != null) {
+            Inspector inspector = inspectorRepo.findById(dto.getIdInspector()).orElse(null);
+            noti.setInspector(inspector); // si no hay, se guarda null
         }
+
+        notificacionRepo.save(noti);
+        productor.enviarNotificacion(dto); // sigue notificando en tiempo real
     }
 
     public void asignarLote(Integer idLote, Integer idInspector) {
@@ -123,11 +165,30 @@ public class ServicioQA {
         asignarLoteAInspector(dto);
     }
 
-    public List<Lote> obtenerTodosLosLotes() {
-        return loteRepo.findAll();
+    public List<LotesDTO> obtenerTodosLosLotes() {
+        return loteRepo.findAll().stream()
+                .map(LotesDTO::new)
+                .collect(Collectors.toList());
+
     }
 
-    public List<Lote> obtenerLotesConErrores() {
-        return loteErrorRepo.findLotesConProductosConErrores();
+    public List<LotesDTO> obtenerLotesConErrores() {
+        return loteRepo.findAll().stream()
+                .filter(lote -> lote.getProductos().stream()
+                .anyMatch(lp -> !lp.getProducto().getErrores().isEmpty()))
+                .map(LotesDTO::new)
+                .collect(Collectors.toList());
+    }
+
+    public List<NotificacionDTO> obtenerNotificaciones() {
+        return notificacionRepo.findAll().stream()
+                .map(noti -> new NotificacionDTO(
+                noti.getTitulo(),
+                noti.getMensaje(),
+                noti.getTipo(),
+                noti.getFechaEnvio(),
+                noti.getInspector() != null ? noti.getInspector().getIdInspector() : null
+        ))
+                .collect(Collectors.toList());
     }
 }
