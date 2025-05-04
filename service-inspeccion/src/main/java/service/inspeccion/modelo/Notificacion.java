@@ -11,6 +11,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
+
 import java.time.LocalDateTime;
 
 /**
@@ -35,6 +37,8 @@ public class Notificacion {
     private String tipo;  // Ej: "ASIGNACION", "DEFECTO", "ALERTA"
 
     private LocalDateTime fechaEnvio;
+
+
 
     @ManyToOne
     @JoinColumn(name = "id_inspector")

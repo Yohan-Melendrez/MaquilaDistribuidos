@@ -22,7 +22,7 @@ public class Inspeccion {
 
     @ManyToOne
     @JoinColumn(name = "id_error")
-    private Error error;
+    private ErrorProduccion error;
 
     @ManyToOne
     @JoinColumn(name = "id_inspector")
@@ -59,13 +59,13 @@ public class Inspeccion {
         this.producto = producto;
     }
 
-    public Error getError() {
+    public ErrorProduccion getError() {
         return error;
     }
-
-    public void setError(Error error) {
+    public void setError(ErrorProduccion error) {
         this.error = error;
     }
+    
 
     public Inspector getInspector() {
         return inspector;

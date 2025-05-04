@@ -7,7 +7,6 @@ import java.util.Optional;
 
 
 @Repository
-public interface InspectorRepositorio extends JpaRepository<Inspector, Integer> {
+public interface InspectorRepositorio extends JpaRepository<Inspector,Integer> {
     Optional<Inspector> findByNombre(String nombre);
-
 }

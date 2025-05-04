@@ -14,6 +14,10 @@ import jakarta.persistence.Table;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ *
+ * @author Gabriel
+ */
 @Entity
 @Table(name = "inspectores")
 public class Inspector {
@@ -24,7 +28,7 @@ public class Inspector {
 
     private String nombre;
 
-    private Boolean activo = true; 
+    private Boolean activo = true;  // Si está disponible para asignación
 
     @OneToMany(mappedBy = "inspector")
     @JsonManagedReference

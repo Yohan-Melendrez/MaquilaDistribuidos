@@ -6,19 +6,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import service.inspeccion.dtos.InspectorDTO;
 import service.inspeccion.dtos.AsignarLoteDTO;
 import service.inspeccion.dtos.NotificacionDTO;
 import service.inspeccion.dtos.ProductoDelLoteDTO;
 import service.inspeccion.dtos.RegistroInspeccionDTO;
+import service.inspeccion.modelo.ErrorProduccion;
 import service.inspeccion.modelo.Lote;
 import service.inspeccion.rabbit.ProductorNotificaciones;
-import service.inspeccion.repositorio.ErrorRepositorio;
 import service.inspeccion.servicio.InspeccionService;
-import service.inspeccion.modelo.Error;
 
 @RestController
 @RequestMapping("/inspeccion")
-@CrossOrigin
+@CrossOrigin(origins = "*")
 public class InspeccionController {
 
     @Autowired
@@ -26,6 +26,14 @@ public class InspeccionController {
 
     @Autowired
     private ProductorNotificaciones productor;
+
+    // ————————— Añade este método —————————
+    @GetMapping("/inspectores")
+    public ResponseEntity<List<InspectorDTO>> obtenerInspectores() {
+        List<InspectorDTO> lista = inspeccionService.obtenerTodosLosInspectores();
+        return ResponseEntity.ok(lista);
+    }
+    // ————————————————————————————————————————
 
     @PostMapping("/registrar")
     public ResponseEntity<?> registrarInspeccion(@RequestBody RegistroInspeccionDTO dto) {
@@ -47,19 +55,17 @@ public class InspeccionController {
 
     @GetMapping("/productos-del-lote/{idLote}")
     public ResponseEntity<List<ProductoDelLoteDTO>> obtenerProductos(@PathVariable Integer idLote) {
-        List<ProductoDelLoteDTO> productos = inspeccionService.obtenerProductosDeLote(idLote);
-        return ResponseEntity.ok(productos);
+        return ResponseEntity.ok(inspeccionService.obtenerProductosDeLote(idLote));
     }
 
     @GetMapping("/errores")
-    public ResponseEntity<List<Error>> obtenerErrores() {
+    public ResponseEntity<List<ErrorProduccion>> obtenerErrores() {
         return ResponseEntity.ok(inspeccionService.obtenerTodosLosErrores());
     }
 
     @GetMapping("/errores/{idProducto}")
-    public ResponseEntity<List<Error>> obtenerErroresPorProducto(@PathVariable Integer idProducto) {
-        List<Error> errores = inspeccionService.obtenerErroresPorProducto(idProducto);
-        return ResponseEntity.ok(errores);
+    public ResponseEntity<List<ErrorProduccion>> obtenerErroresPorProducto(@PathVariable Integer idProducto) {
+        return ResponseEntity.ok(inspeccionService.obtenerErroresPorProducto(idProducto));
     }
 
     @PostMapping("/probar-notificacion")
@@ -67,5 +73,4 @@ public class InspeccionController {
         productor.enviarNotificacion(dto);
         return ResponseEntity.ok("Notificacion enviada a la cola: " + dto.getTitulo() + " - " + dto.getMensaje());
     }
-
 }
