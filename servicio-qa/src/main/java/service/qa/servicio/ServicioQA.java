@@ -143,7 +143,6 @@ public ServicioQA(LoteRepositorio loteRepo,
         noti.setTipo(notiDTO.getTipo());
         noti.setFechaEnvio(notiDTO.getFechaEnvio());
         noti.setInspector(inspector);
-        noti.setOrigen("QA");
         notificacionRepo.save(noti);
     }
 
@@ -156,13 +155,18 @@ public ServicioQA(LoteRepositorio loteRepo,
 
         if (dto.getIdInspector() != null) {
             Inspector inspector = inspectorRepo.findById(dto.getIdInspector()).orElse(null);
-            noti.setInspector(inspector); // si no hay, se guarda null
+            if (inspector != null) {
+                noti.setInspector(inspector);
+            }
         }
-        noti.setOrigen(dto.getOrigen());
+        
+        if (noti.getInspector() == null && dto.getNombreInspector() != null) {
+            Inspector inspector = inspectorRepo.findByNombre(dto.getNombreInspector()).orElse(null);
+            noti.setInspector(inspector);
+        }
 
         notificacionRepo.save(noti);
-        if("QA".equalsIgnoreCase(dto.getOrigen()))
-        {productor.enviarNotificacion(dto);} 
+
     }
 
     public void asignarLote(Integer idLote, Integer idInspector) {

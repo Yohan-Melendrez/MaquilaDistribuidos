@@ -5,6 +5,8 @@
 package service.qa.repositorio;
 
 import java.util.List;
+import java.util.Optional;
+
 import service.qa.modelo.Inspector;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -17,5 +19,6 @@ import service.qa.modelo.Lote;
  */
 @Repository
 public interface InspectorRepositorio extends JpaRepository<Inspector, Integer> {
+    Optional<Inspector> findByNombre(String nombre);
 
 }

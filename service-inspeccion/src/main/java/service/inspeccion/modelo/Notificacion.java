@@ -27,7 +27,6 @@ public class Notificacion {
 
     private String titulo;  // Ej: "Nuevo lote asignado", "Defecto crítico"
 
-    private String origen;
 
     private String mensaje;
 
@@ -97,11 +96,4 @@ public class Notificacion {
         this.inspector = inspector;
     }
 
-    public String getOrigen() {
-        return origen;
-    }
-
-    public void setOrigen(String origen) {
-        this.origen = origen;
-    }
 }

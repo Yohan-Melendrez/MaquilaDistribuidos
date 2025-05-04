@@ -61,34 +61,40 @@ function cargarNotificaciones(panelContent) {
     panelContent.appendChild(cargando);
 
     fetch('http://localhost:8081/qa/notificaciones')
-            .then(response => response.json())
-            .then(notificaciones => {
-                panelContent.removeChild(cargando);
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}`);
+            }
+            return response.json();
+        })
 
-                if (!notificaciones || notificaciones.length === 0) {
-                    const noNotificaciones = document.createElement('p');
-                    noNotificaciones.className = 'no-notificaciones';
-                    noNotificaciones.textContent = 'No tienes notificaciones nuevas';
-                    panelContent.appendChild(noNotificaciones);
-                    return;
-                }
+        .then(notificaciones => {
+            panelContent.removeChild(cargando);
 
-                notificaciones
-                        .filter(n => !estaNotificacionCerrada(n))
-                        .sort((a, b) => new Date(b.fechaEnvio) - new Date(a.fechaEnvio))
-                        .forEach(notificacion => {
-                            crearItemNotificacion(notificacion, panelContent);
-                        });
+            if (!notificaciones || notificaciones.length === 0) {
+                const noNotificaciones = document.createElement('p');
+                noNotificaciones.className = 'no-notificaciones';
+                noNotificaciones.textContent = 'No tienes notificaciones nuevas';
+                panelContent.appendChild(noNotificaciones);
+                return;
+            }
 
-            })
-            .catch(error => {
-                console.error("Error al cargar notificaciones:", error);
-                panelContent.removeChild(cargando);
-                const errorMsg = document.createElement('p');
-                errorMsg.className = 'error-notificaciones';
-                errorMsg.textContent = 'Error al cargar las notificaciones';
-                panelContent.appendChild(errorMsg);
-            });
+            notificaciones
+                .filter(n => !estaNotificacionCerrada(n))
+                .sort((a, b) => new Date(b.fechaEnvio) - new Date(a.fechaEnvio))
+                .forEach(notificacion => {
+                    crearItemNotificacion(notificacion, panelContent);
+                });
+
+        })
+        .catch(error => {
+            console.error("Error al cargar notificaciones:", error);
+            panelContent.removeChild(cargando);
+            const errorMsg = document.createElement('p');
+            errorMsg.className = 'error-notificaciones';
+            errorMsg.textContent = 'Error al cargar las notificaciones';
+            panelContent.appendChild(errorMsg);
+        });
 }
 
 function crearItemNotificacion(notificacion, panelContent) {

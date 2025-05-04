@@ -11,6 +11,7 @@ import service.qa.dto.NotificacionDTO;
 import service.qa.modelo.Lote;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import service.qa.dto.LotesDTO;
@@ -69,10 +70,14 @@ public class QAControl {
         return ResponseEntity.ok("Notificación recibida y guardada.");
     }
 
-    @GetMapping("/notificaciones")
+    @GetMapping(value = "/notificaciones", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<NotificacionDTO>> obtenerNotificaciones() {
-        return ResponseEntity.ok(servicioQA.obtenerNotificaciones());
+        return ResponseEntity
+            .ok()
+            .contentType(MediaType.APPLICATION_JSON) // <- explícito
+            .body(servicioQA.obtenerNotificaciones());
     }
+    
 
     @GetMapping
     public ResponseEntity<?> obtenerTodas() {

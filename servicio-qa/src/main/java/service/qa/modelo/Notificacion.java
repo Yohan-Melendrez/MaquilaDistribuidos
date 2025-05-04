@@ -11,6 +11,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
+
 import java.time.LocalDateTime;
 
 /**
@@ -27,7 +29,6 @@ public class Notificacion {
 
     private String titulo;  // Ej: "Nuevo lote asignado", "Defecto crítico"
 
-    private String origen;
 
     private String mensaje;
 
@@ -36,6 +37,8 @@ public class Notificacion {
     private String tipo;  // Ej: "ASIGNACION", "DEFECTO", "ALERTA"
 
     private LocalDateTime fechaEnvio;
+
+
 
     @ManyToOne
     @JoinColumn(name = "id_inspector")
@@ -97,11 +100,4 @@ public class Notificacion {
         this.inspector = inspector;
     }
 
-    public String getOrigen() {
-        return origen;
-    }
-
-    public void setOrigen(String origen) {
-        this.origen = origen;
-    }
 }

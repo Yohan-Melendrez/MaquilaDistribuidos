@@ -42,12 +42,18 @@ public class InspeccionService {
     @Autowired
     private ProductorNotificaciones productorNotificaciones;
 
+    @Autowired
+    private InspectorRepositorio inspectorRepo; // Para evitar el error de referencia circular
+
     public void registrarInspeccion(RegistroInspeccionDTO dto) {
         Lote lote = loteRepo.findById(dto.getIdLote())
                 .orElseThrow(() -> new RuntimeException("Lote no encontrado"));
 
         Producto producto = productoRepo.findById(dto.getIdProducto())
                 .orElseThrow(() -> new RuntimeException("Producto no encontrado"));
+
+        Inspector inspector = inspectorRepo.findByNombre(dto.getInspector())
+                .orElseThrow(() -> new RuntimeException("Inspector no encontrado"));
 
         NivelAtencion nivelMasAlto = NivelAtencion.BAJO;
 
@@ -59,14 +65,9 @@ public class InspeccionService {
             inspeccion.setLote(lote);
             inspeccion.setProducto(producto);
             inspeccion.setError(error);
-            inspeccion.setInspector(dto.getInspector());
+            inspeccion.setInspector(inspector); // Ahora sí pasas el objeto correcto
 
             inspeccionRepo.save(inspeccion);
-
-            if (lote != null) {
-                lote.setEstado("Rechazado");
-                loteRepo.save(lote);
-            }
 
             if (error.getNivelAtencion().ordinal() > nivelMasAlto.ordinal()) {
                 nivelMasAlto = error.getNivelAtencion();
@@ -80,16 +81,14 @@ public class InspeccionService {
         NotificacionDTO noti = new NotificacionDTO();
         noti.setTitulo("Lote rechazado");
         noti.setMensaje("El lote " + lote.getNombreLote() + " ha sido rechazado por el inspector " + dto.getInspector()
-                + ". " + "Nivel de atención: " + nivelMasAlto);
+                + ". Nivel de atención: " + nivelMasAlto);
         noti.setTipo("Lote rechazado");
-        if (lote.getInspector() != null) {
-            noti.setIdInspector(lote.getInspector().getIdInspector());
-        }
         noti.setFechaEnvio(LocalDateTime.now());
-        noti.setOrigen("INSPECCION");
-
+        noti.setIdInspector(inspector.getIdInspector());
+        noti.setNombreInspector(inspector.getNombre());
+        
+        
         productorNotificaciones.enviarNotificacion(noti);
-
     }
 
     public void asignarLoteAInspector(AsignarLoteDTO dto) {
@@ -98,7 +97,7 @@ public class InspeccionService {
 
         boolean yaAsignado = loteInspectorRepo.existsByLote_IdLoteAndInspector(dto.getIdLote(), dto.getInspector());
         if (yaAsignado) {
-            //  Aquí usamos CONFLICT (409) en vez de lanzar RuntimeException
+            // Aquí usamos CONFLICT (409) en vez de lanzar RuntimeException
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Este lote ya ha sido asignado al inspector.");
         }
 
