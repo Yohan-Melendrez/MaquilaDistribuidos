@@ -5,34 +5,37 @@
 document.addEventListener('DOMContentLoaded', () => {
   const listaReportes = document.getElementById('listaReportes');
 
-  // Datos simulados de reportes
-  const reportes = [
-    { id: 1, nombre: 'Reporte de Rendimiento - Abril 2025' },
-    { id: 2, nombre: 'Reporte de Producción - Semana 14' },
-    { id: 3, nombre: 'Reporte de Empaque - Q1' },
-    { id: 4, nombre: 'Reporte de Presentación - Línea B' },
-    { id: 5, nombre: 'Reporte de Rendimiento - Planta Norte' },
-    { id: 6, nombre: 'Reporte Especial - Auditoría Interna' },
-  ];
+  fetch('http://localhost:9091/reportes/historial')
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      return response.json();
+    })
+    .then(reportes => {
+      reportes.forEach((reporte, index) => {
+        const item = document.createElement('div');
+        item.className = 'reporte-item';
 
-  // Generar dinámicamente la lista
-  reportes.forEach(reporte => {
-    const item = document.createElement('div');
-    item.className = 'reporte-item';
+        const nombre = document.createElement('span');
+        nombre.textContent = `Reporte #${index + 1} - Defecto: ${reporte.tipoDefecto}`;
 
-    const nombre = document.createElement('span');
-    nombre.textContent = reporte.nombre;
+        const botonVer = document.createElement('button');
+        botonVer.className = 'ver-btn';
+        botonVer.textContent = 'Ver';
+        botonVer.addEventListener('click', () => {
+          // Puedes almacenar el reporte en localStorage o pasar datos por URL si implementas un detalle
+          localStorage.setItem('reporteSeleccionado', JSON.stringify(reporte));
+          window.location.href = 'detalleReporte.html';
+        });
 
-    const botonVer = document.createElement('button');
-    botonVer.className = 'ver-btn';
-    botonVer.textContent = 'Ver';
-    botonVer.addEventListener('click', () => {
-      // Redirige a la pantalla de detalle (puedes pasar el id por querystring si lo deseas)
-      window.location.href = 'detalleReporte.html';
+        item.appendChild(nombre);
+        item.appendChild(botonVer);
+        listaReportes.appendChild(item);
+      });
+    })
+    .catch(error => {
+      console.error('Error al obtener los reportes:', error);
+      listaReportes.innerHTML = '<p>Error al cargar los reportes.</p>';
     });
-
-    item.appendChild(nombre);
-    item.appendChild(botonVer);
-    listaReportes.appendChild(item);
-  });
 });

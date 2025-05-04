@@ -1,0 +1,13 @@
+service\reporte\modelo\Reporte.class
+service\reporte\ServiceReporteApplication.class
+service\reporte\modelo\Lote.class
+service\reporte\dtos\ReporteDTO.class
+service\reporte\modelo\Error.class
+service\reporte\repositorio\ReporteRepository.class
+service\reporte\WebConfig.class
+service\reporte\modelo\Inspeccion.class
+service\reporte\modelo\Producto.class
+service\reporte\repositorio\InspeccionRepository.class
+service\reporte\servicio\ReporteService.class
+service\reporte\WebConfig$1.class
+service\reporte\controller\ReporteController.class
