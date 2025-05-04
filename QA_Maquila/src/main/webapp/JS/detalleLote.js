@@ -36,19 +36,31 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function resetModal() {
         modalContent.innerHTML = `
-            <h3>Asignar a Empleado</h3>
-            <select id="selectEmpleado">
-                <option value="" disabled selected>Selecciona un empleado</option>
-                <option value="1">Carlos Ramírez</option>
-                <option value="2">Ana Torres</option>
-                <option value="3">Luis Gómez</option>
-                <option value="4">María Pérez</option>
-            </select>
-            <div class="modal-botones">
-                <button class="btn-cancelar" id="cancelarAsignacion">Cancelar</button>
-                <button class="btn-confirmar" id="confirmarAsignacion">Asignar</button>
-            </div>
-        `;
+        <h3>Asignar a Empleado</h3>
+        <select id="selectEmpleado">
+            <option value="" disabled selected>Selecciona un empleado</option>
+        </select>
+        <div class="modal-botones">
+            <button class="btn-cancelar" id="cancelarAsignacion">Cancelar</button>
+            <button class="btn-confirmar" id="confirmarAsignacion">Asignar</button>
+        </div>
+    `;
+
+        fetch('http://localhost:8081/qa/inspectores')
+                .then(response => response.json())
+                .then(inspectores => {
+                    const selectEmpleado = document.getElementById('selectEmpleado');
+                    inspectores.forEach(inspector => {
+                        const option = document.createElement('option');
+                        option.value = inspector.idInspector;
+                        option.textContent = inspector.nombre;  // Asegúrate de que en tu entidad tengas `getNombre()`
+                        selectEmpleado.appendChild(option);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error al cargar inspectores:', error);
+                    mostrarMensajeError("Error al cargar inspectores.");
+                });
 
         document.getElementById('cancelarAsignacion').addEventListener('click', () => {
             modal.style.display = 'none';
@@ -65,8 +77,8 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             const asignacionLoteDTO = {
-                loteId: lote.id,
-                empleadoId: empleadoId,
+                idLote: lote.id,
+                idInspector: empleadoId,
             };
 
             fetch('http://localhost:8081/qa/asignarLote', {
@@ -79,10 +91,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     .then(response => response.json())
                     .then(data => {
                         modalContent.innerHTML = `
-                        <h3>Lote Asignado Exitosamente</h3>
-                        <p>El lote fue asignado a <strong>${empleadoTexto}</strong>.</p>
-                        <button class="btn-confirmar" id="cerrarModalFinal">Cerrar</button>
-                    `;
+                    <h3>Lote Asignado Exitosamente</h3>
+                    <p>El lote fue asignado a <strong>${empleadoTexto}</strong>.</p>
+                    <button class="btn-confirmar" id="cerrarModalFinal">Cerrar</button>
+                `;
                         document.getElementById('cerrarModalFinal').addEventListener('click', () => {
                             modal.style.display = 'none';
                         });

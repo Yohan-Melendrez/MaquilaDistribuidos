@@ -14,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import service.qa.dto.LotesDTO;
+import service.qa.modelo.Inspector;
 import service.qa.servicio.ServicioQA;
 
 @RestController
@@ -76,5 +77,10 @@ public class QAControl {
     @GetMapping
     public ResponseEntity<?> obtenerTodas() {
         return ResponseEntity.ok(servicioQA.obtenerNotificaciones());
+    }
+
+    @GetMapping("/inspectores")
+    public List<Inspector> obtenerInspectoresActivos() {
+        return servicioQA.obtenerInspectoresActivos();
     }
 }

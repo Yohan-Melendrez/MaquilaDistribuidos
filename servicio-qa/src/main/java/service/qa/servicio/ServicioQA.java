@@ -191,4 +191,37 @@ public class ServicioQA {
         ))
                 .collect(Collectors.toList());
     }
+
+    public void enviarLotesDeInspector(Integer idInspector) {
+        Inspector inspector = inspectorRepo.findById(idInspector).orElse(null);
+
+        if (inspector == null) {
+            System.err.println("Inspector no encontrado con ID: " + idInspector);
+            return;
+        }
+        List<LotesDTO> lotesDTO = inspector.getLotes().stream()
+                .map(LotesDTO::new)
+                .collect(Collectors.toList());
+
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            HttpEntity<List<LotesDTO>> request = new HttpEntity<>(lotesDTO, headers);
+
+            String endpoint = erpServiceUrl + "/recibirLotesInspector";  // Ajusta al endpoint real
+
+            restTemplate.postForEntity(endpoint, request, String.class);
+
+            System.out.println("Lotes del inspector " + idInspector + " enviados correctamente.");
+        } catch (Exception e) {
+            System.err.println("Error al enviar lotes del inspector: " + e.getMessage());
+        }
+    }
+
+    public List<Inspector> obtenerInspectoresActivos() {
+        return inspectorRepo.findAll().stream()
+                .filter(Inspector::getActivo)
+                .collect(Collectors.toList());
+    }
+
 }
