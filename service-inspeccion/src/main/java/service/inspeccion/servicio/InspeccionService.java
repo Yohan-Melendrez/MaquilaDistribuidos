@@ -14,6 +14,7 @@ import service.inspeccion.modelo.Error;
 import service.inspeccion.rabbit.ProductorNotificaciones;
 import service.inspeccion.repositorio.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -84,6 +85,8 @@ public class InspeccionService {
         if (lote.getInspector() != null) {
             noti.setIdInspector(lote.getInspector().getIdInspector());
         }
+        noti.setFechaEnvio(LocalDateTime.now());
+
 
         productorNotificaciones.enviarNotificacion(noti);
 
