@@ -1,73 +1,70 @@
 <!DOCTYPE html>
-<!--
-Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
-Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit this template
--->
-<!DOCTYPE html>
 <html lang="es">
-    <head>
-        <meta charset="UTF-8">
-        <title>Detalle del Lote</title>
-        <link rel="stylesheet" href="CSS/detalleLote.css">
-        <link rel="stylesheet" href="CSS/notificaciones.css">
-        <script src="JS/notificaciones.js" defer></script>
-        <script src="JS/detalleLote.js" defer></script>
-    </head>
-    <body>
-        <div class="barraSuperior">
-            <div class="tituloBarra">
-                <img src="img/logo.png" alt="Logo" class="logo">
-                <h1 class="titulo">Cleansify departamento QA</h1>
-            </div>
-            <div class="iconosBarra">
-                <a href="atencionFallos.html" class="iconoNav">
-                    <img src="img/fallo.svg" alt="Fallo">
-                </a>
-                <a href="lotesDisponibles.html" class="iconoNav activo">
-                    <img src="img/lotes.svg" alt="Lotes">
-                </a>
-                <a class="iconoNav">
-                    <img src="img/noti.svg" alt="Notificaciones">
-                </a>
-            </div>
-        </div>
+<head>
+  <meta charset="UTF-8">
+  <title>Detalle del Lote</title>
+  <link rel="stylesheet" href="CSS/detalleLote.css">
+  <link rel="stylesheet" href="CSS/notificaciones.css">
+  <script src="JS/notificaciones.js" defer></script>
+  <script src="JS/detalleLote.js" defer></script>
+</head>
+<body>
+  <!-- Barra superior -->
+  <div class="barraSuperior">
+    <div class="tituloBarra">
+      <img src="img/logo.png" alt="Logo" class="logo">
+      <h1 class="titulo">Cleanlify departamento QA</h1>
+    </div>
+    <div class="iconosBarra">
+      <a href="atencionFallos.html" class="iconoNav">
+        <img src="img/fallo.svg" alt="Fallo">
+      </a>
+      <a href="lotesDisponibles.html" class="iconoNav activo">
+        <img src="img/lotes.svg" alt="Lotes">
+      </a>
+      <a href="#" class="iconoNav">
+        <img src="img/noti.svg" alt="Notificaciones">
+      </a>
+    </div>
+  </div>
 
-        <div class="contenedor">
-            <h2>Detalle del Lote</h2>
-            <div class="tarjeta">
-                <label for="loteId">Número de Lote</label>
-                <input type="text" id="loteId" readonly>
+  <!-- Contenedor principal -->
+  <div class="contenedor">
+    <h2>Detalle del Lote</h2>
+    <div class="tarjeta">
+      <label for="loteNombre">Nombre del Lote</label>
+      <input type="text" id="loteNombre" readonly>
 
-                <label for="loteNombre">Nombre del Lote</label>
-                <input type="text" id="loteNombre" readonly>
+      <label for="loteCantidad">Cantidad de Lotes</label>
+      <input type="text" id="loteCantidad" readonly>
 
-                <label for="loteCantidad">Cantidad de Lotes</label>
-                <input type="text" id="loteCantidad" readonly>
+      <label for="loteDescripcion">Descripción Breve</label>
+      <textarea id="loteDescripcion" rows="3" readonly></textarea>
+    </div>
 
-                <label for="loteDescripcion">Descripción Breve</label>
-                <textarea id="loteDescripcion" rows="3" readonly></textarea>
-            </div>
+    <div class="botones">
+      <button class="asignar">Asignar a Empleado</button>
+      <a href="lotesDisponibles.html" class="volver">Volver a Lotes Disponibles</a>
+    </div>
+  </div>
 
-            <div class="botones">
-                <button class="asignar">Asignar a Empleado</button>
-                <a href="lotesDisponibles.html" class="volver">Volver a Lotes Disponibles</a>
-            </div>
-        </div>
-        <div id="modalAsignar" class="modal">
-            <div class="modal-content">
-                <h3>Asignar a Empleado</h3>
-                <select id="selectEmpleado">
-                    <option value="" disabled selected>Selecciona un empleado</option>
-                    <option value="1">Carlos Ramírez</option>
-                    <option value="2">Ana Torres</option>
-                    <option value="3">Luis Gómez</option>
-                    <option value="4">María Pérez</option>
-                </select>
-                <div class="modal-botones">
-                    <button class="btn-cancelar" id="cancelarAsignacion">Cancelar</button>
-                    <button class="btn-confirmar" id="confirmarAsignacion">Asignar</button>
-                </div>
-            </div>
-        </div>
-    </body>
+  <!-- Modal de asignación -->
+  <div id="modalAsignar" class="modal">
+    <div class="modal-content">
+      <h3>Asignar a Empleado</h3>
+
+      <div class="modal-body">
+        <select id="selectEmpleado">
+          <option value="" disabled selected>Selecciona un empleado</option>
+        </select>
+        <p id="modalError" class="error-message"></p>
+      </div>
+
+      <div class="modal-botones">
+        <button id="cancelarAsignacion" class="btn-cancelar">Cancelar</button>
+        <button id="confirmarAsignacion" class="btn-confirmar">Asignar</button>
+      </div>
+    </div>
+  </div>
+</body>
 </html>

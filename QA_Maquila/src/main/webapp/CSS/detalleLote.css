@@ -198,3 +198,32 @@ textarea {
 .btn-cancelar:hover {
     background-color: #777;
 }
+
+/*_Error debajo del select_*/
+.error-message {
+    display: none;       /* por defecto oculto */
+    margin: 0;
+    padding: 4px 0;
+    color: #d9534f;       /* rojo suave */
+    font-size: 0.9em;
+    text-align: left;
+  }
+  
+  /*_modal-body para envolver select + error_*/
+  .modal-body {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 20px;
+  }
+  
+  /* Asegúrate de que el select ocupe ancho completo dentro del modal */
+  .modal-content select {
+    width: 100%;
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+    box-sizing: border-box;
+  }
+  

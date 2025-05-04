@@ -22,9 +22,11 @@ public class Inspeccion {
 
     @ManyToOne
     @JoinColumn(name = "id_error")
-    private Error error;
+    private ErrorProduccion error;
 
-    private String inspector;
+    @ManyToOne
+    @JoinColumn(name = "id_inspector")
+    private Inspector inspector;
 
     private LocalDateTime fecha;
 
@@ -57,19 +59,19 @@ public class Inspeccion {
         this.producto = producto;
     }
 
-    public Error getError() {
+    public ErrorProduccion getError() {
         return error;
     }
-
-    public void setError(Error error) {
+    public void setError(ErrorProduccion error) {
         this.error = error;
     }
+    
 
-    public String getInspector() {
+    public Inspector getInspector() {
         return inspector;
     }
 
-    public void setInspector(String inspector) {
+    public void setInspector(Inspector inspector) {
         this.inspector = inspector;
     }
 

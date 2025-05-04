@@ -1,46 +1,44 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
 package service.inspeccion.modelo;
 
-import jakarta.persistence.*;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import jakarta.persistence.EmbeddedId;
+import jakarta.persistence.Entity;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.MapsId;
+import jakarta.persistence.Table;
 
+/**
+ *
+ * @author abelc
+ */
 @Entity
 @Table(name = "lote_productos")
-@IdClass(LoteProductoId.class)
+
 public class LoteProducto {
 
-    @Id
-    @Column(name = "id_lote")
-    private Integer idLote;
-
-    @Id
-    @Column(name = "id_producto")
-    private Integer idProducto;
+    @EmbeddedId
+    private LoteProductoId id = new LoteProductoId();
 
     @ManyToOne
-    @JoinColumn(name = "id_lote", insertable = false, updatable = false)
+    @MapsId("idLote")
+    @JoinColumn(name = "id_lote")
+    @JsonBackReference // Evitar recursión
     private Lote lote;
 
     @ManyToOne
-    @JoinColumn(name = "id_producto", insertable = false, updatable = false)
+    @MapsId("idProducto")
+    @JoinColumn(name = "id_producto")
+    
     private Producto producto;
 
     private Integer cantidad;
 
-    public Integer getIdLote() {
-        return idLote;
-    }
-
-    public void setIdLote(Integer idLote) {
-        this.idLote = idLote;
-    }
-
-    public Integer getIdProducto() {
-        return idProducto;
-    }
-
-    public void setIdProducto(Integer idProducto) {
-        this.idProducto = idProducto;
-    }
-
+    // Getters y Setters
     public Lote getLote() {
         return lote;
     }

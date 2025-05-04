@@ -1,49 +1,49 @@
-const contenedor = document.getElementById('lotesContainer');
-const inspector = sessionStorage.getItem("inspector");
+// JS/menuLotes.js
+const API_ROOT    = 'http://localhost:9090';
+const contenedor  = document.getElementById('lotesContainer');
+const salirBtn    = document.getElementById('salirBtn');
 
-if (!inspector) {
-    alert("No hay sesión activa.");
-    window.location.href = "index.html";
+const inspectorIdRaw  = sessionStorage.getItem('inspectorId');
+const inspectorId     = parseInt(inspectorIdRaw, 10);
+const inspectorName   = sessionStorage.getItem('inspectorName');
+
+if (!inspectorId || isNaN(inspectorId)) {
+  alert('ID de inspector inválido. Vuelve a iniciar sesión.');
+  window.location.href = 'index.html';
 }
 
-// Mostrar saludo
-document.querySelector('.saludo').textContent = `Hola ${inspector}`;
+document.querySelector('.saludo').textContent = `Hola ${inspectorName}`;
 
-// Cargar lotes reales del backend
-fetch(`http://localhost:9090/inspeccion/lotes-asignados/${inspector}`)
-    .then(response => {
-        if (!response.ok) {
-            throw new Error("Error al obtener lotes.");
-        }
-        return response.json();
-    })
-    .then(lotes => {
-        lotes.forEach(lote => {
-            const div = document.createElement('div');
-            div.className = 'lote';
-            div.innerHTML = `
-                <img src="img/box_icon.png" alt="Caja">
-                <div class="loteNombre">${lote.nombreLote}</div>
-            `;
-
-            div.addEventListener('click', () => {
-                sessionStorage.setItem("idLote", lote.idLote);
-                window.location.href = 'productosLote.html';
-            });
-
-            contenedor.appendChild(div);
-        });
-
-        if (lotes.length === 0) {
-            contenedor.innerHTML = "<p>No tienes lotes asignados.</p>";
-        }
-    })
-    .catch(error => {
-        console.error(error);
-        contenedor.innerHTML = "<p>Error al cargar lotes.</p>";
+fetch(`${API_ROOT}/inspeccion/lotes-asignados/${inspectorId}`)
+  .then(res => {
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    return res.json();
+  })
+  .then(lotes => {
+    if (lotes.length === 0) {
+      contenedor.innerHTML = '<p>No tienes lotes asignados.</p>';
+      return;
+    }
+    lotes.forEach(lote => {
+      const div = document.createElement('div');
+      div.className = 'lote';
+      div.innerHTML = `
+        <img src="img/box_icon.png" alt="Caja">
+        <div class="loteNombre">${lote.nombreLote}</div>
+      `;
+      div.addEventListener('click', () => {
+        sessionStorage.setItem('idLote', lote.idLote);
+        window.location.href = 'productosLote.html';
+      });
+      contenedor.appendChild(div);
     });
+  })
+  .catch(err => {
+    console.error('Error al obtener lotes:', err);
+    contenedor.innerHTML = '<p>Error al cargar lotes.</p>';
+  });
 
-document.getElementById('salirBtn').addEventListener('click', () => {
-    sessionStorage.clear();
-    window.location.href = 'index.html';
+salirBtn.addEventListener('click', () => {
+  sessionStorage.clear();
+  window.location.href = 'index.html';
 });

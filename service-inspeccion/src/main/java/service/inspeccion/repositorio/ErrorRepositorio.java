@@ -6,12 +6,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import service.inspeccion.modelo.Error;
+import service.inspeccion.modelo.ErrorProduccion;
 
-public interface ErrorRepositorio extends JpaRepository<Error, Integer> {
-    @Query(value = "SELECT e.* FROM errores e JOIN producto_errores pe ON e.id_error = pe.id_error WHERE pe.id_producto = :idProducto", nativeQuery = true)
-    List<Error> findErroresPorProducto(@Param("idProducto") Integer idProducto);
-    
-    
-
+public interface ErrorRepositorio extends JpaRepository<ErrorProduccion,Integer> {
+    @Query("SELECT e FROM ErrorProduccion e JOIN e.productos p WHERE p.idProducto = :id")
+    List<ErrorProduccion> findErroresPorProducto(@Param("id") Integer idProducto);
 }

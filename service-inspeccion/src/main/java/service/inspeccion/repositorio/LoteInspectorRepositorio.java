@@ -2,12 +2,14 @@ package service.inspeccion.repositorio;
 
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 import service.inspeccion.modelo.LoteInspector;
 
-public interface LoteInspectorRepositorio extends JpaRepository<LoteInspector, Integer> {
-    List<LoteInspector> findByInspector(String inspector);
+@Repository
+public interface LoteInspectorRepositorio 
+        extends JpaRepository<LoteInspector, Integer> {
+
     boolean existsByLote_IdLoteAndInspector(Integer idLote, String inspector);
 
-
+    List<LoteInspector> findByInspector(String inspector);
 }
-
