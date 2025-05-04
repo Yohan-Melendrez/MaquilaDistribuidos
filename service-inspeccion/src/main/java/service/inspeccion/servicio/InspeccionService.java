@@ -6,12 +6,15 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import service.inspeccion.dtos.AsignarLoteDTO;
+import service.inspeccion.dtos.NotificacionDTO;
 import service.inspeccion.dtos.ProductoDelLoteDTO;
 import service.inspeccion.dtos.RegistroInspeccionDTO;
 import service.inspeccion.modelo.*;
 import service.inspeccion.modelo.Error;
+import service.inspeccion.rabbit.ProductorNotificaciones;
 import service.inspeccion.repositorio.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -36,7 +39,8 @@ public class InspeccionService {
     @Autowired
     private LoteProductoRepositorio loteProductoRepo;
 
-
+    @Autowired
+    private ProductorNotificaciones productorNotificaciones;
 
     public void registrarInspeccion(RegistroInspeccionDTO dto) {
         Lote lote = loteRepo.findById(dto.getIdLote())
@@ -44,6 +48,8 @@ public class InspeccionService {
 
         Producto producto = productoRepo.findById(dto.getIdProducto())
                 .orElseThrow(() -> new RuntimeException("Producto no encontrado"));
+
+        NivelAtencion nivelMasAlto = NivelAtencion.BAJO;
 
         for (Integer idError : dto.getErroresSeleccionados()) {
             Error error = errorRepo.findById(idError)
@@ -56,7 +62,34 @@ public class InspeccionService {
             inspeccion.setInspector(dto.getInspector());
 
             inspeccionRepo.save(inspeccion);
+
+            if (lote != null) {
+                lote.setEstado("Rechazado");
+                loteRepo.save(lote);
+            }
+
+            if (error.getNivelAtencion().ordinal() > nivelMasAlto.ordinal()) {
+                nivelMasAlto = error.getNivelAtencion();
+            }
         }
+
+        lote.setEstado("Rechazado");
+        lote.setNivelAtencion(nivelMasAlto);
+        loteRepo.save(lote);
+
+        NotificacionDTO noti = new NotificacionDTO();
+        noti.setTitulo("Lote rechazado");
+        noti.setMensaje("El lote " + lote.getNombreLote() + " ha sido rechazado por el inspector " + dto.getInspector()
+                + ". " + "Nivel de atención: " + nivelMasAlto);
+        noti.setTipo("Lote rechazado");
+        if (lote.getInspector() != null) {
+            noti.setIdInspector(lote.getInspector().getIdInspector());
+        }
+        noti.setFechaEnvio(LocalDateTime.now());
+
+
+        productorNotificaciones.enviarNotificacion(noti);
+
     }
 
     public void asignarLoteAInspector(AsignarLoteDTO dto) {
@@ -65,7 +98,7 @@ public class InspeccionService {
 
         boolean yaAsignado = loteInspectorRepo.existsByLote_IdLoteAndInspector(dto.getIdLote(), dto.getInspector());
         if (yaAsignado) {
-            // 👇 Aquí usamos CONFLICT (409) en vez de lanzar RuntimeException
+            //  Aquí usamos CONFLICT (409) en vez de lanzar RuntimeException
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Este lote ya ha sido asignado al inspector.");
         }
 
@@ -99,11 +132,9 @@ public class InspeccionService {
     public List<Error> obtenerTodosLosErrores() {
         return errorRepo.findAll();
     }
-    
+
     public List<Error> obtenerErroresPorProducto(Integer idProducto) {
         return errorRepo.findErroresPorProducto(idProducto);
     }
-    
-
 
 }
