@@ -1,25 +1,22 @@
 // JS/menuLotes.js
+const API_ROOT    = 'http://localhost:9090';
+const contenedor  = document.getElementById('lotesContainer');
+const salirBtn    = document.getElementById('salirBtn');
 
-// Define tu base de API aquí (ajusta puerto si cambia)
-const API_BASE = 'http://localhost:9090/inspeccion';
+const inspectorIdRaw  = sessionStorage.getItem('inspectorId');
+const inspectorId     = parseInt(inspectorIdRaw, 10);
+const inspectorName   = sessionStorage.getItem('inspectorName');
 
-const contenedor = document.getElementById('lotesContainer');
-const salirBtn   = document.getElementById('salirBtn');
-
-// Obtenemos el nombre del inspector de la sesión
-const inspector = sessionStorage.getItem('inspector');
-if (!inspector) {
-  alert('No hay sesión activa.');
+if (!inspectorId || isNaN(inspectorId)) {
+  alert('ID de inspector inválido. Vuelve a iniciar sesión.');
   window.location.href = 'index.html';
 }
 
-// Mostramos saludo (sobrescribe el placeholder “Hola Juan”)
-document.querySelector('.saludo').textContent = `Hola ${inspector}`;
+document.querySelector('.saludo').textContent = `Hola ${inspectorName}`;
 
-// Llamamos al endpoint de lotes asignados
-fetch(`${API_BASE}/lotes-asignados/${encodeURIComponent(inspector)}`)
+fetch(`${API_ROOT}/inspeccion/lotes-asignados/${inspectorId}`)
   .then(res => {
-    if (!res.ok) throw new Error('Error al obtener lotes.');
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
     return res.json();
   })
   .then(lotes => {
@@ -42,11 +39,10 @@ fetch(`${API_BASE}/lotes-asignados/${encodeURIComponent(inspector)}`)
     });
   })
   .catch(err => {
-    console.error(err);
+    console.error('Error al obtener lotes:', err);
     contenedor.innerHTML = '<p>Error al cargar lotes.</p>';
   });
 
-// Botón “Salir”
 salirBtn.addEventListener('click', () => {
   sessionStorage.clear();
   window.location.href = 'index.html';

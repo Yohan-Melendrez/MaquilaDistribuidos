@@ -6,8 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import service.inspeccion.dtos.InspectorDTO;
 import service.inspeccion.dtos.AsignarLoteDTO;
+import service.inspeccion.dtos.InspectorDTO;
 import service.inspeccion.dtos.NotificacionDTO;
 import service.inspeccion.dtos.ProductoDelLoteDTO;
 import service.inspeccion.dtos.RegistroInspeccionDTO;
@@ -27,13 +27,10 @@ public class InspeccionController {
     @Autowired
     private ProductorNotificaciones productor;
 
-    // ————————— Añade este método —————————
     @GetMapping("/inspectores")
     public ResponseEntity<List<InspectorDTO>> obtenerInspectores() {
-        List<InspectorDTO> lista = inspeccionService.obtenerTodosLosInspectores();
-        return ResponseEntity.ok(lista);
+        return ResponseEntity.ok(inspeccionService.obtenerTodosLosInspectores());
     }
-    // ————————————————————————————————————————
 
     @PostMapping("/registrar")
     public ResponseEntity<?> registrarInspeccion(@RequestBody RegistroInspeccionDTO dto) {
@@ -44,13 +41,12 @@ public class InspeccionController {
     @PostMapping("/asignar-lote")
     public ResponseEntity<?> asignarLote(@RequestBody AsignarLoteDTO dto) {
         inspeccionService.asignarLoteAInspector(dto);
-        return ResponseEntity.ok("Lote asignado correctamente al inspector.");
+        return ResponseEntity.ok("Solicitud de asignación enviada a QA.");
     }
 
-    @GetMapping("/lotes-asignados/{inspector}")
-    public ResponseEntity<List<Lote>> obtenerLotes(@PathVariable String inspector) {
-        List<Lote> lotes = inspeccionService.obtenerLotesPorInspector(inspector);
-        return ResponseEntity.ok(lotes);
+    @GetMapping("/lotes-asignados/{inspectorId}")
+    public ResponseEntity<List<Lote>> obtenerLotes(@PathVariable Integer inspectorId) {
+        return ResponseEntity.ok(inspeccionService.obtenerLotesPorInspector(inspectorId));
     }
 
     @GetMapping("/productos-del-lote/{idLote}")

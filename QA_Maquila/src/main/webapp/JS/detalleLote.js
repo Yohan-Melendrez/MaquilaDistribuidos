@@ -1,122 +1,76 @@
-/* 
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/JavaScript.js to edit this template
- */
-
 document.addEventListener('DOMContentLoaded', () => {
+    const QA = 'http://localhost:8081/qa';
     const lote = JSON.parse(localStorage.getItem('loteSeleccionado'));
-
-    if (!lote) {
-        alert('No se encontró información del lote.');
-        window.location.href = 'lotesDisponibles.html';
-        return;
+    if (!lote) return alert('Sin lote') && location.reload();
+  
+    // Rellenar datos
+    document.getElementById('loteNombre').value    = lote.nombreLote;
+    document.getElementById('loteCantidad').value = lote.productos[0]?.cantidad || 0;
+    document.getElementById('loteDescripcion').value =
+      lote.productos[0]?.descripcion || '';
+  
+    const modal      = document.getElementById('modalAsignar');
+    const errorBox   = document.getElementById('modalError');
+    const selInspect = document.getElementById('selectEmpleado');
+    const btnAsig    = document.getElementById('confirmarAsignacion');
+    const btnCanc    = document.getElementById('cancelarAsignacion');
+  
+    // Abrir y cancelar
+    document.querySelector('.asignar').onclick = () => {
+      errorBox.style.display = 'none';
+      modal.style.display = 'flex';
+      cargarInspectores();
+    };
+    btnCanc.onclick = () => modal.style.display = 'none';
+  
+    function cargarInspectores() {
+      fetch(`${QA}/inspectores`)
+        .then(r => r.ok ? r.json() : Promise.reject())
+        .then(list => {
+          selInspect.innerHTML = '<option value="" disabled selected>Selecciona un empleado</option>';
+          list.forEach(i => {
+            const o = document.createElement('option');
+            o.value = i.idInspector;
+            o.text  = i.nombre;
+            selInspect.append(o);
+          });
+        })
+        .catch(_ => showError('No pudimos cargar los inspectores.'));
     }
-
-    document.getElementById('loteNombre').value = lote.nombreLote;
-    document.getElementById('loteCantidad').value = lote.productos.length > 0 ? lote.productos[0].cantidad : 0;
-    document.getElementById('loteDescripcion').value = lote.productos.length > 0 ? lote.productos[0].descripcion : 'Descripción no disponible';
-});
-
-document.addEventListener('DOMContentLoaded', () => {
-    const asignarBtn = document.querySelector('.asignar');
-    const modal = document.getElementById('modalAsignar');
-    const modalContent = modal.querySelector('.modal-content');
-    const lote = JSON.parse(localStorage.getItem('loteSeleccionado'));
-
-    asignarBtn.addEventListener('click', () => {
-        resetModal();
-        modal.style.display = 'flex';
-    });
-
-    window.addEventListener('click', (e) => {
-        if (e.target === modal) {
-            modal.style.display = 'none';
-        }
-    });
-
-    function resetModal() {
-        modalContent.innerHTML = `
-        <h3>Asignar a Empleado</h3>
-        <select id="selectEmpleado">
-            <option value="" disabled selected>Selecciona un empleado</option>
-        </select>
-        <div class="modal-botones">
-            <button class="btn-cancelar" id="cancelarAsignacion">Cancelar</button>
-            <button class="btn-confirmar" id="confirmarAsignacion">Asignar</button>
-        </div>
-    `;
-
-        fetch('http://localhost:8081/qa/inspectores')
-                .then(response => response.json())
-                .then(inspectores => {
-                    const selectEmpleado = document.getElementById('selectEmpleado');
-                    inspectores.forEach(inspector => {
-                        const option = document.createElement('option');
-                        option.value = inspector.idInspector;
-                        option.textContent = inspector.nombre;  // Asegúrate de que en tu entidad tengas `getNombre()`
-                        selectEmpleado.appendChild(option);
-                    });
-                })
-                .catch(error => {
-                    console.error('Error al cargar inspectores:', error);
-                    mostrarMensajeError("Error al cargar inspectores.");
-                });
-
-        document.getElementById('cancelarAsignacion').addEventListener('click', () => {
-            modal.style.display = 'none';
-        });
-
-        document.getElementById('confirmarAsignacion').addEventListener('click', () => {
-            const selectEmpleado = document.getElementById('selectEmpleado');
-            const empleadoId = selectEmpleado.value;
-            const empleadoTexto = selectEmpleado.options[selectEmpleado.selectedIndex].text;
-
-            if (!empleadoId) {
-                mostrarMensajeError("Selecciona un empleado antes de continuar.");
-                return;
-            }
-
-            const asignacionLoteDTO = {
-                idLote: lote.id,
-                idInspector: empleadoId,
-            };
-
-            fetch('http://localhost:8081/qa/asignarLote', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(asignacionLoteDTO),
-            })
-                    .then(response => response.json())
-                    .then(data => {
-                        modalContent.innerHTML = `
-                    <h3>Lote Asignado Exitosamente</h3>
-                    <p>El lote fue asignado a <strong>${empleadoTexto}</strong>.</p>
-                    <button class="btn-confirmar" id="cerrarModalFinal">Cerrar</button>
-                `;
-                        document.getElementById('cerrarModalFinal').addEventListener('click', () => {
-                            modal.style.display = 'none';
-                        });
-                    })
-                    .catch(error => {
-                        console.error('Error al asignar el lote:', error);
-                        mostrarMensajeError("Ocurrió un error al asignar el lote.");
-                    });
-        });
+  
+    function showError(msg) {
+      errorBox.textContent = msg;
+      errorBox.style.display = 'block';
     }
-
-    function mostrarMensajeError(mensaje) {
-        const errorParrafo = document.createElement('p');
-        errorParrafo.style.color = 'red';
-        errorParrafo.textContent = mensaje;
-
-        const existente = modalContent.querySelector('p[style="color: red;"]');
-        if (!existente) {
-            modalContent.insertBefore(errorParrafo, modalContent.querySelector('.modal-botones'));
-        }
-    }
-});
-
-
-
+  
+    btnAsig.onclick = () => {
+      const idI = parseInt(selInspect.value,10);
+      if (!idI) return showError('Debes elegir un inspector.');
+  
+      const payload = {
+        idLote: lote.idLote,
+        idInspector: idI
+      };
+  
+      fetch(`${QA}/asignarLote`, {
+        method: 'POST',
+        headers: { 'Content-Type':'application/json' },
+        body: JSON.stringify(payload)
+      })
+      .then(r => r.ok ? r.json() : Promise.reject())
+      .then(res => {
+        // Reducir cantidad en pantalla + storage
+        const inp = document.getElementById('loteCantidad');
+        const n = Math.max(parseInt(inp.value,10)-1,0);
+        inp.value = n;
+        lote.productos[0].cantidad = n;
+        localStorage.setItem('loteSeleccionado', JSON.stringify(lote));
+  
+        // Mensaje de éxito
+        document.querySelector('.modal-content h3').textContent = res.mensaje;
+        errorBox.style.display = 'none';
+      })
+      .catch(_ => showError('Ocurrió un error al asignar el lote.'));
+    };
+  });
+  

@@ -1,13 +1,8 @@
 // JS/index.js
-
-// Base de tu API (ajusta el puerto si cambia)
 const API_ROOT = 'http://localhost:9090';
+const select     = document.getElementById('inspectorSelect');
+const loginBtn   = document.getElementById('loginBtn');
 
-// Elementos del DOM
-const select = document.getElementById('inspectorSelect');
-const loginBtn = document.getElementById('loginBtn');
-
-// 1) Traer inspectores desde el backend
 fetch(`${API_ROOT}/inspeccion/inspectores`)
   .then(res => {
     if (!res.ok) throw new Error('No se pudo cargar inspectores.');
@@ -16,8 +11,8 @@ fetch(`${API_ROOT}/inspeccion/inspectores`)
   .then(inspectores => {
     inspectores.forEach(i => {
       const opt = document.createElement('option');
-      opt.value = i.nombre;      // ejemplo: "Inspector A"
-      opt.textContent = i.nombre;
+      opt.value       = i.id;      // <-- Aquí ponemos el ID numérico
+      opt.textContent = i.nombre;  // <-- El texto sí sigue siendo el nombre
       select.appendChild(opt);
     });
   })
@@ -26,13 +21,15 @@ fetch(`${API_ROOT}/inspeccion/inspectores`)
     alert('Error cargando inspectores. Revisa la consola.');
   });
 
-// 2) Habilitar el botón solo si hay selección
 select.addEventListener('change', () => {
   loginBtn.disabled = select.value === '';
 });
 
-// 3) Al hacer click, guardamos sesión y redirigimos
 loginBtn.addEventListener('click', () => {
-  sessionStorage.setItem('inspector', select.value);
+  // Guardamos **ambos** en sessionStorage
+  const inspectorId   = select.value;
+  const inspectorName = select.options[select.selectedIndex].text;
+  sessionStorage.setItem('inspectorId', inspectorId);
+  sessionStorage.setItem('inspectorName', inspectorName);
   window.location.href = 'menuLotes.html';
 });

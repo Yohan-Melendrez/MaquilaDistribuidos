@@ -1,14 +1,16 @@
 package service.inspeccion.servicio;
 
+import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.server.ResponseStatusException;
 
 import service.inspeccion.dtos.AsignarLoteDTO;
 import service.inspeccion.dtos.InspectorDTO;
@@ -19,38 +21,27 @@ import service.inspeccion.modelo.*;
 import service.inspeccion.rabbit.ProductorNotificaciones;
 import service.inspeccion.repositorio.*;
 
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.stream.Collectors;
-
 @Service
 public class InspeccionService {
 
-    @Autowired
-    private InspeccionRepositorio inspeccionRepo;
-    @Autowired
-    private LoteRepositorio loteRepo;
-    @Autowired
-    private LoteInspectorRepositorio loteInspectorRepo;
-    @Autowired
-    private ProductoRepositorio productoRepo;
-    @Autowired
-    private ErrorRepositorio errorRepo;
-    @Autowired
-    private LoteProductoRepositorio loteProductoRepo;
-    @Autowired
-    private ProductorNotificaciones productorNotificaciones;
-    @Autowired
-    private InspectorRepositorio inspectorRepo;
-    private final RestTemplate restTemplate;
+    @Autowired private InspeccionRepositorio inspeccionRepo;
+    @Autowired private LoteRepositorio loteRepo;
+    @Autowired private ProductoRepositorio productoRepo;
+    @Autowired private ErrorRepositorio errorRepo;
+    @Autowired private LoteProductoRepositorio loteProductoRepo;
+    @Autowired private ProductorNotificaciones productorNotificaciones;
+    @Autowired private InspectorRepositorio inspectorRepo;
+
+    private final RestTemplate restTemplate = new RestTemplate();
+
     @Value("${qa.service.url:http://localhost:8081/qa}")
     private String qaServiceUrl;
 
-    public InspeccionService() {
-       
-        this.restTemplate = new RestTemplate();
-    }
-
+    /**
+     * 1) Registra la inspección (persistencia local).
+     * 2) Envía notificación a Rabbit y luego a QA para registrar la notificación.
+     * 3) Desactiva el inspector localmente.
+     */
     public void registrarInspeccion(RegistroInspeccionDTO dto) {
         Lote lote = loteRepo.findById(dto.getIdLote())
                 .orElseThrow(() -> new RuntimeException("Lote no encontrado"));
@@ -61,7 +52,7 @@ public class InspeccionService {
         Inspector inspector = inspectorRepo.findByNombre(dto.getInspector())
                 .orElseThrow(() -> new RuntimeException("Inspector no encontrado"));
 
-        // --- Guardar inspecciones y determinar nivel ---
+        // --- Guardar cada inspección y calcular nivel de atención máximo ---
         NivelAtencion nivelMasAlto = NivelAtencion.BAJO;
         for (Integer idError : dto.getErroresSeleccionados()) {
             ErrorProduccion err = errorRepo.findById(idError)
@@ -82,11 +73,10 @@ public class InspeccionService {
         lote.setNivelAtencion(nivelMasAlto);
         loteRepo.save(lote);
 
-        // --- Crear DTO de notificación ---
+        // --- Preparar DTO de notificación ---
         NotificacionDTO noti = new NotificacionDTO();
         noti.setTitulo("Lote rechazado");
-        noti.setMensaje(
-                "El lote " + lote.getNombreLote() +
+        noti.setMensaje("El lote " + lote.getNombreLote() +
                         " fue rechazado por " + dto.getInspector() +
                         ". Nivel: " + nivelMasAlto);
         noti.setTipo("DEFECTO");
@@ -94,57 +84,62 @@ public class InspeccionService {
         noti.setIdInspector(inspector.getIdInspector());
         noti.setNombreInspector(inspector.getNombre());
 
-        // --- 3) Enviar notificación a RabbitMQ ---
+        // --- 1) RabbitMQ local ---
         productorNotificaciones.enviarNotificacion(noti);
 
-        // --- 4) Enviar notificación a QA para guardarla en su sistema ---
+        // --- 2) POST a QA para que registre la notificación ---
         try {
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
             HttpEntity<NotificacionDTO> req = new HttpEntity<>(noti, headers);
             restTemplate.postForEntity(qaServiceUrl + "/externa", req, String.class);
         } catch (Exception e) {
-            // Loguea el error pero no detengas el flujo principal
             System.err.println("Error al notificar a QA: " + e.getMessage());
         }
 
-        // --- 5) Desactivar el inspector que acaba de reportar ---
+        // --- 3) Desactivar el inspector local ---
         inspector.setActivo(false);
         inspectorRepo.save(inspector);
     }
 
+    /**
+     * En lugar de persistir localmente, delega la asignación a QA.
+     */
     public void asignarLoteAInspector(AsignarLoteDTO dto) {
-        Lote lote = loteRepo.findById(dto.getIdLote())
-                .orElseThrow(() -> new RuntimeException("Lote no encontrado"));
-
-        boolean existe = loteInspectorRepo
-                .existsByLote_IdLoteAndInspector(dto.getIdLote(), dto.getInspector());
-        if (existe) {
-            throw new ResponseStatusException(
-                    HttpStatus.CONFLICT,
-                    "Este lote ya fue asignado a " + dto.getInspector());
+        // Validaciones mínimas
+        if (dto.getIdLote() == null || dto.getInspector() == null) {
+            throw new IllegalArgumentException("El ID del lote o del inspector no puede ser null");
         }
 
-        LoteInspector asignacion = new LoteInspector();
-        asignacion.setLote(lote);
-        asignacion.setInspector(dto.getInspector());
-        loteInspectorRepo.save(asignacion);
+        // Llamada REST a QA
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            HttpEntity<AsignarLoteDTO> req = new HttpEntity<>(dto, headers);
+            restTemplate.postForEntity(qaServiceUrl + "/asignarLote", req, String.class);
+        } catch (HttpClientErrorException e) {
+            throw new RuntimeException("QA respondió con error: " + e.getResponseBodyAsString(), e);
+        }
     }
 
-    public List<Lote> obtenerLotesPorInspector(String inspector) {
-        return loteInspectorRepo.findByInspector(inspector).stream()
-                .map(LoteInspector::getLote)
-                .collect(Collectors.toList());
+    /**
+     * Trae los lotes asignados al inspector consultando a QA.
+     */
+    public List<Lote> obtenerLotesPorInspector(Integer idInspector) {
+        return loteRepo.findByInspector_IdInspector(idInspector);
     }
+
 
     public List<ProductoDelLoteDTO> obtenerProductosDeLote(Integer idLote) {
-        return loteProductoRepo.findByLote_IdLote(idLote).stream()
-                .map(lp -> new ProductoDelLoteDTO(
-                        lp.getProducto().getIdProducto(),
-                        lp.getProducto().getNombre(),
-                        lp.getProducto().getDescripcion(),
-                        lp.getCantidad()))
-                .collect(Collectors.toList());
+        return loteProductoRepo.findByLote_IdLote(idLote)
+            .stream()
+            .map(lp -> new ProductoDelLoteDTO(
+                lp.getProducto().getIdProducto(),
+                lp.getProducto().getNombre(),
+                lp.getProducto().getDescripcion(),
+                lp.getCantidad()
+            ))
+            .collect(Collectors.toList());
     }
 
     public List<ErrorProduccion> obtenerTodosLosErrores() {
@@ -157,8 +152,7 @@ public class InspeccionService {
 
     public List<InspectorDTO> obtenerTodosLosInspectores() {
         return inspectorRepo.findAll().stream()
-                .filter(Inspector::getActivo)
-                .map(i -> new InspectorDTO(i.getIdInspector(), i.getNombre()))
-                .collect(Collectors.toList());
+            .map(i -> new InspectorDTO(i.getIdInspector(), i.getNombre()))
+            .collect(Collectors.toList());
     }
 }

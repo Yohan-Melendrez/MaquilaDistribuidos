@@ -1,91 +1,84 @@
 // JS/fallasProducto.js
+const API_ROOT       = 'http://localhost:9090';
+const contenedor     = document.getElementById('fallasContainer');
+const btnReportar    = document.getElementById('reportarBtn');
+const btnCancelar    = document.getElementById('cancelarBtn');
 
-// Define aquí tu base de API (ajusta el puerto si lo cambias)
-const API_BASE = 'http://localhost:9090/inspeccion';
+const idLoteRaw      = sessionStorage.getItem('idLote');
+const idProductoRaw  = sessionStorage.getItem('idProducto');
+const inspectorName  = sessionStorage.getItem('inspectorName');
+const inspectorId    = sessionStorage.getItem('inspectorId');
 
-const contenedor = document.getElementById('fallasContainer');
-const btnReportar = document.getElementById('reportarBtn');
-const btnCancelar = document.getElementById('cancelarBtn');
+const idLote     = parseInt(idLoteRaw, 10);
+const idProducto = parseInt(idProductoRaw, 10);
 
-// Datos necesarios para el registro
-const idLote     = Number(sessionStorage.getItem('idLote'));
-const idProducto = Number(sessionStorage.getItem('idProducto'));
-const inspector  = sessionStorage.getItem('inspector');
-
-if (!idLote || !idProducto || !inspector) {
+if (![idLote, idProducto, inspectorId].every(x => x && !isNaN(x))) {
   alert('Faltan datos para registrar la inspección.');
   window.location.href = 'menuLotes.html';
 }
 
-// 1. Cargar errores reales desde backend
-fetch(`${API_BASE}/errores/${idProducto}`)
-  .then(response => {
-    if (!response.ok) throw new Error('Error al obtener errores.');
-    return response.json();
+fetch(`${API_ROOT}/inspeccion/errores/${idProducto}`)
+  .then(res => {
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    return res.json();
   })
   .then(fallas => {
     if (fallas.length === 0) {
       contenedor.innerHTML = '<p>No hay errores configurados para este producto.</p>';
       return;
     }
-    fallas.forEach(falla => {
+    fallas.forEach(e => {
+      const labelText = e.nombre ?? 'Falla sin nombre';
       const div = document.createElement('div');
       div.className = 'falla';
       div.innerHTML = `
-        <label class="falla-label">
-          ${falla.nombre}
-          <input
-            type="checkbox"
-            class="falla-checkbox"
-            data-id="${falla.idError}"
-          >
+        <label>
+          <input type="checkbox" class="falla-checkbox" data-id="${e.idError}">
+          ${labelText}
         </label>
       `;
       contenedor.appendChild(div);
     });
+    
   })
-  .catch(error => {
-    console.error(error);
+  .catch(err => {
+    console.error('Error al cargar fallas:', err);
     contenedor.innerHTML = '<p>Error al cargar fallas.</p>';
   });
 
-// 2. Habilitar botón si hay una falla marcada
 contenedor.addEventListener('change', () => {
-  const seleccionadas = document.querySelectorAll('.falla-checkbox:checked');
-  btnReportar.disabled = seleccionadas.length === 0;
+  btnReportar.disabled = document.querySelectorAll('.falla-checkbox:checked').length === 0;
 });
 
-// 3. Acción: Cancelar
 btnCancelar.addEventListener('click', () => {
   window.location.href = 'productosLote.html';
 });
 
-// 4. Acción: Reportar
 btnReportar.addEventListener('click', () => {
-  const seleccionadas = document.querySelectorAll('.falla-checkbox:checked');
-  const erroresSeleccionados = Array.from(seleccionadas)
-    .map(input => parseInt(input.dataset.id, 10));
+  const seleccionadas = Array
+    .from(document.querySelectorAll('.falla-checkbox:checked'))
+    .map(cb => parseInt(cb.dataset.id, 10));
 
   const payload = {
     idLote,
     idProducto,
-    inspector,
-    erroresSeleccionados
+    inspector: inspectorName,
+    erroresSeleccionados: seleccionadas
   };
 
-  fetch(`${API_BASE}/registrar`, {
+  fetch(`${API_ROOT}/inspeccion/registrar`, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: { 'Content-Type':'application/json' },
     body: JSON.stringify(payload)
   })
-  .then(response => {
-    if (!response.ok) throw new Error('Error al registrar inspección.');
-    // Mostrar modal de confirmación (debes tenerlo en tu HTML)
-    document.getElementById('modalConfirmacion').style.display = 'flex';
-    setTimeout(() => window.location.href = 'menuLotes.html', 1200);
-  })
-  .catch(error => {
-    console.error(error);
-    alert('Error al registrar inspección.');
-  });
+    .then(res => {
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      // aquí muestras tu modal de “Falla reportada…”
+      document.getElementById('modalConfirmacion').style.display = 'flex';
+      setTimeout(() => window.location.href = 'menuLotes.html', 1200);
+    })
+    .catch(err => {
+      console.error('Error al reportar falla:', err);
+      alert('Error al registrar inspección.');
+    });
 });

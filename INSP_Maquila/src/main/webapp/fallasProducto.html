@@ -1,40 +1,45 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <title>Notificar falla</title>
-    <link rel="stylesheet" href="CSS/fallasProducto.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" />
-
+  <meta charset="UTF-8">
+  <title>Notificar falla</title>
+  <link rel="stylesheet" href="CSS/fallasProducto.css">
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+  />
+  <!-- <-- defer para que el script espere a que se haya parseado el HTML y exista sessionStorage -->
+  <script src="JS/fallasProducto.js" defer></script>
 </head>
 <body>
-    <div class="app-container">
-        <div class="header">
-            <h2>Notificar falla</h2>
-        </div>
-
-        <div class="subtitulo">
-            Seleccione las fallas del producto
-        </div>
-
-        <div class="fallas-container" id="fallasContainer">
-            <!-- Fallas dinámicas -->
-        </div>
-
-        <div class="footer">
-            <button class="boton" id="reportarBtn" disabled>Reportar</button>
-            <button class="boton" id="cancelarBtn">Cancelar</button>
-        </div>        
+  <div class="app-container">
+    <div class="header">
+      <h2>Notificar falla</h2>
     </div>
 
-    <script src="JS/fallasProducto.js"></script>
+    <div class="subtitulo">
+      Seleccione las fallas del producto
+    </div>
 
-    <div id="modalConfirmacion" class="modal">
-        <div class="modal-contenido">
-          <i class="fas fa-circle-check fa-3x fa-bounce icono-confirmacion"></i>
-          <p class="mensaje">¡Falla reportada exitosamente!</p>
-        </div>
-      </div>
-      
+    <div class="fallas-container" id="fallasContainer">
+      <!-- Fallas dinámicas -->
+    </div>
+
+    <div class="footer">
+      <button class="boton" id="reportarBtn" disabled>
+        Reportar
+      </button>
+      <button class="boton" id="cancelarBtn">
+        Cancelar
+      </button>
+    </div>
+  </div>
+
+  <div id="modalConfirmacion" class="modal">
+    <div class="modal-contenido">
+      <i class="fas fa-circle-check fa-3x fa-bounce icono-confirmacion"></i>
+      <p class="mensaje">¡Falla reportada exitosamente!</p>
+    </div>
+  </div>
 </body>
 </html>

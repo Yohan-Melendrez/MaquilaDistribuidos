@@ -5,6 +5,8 @@
 package service.qa.controller;
 
 import java.util.List;
+import java.util.Map;
+
 import service.qa.dto.AsignacionLoteDTO;
 import service.qa.dto.EvaluacionDefectoDTO;
 import service.qa.dto.NotificacionDTO;
@@ -20,6 +22,7 @@ import service.qa.servicio.ServicioQA;
 
 @RestController
 @RequestMapping("/qa")
+@CrossOrigin(origins = "*")
 public class QAControl {
 
     @Autowired
@@ -38,11 +41,10 @@ public class QAControl {
         return ResponseEntity.ok("Nivel de atención actualizado");
     }
 
-    // Endpoint para asignar lotes a inspectores
     @PostMapping("/asignarLote")
-    public ResponseEntity<String> asignarLoteAInspector(@RequestBody AsignacionLoteDTO dto) {
+    public ResponseEntity<?> asignarLote(@RequestBody AsignacionLoteDTO dto) {
         servicioQA.asignarLoteAInspector(dto);
-        return new ResponseEntity<>("Lote asignado al inspector", HttpStatus.CREATED);
+        return ResponseEntity.ok("Lote asignado en QA");
     }
 
     // Endpoint para guardar una notificación manual
@@ -73,11 +75,10 @@ public class QAControl {
     @GetMapping(value = "/notificaciones", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<NotificacionDTO>> obtenerNotificaciones() {
         return ResponseEntity
-            .ok()
-            .contentType(MediaType.APPLICATION_JSON) // <- explícito
-            .body(servicioQA.obtenerNotificaciones());
+                .ok()
+                .contentType(MediaType.APPLICATION_JSON) // <- explícito
+                .body(servicioQA.obtenerNotificaciones());
     }
-    
 
     @GetMapping
     public ResponseEntity<?> obtenerTodas() {
