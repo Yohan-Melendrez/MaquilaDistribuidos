@@ -4,37 +4,38 @@
  */
 
 document.addEventListener('DOMContentLoaded', () => {
-  // Obtener contenedor para los detalles
-  const detalleInfo = document.getElementById('detalleInfo');
-  
-  // Simular los datos del reporte que vendrían de la página anterior o base de datos
-  const reporteData = {
-    tipoDefecto: "RENDIMIENTO",
-    lotesRechazados: 3,
-    costoTotal: "$ 10,000 PESOS",
-    detalles: "3 LOTES DE BASURADORA NO FUNCIONAN CORRECTAMENTE, UNAS NO PRENDEN OTRAS NO TIENEN LA POTENCIA CORRECTA CUANDO ESTÁN ENCENDIDAS Y OTRAS NO CORTAN"
-  };
-  
-  // Crear los elementos de visualización (no editables)
-  detalleInfo.innerHTML = `
-    <div class="campo">
-      <label class="etiqueta">Tipo de defecto</label>
-      <span class="valor">${reporteData.tipoDefecto}</span>
-    </div>
-    
-    <div class="campo">
-      <label class="etiqueta">Total de lotes rechazados según el tipo de defecto</label>
-      <input type="text" class="valor" value="${reporteData.lotesRechazados}" readonly>
-    </div>
-    
-    <div class="campo">
-      <label class="etiqueta">Costo total de las piezas rechazadas</label>
-      <input type="text" class="valor" value="${reporteData.costoTotal}" readonly>
-    </div>
-    
-    <div class="campo">
-      <label class="etiqueta">Detalles de las piezas rechazadas</label>
-      <textarea class="valor" readonly>${reporteData.detalles}</textarea>
-    </div>
-  `;
+    // 1. Obtener el ID del reporte desde la URL
+    const params = new URLSearchParams(window.location.search);
+    const id = params.get('id');
+
+    if (!id) {
+        document.getElementById('detalleInfo').innerHTML = '<p>ID de reporte no proporcionado.</p>';
+        return;
+    }
+
+    // 2. Hacer fetch al endpoint con el ID
+    fetch(`http://localhost:9091/reportes/historial/${id}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`Error al obtener reporte: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(reporte => {
+                document.getElementById('tipo').textContent = reporte.tipoDefecto;
+
+                const inputs = document.querySelectorAll('.valor');
+                if (inputs.length >= 5) {
+                    inputs[0].value = reporte.totalPiezasRechazadas || '';
+                    inputs[1].value = reporte.fechaComprendida || '';  // nuevo campo de fecha
+                    inputs[2].value = `$${reporte.costoTotalUsd} USD`;
+                    inputs[3].value = `$${reporte.costoTotalMxn} MXN`;
+                    inputs[4].value = reporte.detallesRechazo || '';
+                }
+            })
+
+            .catch(error => {
+                console.error('Error al cargar el detalle del reporte:', error);
+                document.getElementById('detalleInfo').innerHTML = '<p>No se pudo cargar el reporte.</p>';
+            });
 });

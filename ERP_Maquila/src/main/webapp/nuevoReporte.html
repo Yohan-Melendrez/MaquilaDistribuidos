@@ -32,33 +32,38 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                 <div class="campo">
                     <label class="etiqueta">Tipo de defecto</label>
                     <select class="valor" id="tipoDefecto" required>
-                        <option value="">Tipo de defecto</option>
-                        <option value="rendimiento">Rendimiento</option>
-                        <option value="empaque">Empaque</option>
-                        <option value="produccion">Producción</option>
-                        <option value="presentacion">Presentación</option>
+                        <option value="">Seleccione un defecto</option>
+                        <!-- Se llenará dinámicamente -->
                     </select>
                 </div>
 
                 <div class="campo">
-                    <label class="etiqueta">Total de lotes rechazados según el tipo de defecto</label>
-                    <input type="number" class="valor" id="lotesRechazados" required>
+                    <label class="etiqueta">Fecha desde</label>
+                    <input type="date" class="valor" id="fechaDesde" required>
                 </div>
 
                 <div class="campo">
-                    <label class="etiqueta">Costo total de las piezas rechazadas</label>
-                    <input type="text" class="valor" id="costoTotal" required>
+                    <label class="etiqueta">Fecha hasta</label>
+                    <input type="date" class="valor" id="fechaHasta" required>
                 </div>
 
-                <div class="campo">
-                    <label class="etiqueta">Detalles de las piezas rechazadas</label>
-                    <textarea class="valor" id="detalles" required></textarea>
-                </div>
 
                 <button type="submit" class="generar">Guardar Reporte</button>
             </form>
             <a href="reportes.html" class="volver">Volver a Reportes</a>
         </div>
+        <div id="modalConfirmacion" class="modal">
+            <div class="modal-contenido">
+                <i class="fas fa-circle-check fa-3x fa-bounce icono-confirmacion"></i>
+                <p class="mensaje">¡Reporte Generado exitosamente!</p>
+            </div>
+        </div> 
+        <div id="modalRechazo" class="modal">
+            <div class="modal-contenido">
+                <i class="fas fa-circle-check fa-3x fa-bounce icono-confirmacion"></i>
+                <p class="mensaje">¡No se han encontrado inspecciones para reportar dentro de esa fecha y defecto!</p>
+            </div>
+        </div> 
         <script src="JS/nuevoReporte.js"></script>
     </body>
 </html>
