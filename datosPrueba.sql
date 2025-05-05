@@ -118,8 +118,8 @@ INSERT INTO inspecciones (id_lote, id_producto, id_error, fecha, inspector, deta
 (15, 6, 5, '2025-05-01 08:30:00', 'juan', 'Envase con manchas de color extraño en el plástico'),  -- Más envases dañados
 (15, 6, NULL, '2025-05-01 09:45:00', 'juan', NULL); -- Inspección sin errores detectados
 
-INSERT INTO reportes (tipo_defecto, total_piezas_rechazadas, costo_total_usd, detalles_rechazo
-) VALUES ('Soldadura mala',5,120.50,'Lote: L001, Producto: Motor A, Inspector: Juan, Fecha: 2025-05-01 10:45; Lote: L002, 
+INSERT INTO reportes (tipo_defecto, total_piezas_rechazadas, costo_total_usd, costo_total_mxn, detalles_rechazo
+) VALUES ('Soldadura mala',5,120.50,10.5,'Lote: L001, Producto: Motor A, Inspector: Juan, Fecha: 2025-05-01 10:45; Lote: L002, 
 Producto: Motor B, Inspector: Ana, Fecha: 2025-05-02 11:30'
 );
 

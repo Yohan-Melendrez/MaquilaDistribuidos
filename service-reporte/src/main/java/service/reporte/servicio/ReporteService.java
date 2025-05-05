@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import service.reporte.dtos.ConversionDTO;
 import service.reporte.dtos.ErrorDTO;
 import service.reporte.dtos.ReporteDTO;
 import service.reporte.modelo.Inspeccion;
@@ -36,6 +37,9 @@ public class ReporteService {
 
     @Autowired
     private ErrorRepository errorRepository;
+    
+    @Autowired
+    private CurrencyClientService currencyClientService;
 
     public List<ReporteDTO> obtenerHistorial() {
         List<Reporte> reportes = reporteRepository.findAll();
@@ -45,6 +49,7 @@ public class ReporteService {
                 r.getTipoDefecto(),
                 r.getTotalPiezasRechazadas(),
                 r.getCostoTotalUsd(),
+                r.getCostoTotalMxn(),
                 r.getDetallesRechazo()
         )).toList();
     }
@@ -60,6 +65,9 @@ public class ReporteService {
         double costoTotalUsd = inspecciones.stream()
                 .mapToDouble(i -> i.getError().getCostoUsd())
                 .sum();
+        
+        ConversionDTO conversion = currencyClientService.getConversion("USD", "MXN");
+        double costoTotalMxn = costoTotalUsd * conversion.getRate();
 
         String detalles = inspecciones.stream()
                 .map(i -> "El producto " + i.getProducto().getNombre()
@@ -71,6 +79,7 @@ public class ReporteService {
         reporte.setTipoDefecto(inspecciones.get(0).getErrorDefecto().getNombre());
         reporte.setTotalPiezasRechazadas(total);
         reporte.setCostoTotalUsd(costoTotalUsd);
+        reporte.setCostoTotalMxn(costoTotalMxn);
         reporte.setDetallesRechazo(detalles);
 
         return reporteRepository.save(reporte);
@@ -92,7 +101,8 @@ public class ReporteService {
         return new ReporteDTO(
                 reporte.getTipoDefecto(), 
                 reporte.getTotalPiezasRechazadas(), 
-                reporte.getCostoTotalUsd(), 
+                reporte.getCostoTotalUsd(),
+                reporte.getCostoTotalMxn(),
                 reporte.getDetallesRechazo());
     }
 }

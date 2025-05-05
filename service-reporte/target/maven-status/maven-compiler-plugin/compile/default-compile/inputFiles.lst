@@ -1,4 +1,5 @@
 C:\Users\USER\Documents\ITSON\Trabajos ITSON\Sexto Semestre\Sistemas Distribuidos\Proyecto\MaquilaDistribuidos\service-reporte\src\main\java\service\reporte\controller\ReporteController.java
+C:\Users\USER\Documents\ITSON\Trabajos ITSON\Sexto Semestre\Sistemas Distribuidos\Proyecto\MaquilaDistribuidos\service-reporte\src\main\java\service\reporte\dtos\ConversionDTO.java
 C:\Users\USER\Documents\ITSON\Trabajos ITSON\Sexto Semestre\Sistemas Distribuidos\Proyecto\MaquilaDistribuidos\service-reporte\src\main\java\service\reporte\dtos\ErrorDTO.java
 C:\Users\USER\Documents\ITSON\Trabajos ITSON\Sexto Semestre\Sistemas Distribuidos\Proyecto\MaquilaDistribuidos\service-reporte\src\main\java\service\reporte\dtos\FiltroReporteDTO.java
 C:\Users\USER\Documents\ITSON\Trabajos ITSON\Sexto Semestre\Sistemas Distribuidos\Proyecto\MaquilaDistribuidos\service-reporte\src\main\java\service\reporte\dtos\ReporteDTO.java
@@ -11,5 +12,6 @@ C:\Users\USER\Documents\ITSON\Trabajos ITSON\Sexto Semestre\Sistemas Distribuido
 C:\Users\USER\Documents\ITSON\Trabajos ITSON\Sexto Semestre\Sistemas Distribuidos\Proyecto\MaquilaDistribuidos\service-reporte\src\main\java\service\reporte\repositorio\InspeccionRepository.java
 C:\Users\USER\Documents\ITSON\Trabajos ITSON\Sexto Semestre\Sistemas Distribuidos\Proyecto\MaquilaDistribuidos\service-reporte\src\main\java\service\reporte\repositorio\ReporteRepository.java
 C:\Users\USER\Documents\ITSON\Trabajos ITSON\Sexto Semestre\Sistemas Distribuidos\Proyecto\MaquilaDistribuidos\service-reporte\src\main\java\service\reporte\ServiceReporteApplication.java
+C:\Users\USER\Documents\ITSON\Trabajos ITSON\Sexto Semestre\Sistemas Distribuidos\Proyecto\MaquilaDistribuidos\service-reporte\src\main\java\service\reporte\servicio\CurrencyClientService.java
 C:\Users\USER\Documents\ITSON\Trabajos ITSON\Sexto Semestre\Sistemas Distribuidos\Proyecto\MaquilaDistribuidos\service-reporte\src\main\java\service\reporte\servicio\ReporteService.java
 C:\Users\USER\Documents\ITSON\Trabajos ITSON\Sexto Semestre\Sistemas Distribuidos\Proyecto\MaquilaDistribuidos\service-reporte\src\main\java\service\reporte\WebConfig.java

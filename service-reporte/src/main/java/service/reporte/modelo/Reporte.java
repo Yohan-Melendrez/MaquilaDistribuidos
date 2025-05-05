@@ -22,6 +22,7 @@ public class Reporte {
     private String tipoDefecto;
     private Long totalPiezasRechazadas;
     private Double costoTotalUsd;
+    private Double costoTotalMxn;
 
     @Lob
     private String detallesRechazo;
@@ -79,6 +80,14 @@ public class Reporte {
 
     public void setFechaGeneracion(LocalDateTime fechaGeneracion) {
         this.fechaGeneracion = fechaGeneracion;
+    }
+
+    public Double getCostoTotalMxn() {
+        return costoTotalMxn;
+    }
+
+    public void setCostoTotalMxn(Double costoTotalMxn) {
+        this.costoTotalMxn = costoTotalMxn;
     }
 
     

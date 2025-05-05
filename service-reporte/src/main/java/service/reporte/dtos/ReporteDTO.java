@@ -13,23 +13,26 @@ public class ReporteDTO {
     private String tipoDefecto;
     private Long totalPiezasRechazadas;
     private Double costoTotalUsd;
+    private Double costoTotalMxn;
     private String detallesRechazo;
 
     public ReporteDTO() {
     }
 
-    public ReporteDTO(Long id, String tipoDefecto, Long totalPiezasRechazadas, Double costoTotalUsd, String detallesRechazo) {
+    public ReporteDTO(Long id, String tipoDefecto, Long totalPiezasRechazadas, Double costoTotalUsd, Double costoTotalMxn, String detallesRechazo) {
         this.id = id;
         this.tipoDefecto = tipoDefecto;
         this.totalPiezasRechazadas = totalPiezasRechazadas;
         this.costoTotalUsd = costoTotalUsd;
+        this.costoTotalMxn = costoTotalMxn;
         this.detallesRechazo = detallesRechazo;
     }
 
-    public ReporteDTO(String tipoDefecto, Long totalPiezasRechazadas, Double costoTotalUsd, String detallesRechazo) {
+    public ReporteDTO(String tipoDefecto, Long totalPiezasRechazadas, Double costoTotalUsd, Double costoTotalMxn, String detallesRechazo) {
         this.tipoDefecto = tipoDefecto;
         this.totalPiezasRechazadas = totalPiezasRechazadas;
         this.costoTotalUsd = costoTotalUsd;
+        this.costoTotalMxn = costoTotalMxn;
         this.detallesRechazo = detallesRechazo;
     }
 
@@ -63,6 +66,14 @@ public class ReporteDTO {
 
     public void setCostoTotalUsd(Double costoTotalUsd) {
         this.costoTotalUsd = costoTotalUsd;
+    }
+    
+    public Double getCostoTotalMxn() {
+        return costoTotalMxn;
+    }
+
+    public void setCostoTotalMxn(Double costoTotalMxn) {
+        this.costoTotalMxn = costoTotalMxn;
     }
 
     public String getDetallesRechazo() {

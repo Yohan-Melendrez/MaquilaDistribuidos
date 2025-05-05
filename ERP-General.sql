@@ -65,6 +65,7 @@ CREATE TABLE reportes (
     tipo_defecto VARCHAR(255) NOT NULL,
     total_piezas_rechazadas BIGINT NOT NULL,
     costo_total_usd DOUBLE NOT NULL,
+    costo_total_mxn DOUBLE NOT NULL,
     detalles_rechazo TEXT,
     fecha_generacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );

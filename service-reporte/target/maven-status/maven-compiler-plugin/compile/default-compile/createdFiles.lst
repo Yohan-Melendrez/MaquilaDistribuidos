@@ -1,4 +1,5 @@
 service\reporte\modelo\ErrorDefecto.class
+service\reporte\servicio\CurrencyClientService.class
 service\reporte\modelo\Reporte.class
 service\reporte\dtos\ErrorDTO.class
 service\reporte\dtos\FiltroReporteDTO.class
@@ -13,4 +14,5 @@ service\reporte\repositorio\ErrorRepository.class
 service\reporte\repositorio\InspeccionRepository.class
 service\reporte\servicio\ReporteService.class
 service\reporte\WebConfig$1.class
+service\reporte\dtos\ConversionDTO.class
 service\reporte\controller\ReporteController.class
