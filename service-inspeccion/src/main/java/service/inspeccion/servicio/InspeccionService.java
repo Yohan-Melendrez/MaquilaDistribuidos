@@ -62,9 +62,9 @@ public class InspeccionService {
             ins.setDetalle_error(dto.getDetalleError());
             
             inspeccionRepo.save(ins);
-            if (err.getNivelAtencion().ordinal() > nivelMasAlto.ordinal()) {
-                nivelMasAlto = err.getNivelAtencion();
-            }
+//            if (err.getNivelAtencion().ordinal() > nivelMasAlto.ordinal()) {
+//                nivelMasAlto = err.getNivelAtencion();
+//            }
         }
 
         // --- Actualizar estado del lote ---
