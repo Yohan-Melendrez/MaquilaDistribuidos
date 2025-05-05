@@ -37,21 +37,18 @@ body {
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
-    background-image: url('data:image/svg+xml;charset=US-ASCII,\
-      %3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'12\' height=\'8\'%3E\
-      %3Cpath fill=\'%23333\' d=\'M6 8L0 0h12z\'/%3E%3C/svg%3E');
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath fill='%23333' d='M6 8L0 0h12z'/%3E%3C/svg%3E");
     background-repeat: no-repeat;
     background-position: right 10px center;
     background-size: 12px 8px;
 }
+
 
 /* Ajustar el contenedor para que el arrow no tape el texto */
 .login-container select:focus {
     outline: none;
     border-color: #2d6073;
 }
-
-
 
 .login-container h2 {
     margin-bottom: 20px;
@@ -81,11 +78,10 @@ body {
 .login-container button:hover {
     background-color: #1b4050;
 }
-
-.logo-login{
+.logo-login {
     width: 150px;
     height: 150px;
     margin-bottom: 20px;
     border-radius: 50%;
-    box-shadow: 0 0 10px rgb(45, 96, 115);   
+    box-shadow: 0 0 10px rgb(45, 96, 115);
 }
