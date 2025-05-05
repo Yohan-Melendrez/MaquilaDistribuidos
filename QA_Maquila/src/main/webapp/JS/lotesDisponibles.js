@@ -5,7 +5,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     const listaLotes = document.getElementById('listaLotes');
 
-    fetch('http://localhost:8081/qa/lotes')
+    fetch('http://localhost:8082/qa/lotes')
             .then(response => response.json())
             .then(lotes => {
                 lotes.forEach(lote => {
@@ -43,7 +43,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         botonNotificar.disabled = true;
                         botonNotificar.textContent = 'Notificando...';
 
-                        fetch('http://localhost:8081/qa/guardarNotificacion', {
+                        fetch('http://localhost:8082/qa/guardarNotificacion', {
                             method: 'POST',
                             headers: {'Content-Type': 'application/json'},
                             body: JSON.stringify(lote)
@@ -78,7 +78,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                             fechaEnvio: new Date().toISOString()
                                         };
 
-                                        fetch('http://localhost:8081/qa/guardarNotificacion', {
+                                        fetch('http://localhost:8082/qa/guardarNotificacion', {
                                             method: 'POST',
                                             headers: {'Content-Type': 'application/json'},
                                             body: JSON.stringify(notificacionDTO)
@@ -110,7 +110,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     botonDetalles.className = 'ver-btn';
                     botonDetalles.textContent = 'Ver detalles';
                     botonDetalles.addEventListener('click', () => {
-                        fetch(`http://localhost:8081/qa/lote/${lote.idLote}`) // Supongamos que existe este endpoint
+                        fetch(`http://localhost:8082/qa/lote/${lote.idLote}`) // Supongamos que existe este endpoint
                                 .then(resp => resp.ok ? resp.json() : Promise.reject('No se pudo cargar el lote'))
                                 .then(data => {
                                     localStorage.setItem('loteSeleccionado', JSON.stringify(data));

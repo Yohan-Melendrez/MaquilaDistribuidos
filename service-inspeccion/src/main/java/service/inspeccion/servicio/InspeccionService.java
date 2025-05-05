@@ -1,7 +1,6 @@
 package service.inspeccion.servicio;
 
 import java.time.LocalDateTime;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -18,7 +17,6 @@ import service.inspeccion.dtos.NotificacionDTO;
 import service.inspeccion.dtos.ProductoDelLoteDTO;
 import service.inspeccion.dtos.RegistroInspeccionDTO;
 import service.inspeccion.modelo.*;
-import service.inspeccion.rabbit.ProductorNotificaciones;
 import service.inspeccion.repositorio.*;
 
 @Service
@@ -29,12 +27,11 @@ public class InspeccionService {
     @Autowired private ProductoRepositorio productoRepo;
     @Autowired private ErrorRepositorio errorRepo;
     @Autowired private LoteProductoRepositorio loteProductoRepo;
-    @Autowired private ProductorNotificaciones productorNotificaciones;
     @Autowired private InspectorRepositorio inspectorRepo;
 
     private final RestTemplate restTemplate = new RestTemplate();
 
-    @Value("${qa.service.url:http://localhost:8081/qa}")
+    @Value("${qa.service.url:http://localhost:8082/qa}")
     private String qaServiceUrl;
 
     /**

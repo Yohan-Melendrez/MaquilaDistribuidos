@@ -60,7 +60,7 @@ function cargarNotificaciones(panelContent) {
     cargando.textContent = 'Cargando notificaciones...';
     panelContent.appendChild(cargando);
 
-    fetch('http://localhost:8081/qa/notificaciones')
+    fetch('http://localhost:8082/qa/notificaciones')
         .then(response => {
             if (!response.ok) {
                 throw new Error(`HTTP ${response.status}`);

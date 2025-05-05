@@ -6,6 +6,27 @@
     "configurations": [
         {
             "type": "java",
+            "name": "ServiceReporteApplication",
+            "request": "launch",
+            "mainClass": "service.reporte.ServiceReporteApplication",
+            "projectName": "service-reporte"
+        },
+        {
+            "type": "java",
+            "name": "ServiceConversorApplication",
+            "request": "launch",
+            "mainClass": "service.conversor.ServiceConversorApplication",
+            "projectName": "service-conversor"
+        },
+        {
+            "type": "java",
+            "name": "ServiceApplication",
+            "request": "launch",
+            "mainClass": "service.erp.ServiceApplication",
+            "projectName": "service-erp"
+        },
+        {
+            "type": "java",
             "name": "BasicApplication",
             "request": "launch",
             "mainClass": "service.qa.BasicApplication",
