@@ -20,6 +20,9 @@ public class ProductoDTO {
     private Integer cantidad;
     private List<ErrorDTO> errores;
 
+    public ProductoDTO() {
+    }
+
     public ProductoDTO(Producto producto, Integer cantidad) {
         this.idProducto = producto.getIdProducto();
         this.nombre = producto.getNombre();

@@ -12,6 +12,9 @@ public class AsignacionLoteDTO {
       private Integer idLote;
     private Integer idInspector;
 
+    public AsignacionLoteDTO() {
+    }
+
     public Integer getIdLote() {
         return idLote;
     }

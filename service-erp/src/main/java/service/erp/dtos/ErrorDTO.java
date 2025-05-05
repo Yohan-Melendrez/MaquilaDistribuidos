@@ -5,6 +5,7 @@
 package service.erp.dtos;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 /**
  *
@@ -13,7 +14,7 @@ import java.io.Serializable;
 public class ErrorDTO implements Serializable {
     private Integer idError;
     private String descripcion;
-
+    private BigDecimal costo;
     public Integer getIdError() {
         return idError;
     }
@@ -29,4 +30,14 @@ public class ErrorDTO implements Serializable {
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
     }
+
+    public BigDecimal getCosto() {
+        return costo;
+    }
+
+    public void setCosto(BigDecimal costo) {
+        this.costo = costo;
+    }
+    
+    
 }
