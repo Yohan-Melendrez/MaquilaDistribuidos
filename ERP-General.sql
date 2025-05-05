@@ -67,6 +67,8 @@ CREATE TABLE reportes (
     costo_total_usd DOUBLE NOT NULL,
     costo_total_mxn DOUBLE NOT NULL,
     detalles_rechazo TEXT,
-    fecha_generacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    fecha_generacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    fecha_inicio TIMESTAMP,
+    fecha_final TIMESTAMP
 );
 

@@ -22,17 +22,18 @@ document.addEventListener('DOMContentLoaded', () => {
                 return response.json();
             })
             .then(reporte => {
-                // 3. Insertar los datos en los campos del DOM
                 document.getElementById('tipo').textContent = reporte.tipoDefecto;
 
                 const inputs = document.querySelectorAll('.valor');
-                if (inputs.length >= 4) {
+                if (inputs.length >= 5) {
                     inputs[0].value = reporte.totalPiezasRechazadas || '';
-                    inputs[1].value = `$${reporte.costoTotalUsd} USD`;
-                    inputs[2].value = `$${reporte.costoTotalMxn} MXN`;
-                    inputs[3].value = reporte.detallesRechazo || '';
+                    inputs[1].value = reporte.fechaComprendida || '';  // nuevo campo de fecha
+                    inputs[2].value = `$${reporte.costoTotalUsd} USD`;
+                    inputs[3].value = `$${reporte.costoTotalMxn} MXN`;
+                    inputs[4].value = reporte.detallesRechazo || '';
                 }
             })
+
             .catch(error => {
                 console.error('Error al cargar el detalle del reporte:', error);
                 document.getElementById('detalleInfo').innerHTML = '<p>No se pudo cargar el reporte.</p>';

@@ -28,6 +28,8 @@ public class Reporte {
     private String detallesRechazo;
 
     private LocalDateTime fechaGeneracion;
+    private LocalDateTime fechaInicio;
+    private LocalDateTime fechaFinal;
 
     @PrePersist
     public void prePersist() {
@@ -90,6 +92,20 @@ public class Reporte {
         this.costoTotalMxn = costoTotalMxn;
     }
 
-    
-}
+    public LocalDateTime getFechaInicio() {
+        return fechaInicio;
+    }
 
+    public void setFechaInicio(LocalDateTime fechaInicio) {
+        this.fechaInicio = fechaInicio;
+    }
+
+    public LocalDateTime getFechaFinal() {
+        return fechaFinal;
+    }
+
+    public void setFechaFinal(LocalDateTime fechaFinal) {
+        this.fechaFinal = fechaFinal;
+    }
+
+}

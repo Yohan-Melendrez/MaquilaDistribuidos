@@ -15,25 +15,36 @@ public class ReporteDTO {
     private Double costoTotalUsd;
     private Double costoTotalMxn;
     private String detallesRechazo;
+    private String fechaComprendida;
 
     public ReporteDTO() {
     }
 
-    public ReporteDTO(Long id, String tipoDefecto, Long totalPiezasRechazadas, Double costoTotalUsd, Double costoTotalMxn, String detallesRechazo) {
+    public ReporteDTO(Long id, String tipoDefecto, Long totalPiezasRechazadas, Double costoTotalUsd, Double costoTotalMxn, String detallesRechazo, String fechaComprendida) {
         this.id = id;
         this.tipoDefecto = tipoDefecto;
         this.totalPiezasRechazadas = totalPiezasRechazadas;
         this.costoTotalUsd = costoTotalUsd;
         this.costoTotalMxn = costoTotalMxn;
         this.detallesRechazo = detallesRechazo;
+        this.fechaComprendida = fechaComprendida;
     }
 
-    public ReporteDTO(String tipoDefecto, Long totalPiezasRechazadas, Double costoTotalUsd, Double costoTotalMxn, String detallesRechazo) {
+    public ReporteDTO(String tipoDefecto, Long totalPiezasRechazadas, Double costoTotalUsd, Double costoTotalMxn, String detallesRechazo, String fechaComprendida) {
         this.tipoDefecto = tipoDefecto;
         this.totalPiezasRechazadas = totalPiezasRechazadas;
         this.costoTotalUsd = costoTotalUsd;
         this.costoTotalMxn = costoTotalMxn;
         this.detallesRechazo = detallesRechazo;
+        this.fechaComprendida = fechaComprendida;
+    }
+
+    public String getFechaComprendida() {
+        return fechaComprendida;
+    }
+
+    public void setFechaComprendida(String fechaComprendida) {
+        this.fechaComprendida = fechaComprendida;
     }
 
     public Long getId() {

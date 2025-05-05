@@ -6,9 +6,11 @@ package service.reporte.controller;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -40,8 +42,15 @@ public class ReporteController {
     }
 
     @PostMapping("/generarReporte")
-    public Reporte crearReporte(@RequestBody FiltroReporteDTO filtro) {
-        return reporteService.generarYGuardarReporte(filtro.getInicio(), filtro.getFin(), filtro.getIdError());
+    public ResponseEntity<?> crearReporte(@RequestBody FiltroReporteDTO filtro) {
+        try {
+            Reporte reporte = reporteService.generarYGuardarReporte(filtro.getInicio(), filtro.getFin(), filtro.getIdError());
+            return ResponseEntity.ok(reporte);
+        } catch (RuntimeException e) {
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body(Map.of("error", e.getMessage())); // devolver mensaje como JSON
+        }
     }
 
     @GetMapping("/errores")

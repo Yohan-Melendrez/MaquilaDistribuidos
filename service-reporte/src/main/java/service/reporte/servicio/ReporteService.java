@@ -43,14 +43,14 @@ public class ReporteService {
 
     public List<ReporteDTO> obtenerHistorial() {
         List<Reporte> reportes = reporteRepository.findAll();
-
         return reportes.stream().map(r -> new ReporteDTO(
                 r.getId(),
                 r.getTipoDefecto(),
                 r.getTotalPiezasRechazadas(),
                 r.getCostoTotalUsd(),
                 r.getCostoTotalMxn(),
-                r.getDetallesRechazo()
+                r.getDetallesRechazo(),
+                r.getFechaInicio()+ " hasta " + r.getFechaFinal()
         )).toList();
     }
 
@@ -81,6 +81,8 @@ public class ReporteService {
         reporte.setCostoTotalUsd(costoTotalUsd);
         reporte.setCostoTotalMxn(costoTotalMxn);
         reporte.setDetallesRechazo(detalles);
+        reporte.setFechaInicio(inicio);
+        reporte.setFechaFinal(fin);
 
         return reporteRepository.save(reporte);
     }
@@ -98,11 +100,13 @@ public class ReporteService {
         Reporte reporte = reporteRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Reporte no encontrado con ID: " + id));
 
+        String fechaComprendida= reporte.getFechaInicio()+ " hasta " + reporte.getFechaFinal();
         return new ReporteDTO(
                 reporte.getTipoDefecto(), 
                 reporte.getTotalPiezasRechazadas(), 
                 reporte.getCostoTotalUsd(),
                 reporte.getCostoTotalMxn(),
-                reporte.getDetallesRechazo());
+                reporte.getDetallesRechazo(),
+                fechaComprendida);
     }
 }
