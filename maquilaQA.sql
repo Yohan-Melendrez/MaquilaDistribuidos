@@ -54,6 +54,7 @@ CREATE TABLE inspecciones (
     id_producto INT,
     id_error INT,
     fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    detalle_error VARCHAR(100),
     inspector VARCHAR(100),
     FOREIGN KEY (id_lote) REFERENCES lotes(id_lote),
     FOREIGN KEY (id_producto) REFERENCES productos(id_producto),

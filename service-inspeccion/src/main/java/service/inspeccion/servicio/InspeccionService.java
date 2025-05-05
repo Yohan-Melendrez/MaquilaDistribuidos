@@ -62,6 +62,8 @@ public class InspeccionService {
             ins.setProducto(producto);
             ins.setError(err);
             ins.setInspector(inspector);
+            ins.setDetalle_error(dto.getDetalleError());
+            
             inspeccionRepo.save(ins);
             if (err.getNivelAtencion().ordinal() > nivelMasAlto.ordinal()) {
                 nivelMasAlto = err.getNivelAtencion();

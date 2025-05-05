@@ -7,8 +7,19 @@ public class RegistroInspeccionDTO {
     private Integer idProducto;
     private String inspector;
     private List<Integer> erroresSeleccionados;
+    private String detalleError ;
 
     // Getters y setters
+
+    public String getDetalleError() {
+        return detalleError;
+    }
+
+    public void setDetalleError(String detalleError) {
+        this.detalleError = detalleError;
+    }
+    
+    
     public Integer getIdLote() {
         return idLote;
     }

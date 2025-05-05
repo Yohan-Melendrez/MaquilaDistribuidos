@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "inspecciones")
 public class Inspeccion {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_inspeccion")
@@ -29,6 +30,8 @@ public class Inspeccion {
     private Inspector inspector;
 
     private LocalDateTime fecha;
+    @Column(name = "detalle_error")
+    private String detalle_error;
 
     @PrePersist
     public void setFechaPorDefecto() {
@@ -62,10 +65,10 @@ public class Inspeccion {
     public ErrorProduccion getError() {
         return error;
     }
+
     public void setError(ErrorProduccion error) {
         this.error = error;
     }
-    
 
     public Inspector getInspector() {
         return inspector;
@@ -82,4 +85,13 @@ public class Inspeccion {
     public void setFecha(LocalDateTime fecha) {
         this.fecha = fecha;
     }
+
+    public String getDetalle_error() {
+        return detalle_error;
+    }
+
+    public void setDetalle_error(String detalle_error) {
+        this.detalle_error = detalle_error;
+    }
+
 }
