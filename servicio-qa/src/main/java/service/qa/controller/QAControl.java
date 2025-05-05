@@ -28,12 +28,12 @@ public class QAControl {
     @Autowired
     private ServicioQA servicioQA;
 
-    // Endpoint para recibir notificación de defectos desde inspección
-    @PostMapping("/notificarDefecto")
-    public ResponseEntity<String> notificarDefecto(@RequestBody Lote lote) {
-        servicioQA.recibirNotificacionDefecto(lote);
-        return new ResponseEntity<>("Defecto Recibido", HttpStatus.CREATED);
-    }
+//    // Endpoint para recibir notificación de defectos desde inspección
+//    @PostMapping("/notificarDefecto")
+//    public ResponseEntity<String> notificarDefecto(@RequestBody Lote lote) {
+//        servicioQA.recibirNotificacionDefecto(lote);
+//        return new ResponseEntity<>("Defecto Recibido", HttpStatus.CREATED);
+//    }
 
     @PutMapping("/asignarNivelAtencion")
     public ResponseEntity<String> asignarNivelAtencion(@RequestBody EvaluacionDefectoDTO dto) {
@@ -71,18 +71,12 @@ public class QAControl {
         servicioQA.guardarNotificacion(dto);
         return ResponseEntity.ok("Notificación recibida y guardada.");
     }
-
     @GetMapping(value = "/notificaciones", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<NotificacionDTO>> obtenerNotificaciones() {
         return ResponseEntity
                 .ok()
                 .contentType(MediaType.APPLICATION_JSON) // <- explícito
                 .body(servicioQA.obtenerNotificaciones());
-    }
-
-    @GetMapping
-    public ResponseEntity<?> obtenerTodas() {
-        return ResponseEntity.ok(servicioQA.obtenerNotificaciones());
     }
 
     @GetMapping("/inspectores")

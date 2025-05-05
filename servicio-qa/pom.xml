@@ -12,7 +12,7 @@
     <artifactId>servicio-qa</artifactId>
     <version>0.0.1-SNAPSHOT</version>
 
-    <name>servicio-qa</name>
+    <name>servicie-qa</name>
     <description>Demo project for Spring Boot</description>
 
     <properties>
