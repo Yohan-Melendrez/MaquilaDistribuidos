@@ -24,7 +24,7 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 @Configuration
 public class RabbitMQConfig {
 
-    @Value("${cola.notificaciones}")
+    @Value("${rabbitmq.queue.notificaciones}")
     private String nombreCola;
 
     @Bean

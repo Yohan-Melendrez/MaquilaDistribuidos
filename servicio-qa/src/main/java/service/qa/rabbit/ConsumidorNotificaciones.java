@@ -22,7 +22,7 @@ public class ConsumidorNotificaciones {
         this.servicioQA = servicioQA;
     }
 
-    @RabbitListener(queues = "${cola.notificaciones}")
+    @RabbitListener(queues = "${rabbitmq.queue.notificaciones}")
     public void recibirNotificacion(NotificacionDTO dto) {
         System.out.println("📨 Notificación recibida: " + dto.getTitulo());
         servicioQA.guardarNotificacion(dto);

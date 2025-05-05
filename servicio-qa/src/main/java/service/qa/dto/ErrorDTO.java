@@ -15,13 +15,16 @@ public class ErrorDTO {
     private Integer idError;
     private String nombre;
     private String descripcion;
-    private BigDecimal costoUsd;
+    private BigDecimal costo;
+
+    public ErrorDTO() {
+    }
 
     public ErrorDTO(ErrorProduccion error) {
         this.idError = error.getIdError();
         this.nombre = error.getNombre();
         this.descripcion = error.getDescripcion();
-        this.costoUsd = error.getCostoUsd();
+        this.costo = error.getCostoUsd();
     }
 
     public Integer getIdError() {
@@ -48,12 +51,12 @@ public class ErrorDTO {
         this.descripcion = descripcion;
     }
 
-    public BigDecimal getCostoUsd() {
-        return costoUsd;
+    public BigDecimal getCosto() {
+        return costo;
     }
 
-    public void setCostoUsd(BigDecimal costoUsd) {
-        this.costoUsd = costoUsd;
+    public void setCosto(BigDecimal costo) {
+        this.costo = costo;
     }
     
 }

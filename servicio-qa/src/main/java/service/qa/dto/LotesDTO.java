@@ -17,6 +17,9 @@ public class LotesDTO {
     private String estado;
     private List<ProductoDTO> productos;
 
+    public LotesDTO() {
+    }
+
     public LotesDTO(Lote lote) {
         this.idLote = lote.getIdLote();
         this.nombreLote = lote.getNombreLote();

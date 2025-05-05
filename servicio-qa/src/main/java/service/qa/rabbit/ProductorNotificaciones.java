@@ -11,7 +11,7 @@ public class ProductorNotificaciones {
 
     private final RabbitTemplate rabbitTemplate;
 
-    @Value("${rabbitmq.queue}")
+    @Value("${rabbitmq.queue.notificaciones}")
     private String queueName;
 
     public ProductorNotificaciones(@Lazy RabbitTemplate rabbitTemplate) {

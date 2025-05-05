@@ -97,6 +97,7 @@ public class ErpService {
                 ErrorDTO err = new ErrorDTO();
                 err.setIdError(error.getIdError());
                 err.setDescripcion(error.getDescripcion());
+                err.setCosto(error.getCosto());
                 return err;
             }).collect(Collectors.toList());
 
