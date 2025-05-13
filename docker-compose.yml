@@ -1,0 +1,34 @@
+version: '3.8'
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: mysql_qa
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpass
+      MYSQL_DATABASE: maquilqaqa
+      MYSQL_USER: qauser
+      MYSQL_PASSWORD: qapass
+    ports:
+      - "3307:3306"
+    volumes:
+      - ./mysql:/docker-entrypoint-initdb.d
+      - mysql_qa_data:/var/lib/mysql
+
+  servicio-qa:
+    build:
+      context: ./servicio-qa
+    container_name: servicio_qa
+    ports:
+      - "8082:8082"
+    depends_on:
+      - mysql
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/maquilaqa
+      SPRING_DATASOURCE_USERNAME: qauser
+      SPRING_DATASOURCE_PASSWORD: qapass
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      SPRING_JPA_SHOW_SQL: "true"
+
+volumes:
+  mysql_qa_data:
