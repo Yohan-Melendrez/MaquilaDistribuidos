@@ -101,29 +101,34 @@ public class ServicioQA {
         }
     }
 
-    public void asignarLoteAInspector(AsignacionLoteDTO dto) {
+    public String asignarLoteAInspector(AsignacionLoteDTO dto) {
         if (dto.getIdLote() == null || dto.getIdInspector() == null) {
             throw new IllegalArgumentException("El ID del lote o del inspector no puede ser null");
         }
 
         Lote lote = loteRepo.findById(dto.getIdLote())
                 .orElseThrow(() -> new RuntimeException("No se encontró el lote " + dto.getIdLote()));
+
+        // ✅ Validar si ya tiene inspector asignado
+        if (lote.getInspector()!= null) {
+            return "YA_ASIGNADO";
+        }
+
         Inspector insp = inspectorRepo.findById(dto.getIdInspector())
                 .orElseThrow(() -> new RuntimeException("No se encontró el inspector " + dto.getIdInspector()));
 
-        // Guardar asignación en lote_inspector
         LoteInspector li = new LoteInspector();
         li.setLote(lote);
         li.setInspector(insp.getNombre());
         loteInspectorRepo.save(li);
 
-        // Asignar inspector al lote principal (opcional si quieres guardar última asignación)
         lote.setInspector(insp);
         loteRepo.save(lote);
 
-        // Desactivar inspector
         insp.setActivo(false);
         inspectorRepo.save(insp);
+
+        return "ASIGNACION_EXITOSA";
     }
 
     public void Notificaciones(NotificacionDTO dto) {
@@ -183,7 +188,7 @@ public class ServicioQA {
                 if (error == null) {
                     error = new ErrorProduccion();
                     error.setDescripcion(errorDTO.getDescripcion());
-                    error.setNombre(errorDTO.getDescripcion());
+                    error.setNombre(errorDTO.getNombre());
                     error.setCostoUsd(errorDTO.getCosto());
                     error.setNivelAtencion(null);
                     error = errorRepo.save(error);
@@ -221,21 +226,21 @@ public class ServicioQA {
 
         Notificaciones(noti); // Método ya existente que guarda en memoria y envía STOMP
     }
-    
+
     public void notificarLlegadaAErp(Integer idLote) {
-    Lote lote = loteRepo.findById(idLote)
-            .orElseThrow(() -> new RuntimeException("Lote no encontrado"));
+        Lote lote = loteRepo.findById(idLote)
+                .orElseThrow(() -> new RuntimeException("Lote no encontrado"));
 
-    NotificacionDTO noti = new NotificacionDTO();
-    noti.setTitulo("Llegada de lote");
-    noti.setTipo("INFORMACION");
-    noti.setMensaje("El lote " + lote.getNombreLote() + " ha sido registrado en QA");
-    noti.setFechaEnvio(java.time.LocalDateTime.now());
+        NotificacionDTO noti = new NotificacionDTO();
+        noti.setTitulo("Llegada de lote");
+        noti.setTipo("INFORMACION");
+        noti.setMensaje("El lote " + lote.getNombreLote() + " ha sido registrado en QA");
+        noti.setFechaEnvio(java.time.LocalDateTime.now());
 
-    // Guardar solo si quieres mostrar desde backend luego
-    notificacionesERP.add(noti);
+        // Guardar solo si quieres mostrar desde backend luego
+        notificacionesERP.add(noti);
 
-    // Enviar a los suscriptores de ERP (WebSocket)
-    messagingTemplate.convertAndSend("/topic/notificaciones-erp", noti);
-}
+        // Enviar a los suscriptores de ERP (WebSocket)
+        messagingTemplate.convertAndSend("/topic/notificaciones-erp", noti);
+    }
 }

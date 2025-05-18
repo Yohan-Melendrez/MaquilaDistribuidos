@@ -5,42 +5,45 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
 -->
 
 <html lang="es">
-    <head>
-        <meta charset="UTF-8">
-        <title>Nivel de atención de fallos</title>
-        <link rel="stylesheet" href="CSS/atencionFallos.css">
-        <link rel="stylesheet" href="CSS/notificaciones.css">
-        <script src="JS/notificaciones.js" defer></script>
-        <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>
-    </head>
-    <body>
-        <div class="barraSuperior">
-            <div class="tituloBarra">
-                <img src="img/logo.png" alt="Logo" class="logo">
-                <h1 class="titulo">Cleansify departamento QA</h1>
-            </div>
 
-            <div class="iconosBarra">
+<head>
+    <meta charset="UTF-8">
+    <title>Nivel de atención de fallos</title>
+    <link rel="stylesheet" href="CSS/atencionFallos.css">
+    <link rel="stylesheet" href="CSS/notificaciones.css">
+    <script src="JS/notificaciones.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>
+</head>
 
-                <a href="atencionFallos.html" class="iconoNav activo">
-                    <img src="img/fallo.svg" alt="Icono">
-                </a>
-                <a href="lotesDisponibles.html" class="iconoNav">
-                    <img src="img/lotes.svg" alt="Icono">
-                </a>
-                <a class="iconoNav">
-                    <img src="img/noti.svg" alt="Icono">
-                </a>
-            </div>
+<body>
+    <div class="barraSuperior">
+        <div class="tituloBarra">
+            <img src="img/logo.png" alt="Logo" class="logo">
+            <h1 class="titulo">Cleansify departamento QA</h1>
         </div>
-        <div class="contenedorLotes">
-            <h2>Nivel de atención de fallos</h2>
-            <div class="listaLotes" id="listaLotes">
-                <!-- Los fallos se generarán dinámicamente -->
-            </div>
-            <a href="principal.html" class="menu">Volver al principio</a>
+
+        <div class="iconosBarra">
+
+            <a href="atencionFallos.html" class="iconoNav activo">
+                <img src="img/fallo.svg" alt="Icono">
+            </a>
+            <a href="lotesDisponibles.html" class="iconoNav">
+                <img src="img/lotes.svg" alt="Icono">
+            </a>
+                <a id="iconoNotificaciones" class="iconoNav">
+                <img src="img/noti.svg" alt="Icono">
+            </a>
         </div>
-        <script src="JS/atencionFallos.js"></script>
-    </body>
+    </div>
+    <div class="contenedorLotes">
+        <h2>Nivel de atención de fallos</h2>
+        <div class="listaLotes" id="listaLotes">
+            <!-- Los fallos se generarán dinámicamente -->
+        </div>
+        <a href="principal.html" class="menu">Volver al principio</a>
+    </div>
+    <script src="JS/atencionFallos.js"></script>
+</body>
+
 </html>

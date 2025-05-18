@@ -20,6 +20,7 @@ import org.springframework.web.client.RestTemplate;
 import service.erp.dtos.CrearLoteDTO;
 import service.erp.dtos.ErrorDTO;
 import service.erp.dtos.LoteItemDTO;
+import service.erp.dtos.ProductoDTO;
 import service.erp.modelo.Lote;
 import service.erp.modelo.LoteProducto;
 import service.erp.modelo.LoteProductoId;
@@ -76,8 +77,11 @@ public class ErpService {
         return loteRepository.findAll();
     }
 
-    public List<Producto> obtenerTodosProductos() {
-        return productoRepository.findAll();
+    public List<ProductoDTO> obtenerTodosProductos() {
+        return productoRepository.findAll()
+                .stream()
+                .map(ProductoDTO::new)
+                .collect(Collectors.toList());
     }
 
     public void enviarLoteAQa(Integer idLote) {
@@ -101,8 +105,9 @@ public class ErpService {
             List<ErrorDTO> errores = p.getErrores().stream().map(error -> {
                 ErrorDTO err = new ErrorDTO();
                 err.setIdError(error.getIdError());
+                err.setNombre(error.getNombre());
                 err.setDescripcion(error.getDescripcion());
-                err.setCosto(error.getCosto());
+                err.setCosto(error.getCosto_usd());
                 return err;
             }).collect(Collectors.toList());
 

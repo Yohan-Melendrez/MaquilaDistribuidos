@@ -12,7 +12,9 @@ CREATE TABLE errores (
     id_error INT PRIMARY KEY AUTO_INCREMENT,
     nombre VARCHAR(100) NOT NULL,
     descripcion TEXT,
-    costo_usd DECIMAL(10,2) NOT NULL
+    id_producto INT,
+    costo_usd DECIMAL(10,2) NOT NULL,
+	FOREIGN KEY (id_producto) REFERENCES productos(id_producto)
 );
 
 -- Tabla intermedia producto-error (relación N a N)
@@ -46,12 +48,12 @@ INSERT INTO productos (nombre, descripcion) VALUES
 ('Toallitas Húmedas', 'Paquete de 40 unidades, sin alcohol');
 
 -- Insertar errores
-INSERT INTO errores (nombre, descripcion, costo_usd) VALUES
-('Envase Dañado', 'Botella rota o agrietada', 0.35),
-('Etiqueta Mal Pegada', 'Etiqueta torcida o fuera de lugar', 0.15),
-('Producto Mal Sellado', 'Sello de seguridad incompleto', 0.50),
-('Contenido Incorrecto', 'Producto dentro no corresponde al envase', 1.25),
-('Cantidad Incorrecta', 'Volumen menor al especificado', 0.40);
+INSERT INTO errores (nombre, descripcion, costo_usd,id_producto) VALUES
+('Envase Dañado', 'Botella rota o agrietada', 0.35,1),
+('Etiqueta Mal Pegada', 'Etiqueta torcida o fuera de lugar', 0.15,1),
+('Producto Mal Sellado', 'Sello de seguridad incompleto', 0.50,1),
+('Contenido Incorrecto', 'Producto dentro no corresponde al envase', 1.25,2),
+('Cantidad Incorrecta', 'Volumen menor al especificado', 0.40,2);
 
 -- Asociar productos con errores (puedes ajustar según lógica real)
 INSERT INTO producto_errores (id_producto, id_error) VALUES

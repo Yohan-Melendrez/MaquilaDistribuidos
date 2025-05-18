@@ -79,3 +79,15 @@ CREATE TABLE notificaciones (
     id_inspector INT,
     FOREIGN KEY (id_inspector) REFERENCES inspectores(id_inspector)
 );
+-- Insertar inspectores
+INSERT INTO inspectores (nombre, activo) VALUES
+('Juan', true),
+('María', true),
+('Luis', true),
+('Ana', true),
+('Carlos', true),
+('Valeria', true),
+('Pedro', true),
+('Laura', true),
+('Sofía', true),
+('Miguel', true);

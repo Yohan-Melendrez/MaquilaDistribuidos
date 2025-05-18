@@ -12,6 +12,7 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import service.inspeccion.dtos.AsignarLoteDTO;
+import service.inspeccion.dtos.ErrorDTO;
 import service.inspeccion.dtos.InspectorDTO;
 import service.inspeccion.dtos.NotificacionDTO;
 import service.inspeccion.dtos.ProductoDelLoteDTO;
@@ -22,12 +23,18 @@ import service.inspeccion.repositorio.*;
 @Service
 public class InspeccionService {
 
-    @Autowired private InspeccionRepositorio inspeccionRepo;
-    @Autowired private LoteRepositorio loteRepo;
-    @Autowired private ProductoRepositorio productoRepo;
-    @Autowired private ErrorRepositorio errorRepo;
-    @Autowired private LoteProductoRepositorio loteProductoRepo;
-    @Autowired private InspectorRepositorio inspectorRepo;
+    @Autowired
+    private InspeccionRepositorio inspeccionRepo;
+    @Autowired
+    private LoteRepositorio loteRepo;
+    @Autowired
+    private ProductoRepositorio productoRepo;
+    @Autowired
+    private ErrorRepositorio errorRepo;
+    @Autowired
+    private LoteProductoRepositorio loteProductoRepo;
+    @Autowired
+    private InspectorRepositorio inspectorRepo;
 
     private final RestTemplate restTemplate = new RestTemplate();
 
@@ -35,9 +42,9 @@ public class InspeccionService {
     private String qaServiceUrl;
 
     /**
-     * 1) Registra la inspección (persistencia local).
-     * 2) Envía notificación a Rabbit y luego a QA para registrar la notificación.
-     * 3) Desactiva el inspector localmente.
+     * 1) Registra la inspección (persistencia local). 2) Envía notificación a
+     * Rabbit y luego a QA para registrar la notificación. 3) Desactiva el
+     * inspector localmente.
      */
     public void registrarInspeccion(RegistroInspeccionDTO dto) {
         Lote lote = loteRepo.findById(dto.getIdLote())
@@ -60,7 +67,7 @@ public class InspeccionService {
             ins.setError(err);
             ins.setInspector(inspector);
             ins.setDetalle_error(dto.getDetalleError());
-            
+
             inspeccionRepo.save(ins);
 //            if (err.getNivelAtencion().ordinal() > nivelMasAlto.ordinal()) {
 //                nivelMasAlto = err.getNivelAtencion();
@@ -75,9 +82,9 @@ public class InspeccionService {
         // --- Preparar DTO de notificación ---
         NotificacionDTO noti = new NotificacionDTO();
         noti.setTitulo("Lote rechazado");
-        noti.setMensaje("El lote " + lote.getNombreLote() +
-                        " fue rechazado por " + dto.getInspector() +
-                        ". Nivel: " + nivelMasAlto);
+        noti.setMensaje("El lote " + lote.getNombreLote()
+                + " fue rechazado por " + dto.getInspector()
+                + ". Nivel: " + nivelMasAlto);
         noti.setTipo("DEFECTO");
         noti.setFechaEnvio(LocalDateTime.now());
         noti.setIdInspector(inspector.getIdInspector());
@@ -85,13 +92,12 @@ public class InspeccionService {
 
         // --- 1) RabbitMQ local ---
 //        productorNotificaciones.enviarNotificacion(noti);
-
         // --- 2) POST a QA para que registre la notificación ---
         try {
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
             HttpEntity<NotificacionDTO> req = new HttpEntity<>(noti, headers);
-            restTemplate.postForEntity(qaServiceUrl + "/externa", req, String.class);
+            restTemplate.postForEntity(qaServiceUrl + "/notificaciones", req, String.class);
         } catch (Exception e) {
             System.err.println("Error al notificar a QA: " + e.getMessage());
         }
@@ -123,35 +129,59 @@ public class InspeccionService {
 
     /**
      * Trae los lotes asignados al inspector consultando a QA.
+     * @return 
      */
     public List<Lote> obtenerLotesPorInspector(Integer idInspector) {
-        return loteRepo.findByInspector_IdInspector(idInspector);
-    }
+        List<Lote> asignados = loteRepo.findByInspector_IdInspector(idInspector);
 
+        return asignados.stream()
+                .filter(lote -> {
+                    List<Producto> productosDelLote = loteProductoRepo.findByLote_IdLote(lote.getIdLote())
+                            .stream()
+                            .map(lp -> lp.getProducto())
+                            .distinct()
+                            .toList();
+
+                    List<Inspeccion> inspecciones = inspeccionRepo.findByLote_IdLoteAndInspector_IdInspector(
+                            lote.getIdLote(), idInspector
+                    );
+
+                    long productosInspeccionados = inspecciones.stream()
+                            .map(i -> i.getProducto().getIdProducto())
+                            .distinct()
+                            .count();
+
+                    return productosInspeccionados < productosDelLote.size(); // aún faltan por inspeccionar
+                })
+                .collect(Collectors.toList());
+    }
 
     public List<ProductoDelLoteDTO> obtenerProductosDeLote(Integer idLote) {
         return loteProductoRepo.findByLote_IdLote(idLote)
-            .stream()
-            .map(lp -> new ProductoDelLoteDTO(
+                .stream()
+                .map(lp -> new ProductoDelLoteDTO(
                 lp.getProducto().getIdProducto(),
                 lp.getProducto().getNombre(),
                 lp.getProducto().getDescripcion(),
                 lp.getCantidad()
-            ))
-            .collect(Collectors.toList());
+        ))
+                .collect(Collectors.toList());
     }
 
     public List<ErrorProduccion> obtenerTodosLosErrores() {
         return errorRepo.findAll();
     }
 
-    public List<ErrorProduccion> obtenerErroresPorProducto(Integer idProducto) {
-        return errorRepo.findErroresPorProducto(idProducto);
+    public List<ErrorDTO> obtenerErroresPorProducto(Integer idProducto) {
+        List<ErrorProduccion> errores = errorRepo.findErroresPorProducto(idProducto);
+        return errores.stream()
+                .map(ErrorDTO::new)
+                .collect(Collectors.toList());
     }
 
     public List<InspectorDTO> obtenerTodosLosInspectores() {
         return inspectorRepo.findAll().stream()
-            .map(i -> new InspectorDTO(i.getIdInspector(), i.getNombre()))
-            .collect(Collectors.toList());
+                .map(i -> new InspectorDTO(i.getIdInspector(), i.getNombre()))
+                .collect(Collectors.toList());
     }
 }

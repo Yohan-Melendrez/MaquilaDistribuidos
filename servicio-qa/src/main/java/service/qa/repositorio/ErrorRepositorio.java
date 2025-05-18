@@ -18,9 +18,11 @@ import service.qa.modelo.Producto;
  */
 @Repository
 public interface ErrorRepositorio extends JpaRepository<ErrorProduccion, Integer> {
-Optional<ErrorProduccion> findByDescripcion(String descripcion);
- 
-@Query("SELECT e FROM ErrorProduccion e WHERE e.descripcion = :descripcion AND e.nombre = :nombre")
-ErrorProduccion findByDescripcionAndNombre(@Param("descripcion") String descripcion, @Param("nombre") String nombre);
+
+    Optional<ErrorProduccion> findByDescripcion(String descripcion);
+
+    @Query("SELECT e FROM ErrorProduccion e WHERE e.descripcion = :descripcion AND e.nombre = :nombre")
+    ErrorProduccion findByDescripcionAndNombre(@Param("descripcion") String descripcion, @Param("nombre") String nombre);
+
 
 }

@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import service.inspeccion.dtos.AsignarLoteDTO;
+import service.inspeccion.dtos.ErrorDTO;
 import service.inspeccion.dtos.InspectorDTO;
 import service.inspeccion.dtos.NotificacionDTO;
 import service.inspeccion.dtos.ProductoDelLoteDTO;
@@ -60,7 +61,7 @@ public class InspeccionController {
     }
 
     @GetMapping("/errores/{idProducto}")
-    public ResponseEntity<List<ErrorProduccion>> obtenerErroresPorProducto(@PathVariable Integer idProducto) {
+    public ResponseEntity<List<ErrorDTO>> obtenerErroresPorProducto(@PathVariable Integer idProducto) {
         return ResponseEntity.ok(inspeccionService.obtenerErroresPorProducto(idProducto));
     }
 

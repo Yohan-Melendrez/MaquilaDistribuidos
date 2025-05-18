@@ -40,10 +40,10 @@ public class QAControl {
         return ResponseEntity.ok("Nivel de atención actualizado");
     }
 
-    @PostMapping("/asignarLote")
-    public ResponseEntity<Map<String, String>> asignarLote(@RequestBody AsignacionLoteDTO dto) {
-        servicioQA.asignarLoteAInspector(dto);
-        return ResponseEntity.ok(Map.of("mensaje", "Lote asignado en QA"));
+        @PostMapping("/asignarLote")
+    public ResponseEntity<String> asignarLote(@RequestBody AsignacionLoteDTO dto) {
+        
+        return ResponseEntity.ok(servicioQA.asignarLoteAInspector(dto));
     }
 
 // 

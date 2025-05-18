@@ -6,15 +6,38 @@ package service.erp.dtos;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import service.erp.modelo.ErrorPosible;
 
 /**
  *
  * @author abelc
  */
 public class ErrorDTO implements Serializable {
+
     private Integer idError;
     private String descripcion;
     private BigDecimal costo;
+    private String nombre;
+
+    public ErrorDTO() {
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    
+    public ErrorDTO(ErrorPosible error) {
+        this.idError = error.getIdError();
+        this.descripcion = error.getDescripcion();
+        this.costo = error.getCosto_usd();
+        this.nombre=error.getNombre();
+    }
+
     public Integer getIdError() {
         return idError;
     }
@@ -38,6 +61,5 @@ public class ErrorDTO implements Serializable {
     public void setCosto(BigDecimal costo) {
         this.costo = costo;
     }
-    
-    
+
 }

@@ -22,6 +22,7 @@ import java.util.List;
  * @author abelc
  */
 @Entity
+@Table(name = "lotes")
 public class Lote {
 
     @Id
