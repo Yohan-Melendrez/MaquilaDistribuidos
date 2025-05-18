@@ -96,4 +96,10 @@ public class QAControl {
         servicioQA.recibirLoteDesdeERP(dto);
         return ResponseEntity.ok("Lote recibido correctamente");
     }
+    
+    @PostMapping("/notificarLlegada/{idLote}")
+public ResponseEntity<String> notificarLlegada(@PathVariable Integer idLote) {
+    servicioQA.notificarLlegadaAErp(idLote);
+    return ResponseEntity.ok("Notificación enviada a ERP");
+}
 }

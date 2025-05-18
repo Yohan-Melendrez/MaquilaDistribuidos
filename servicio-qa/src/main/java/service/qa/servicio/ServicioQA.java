@@ -1,5 +1,6 @@
 package service.qa.servicio;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -49,7 +50,7 @@ public class ServicioQA {
     private final NotificacionRepositorio notificacionRepo;
     private final RestTemplate restTemplate;
     private final List<NotificacionDTO> notificacionesEnMemoria = new ArrayList<>();
-
+    private final List<NotificacionDTO> notificacionesERP = new ArrayList<>();
     @Autowired
     private SimpMessagingTemplate messagingTemplate;
 
@@ -220,4 +221,21 @@ public class ServicioQA {
 
         Notificaciones(noti); // Método ya existente que guarda en memoria y envía STOMP
     }
+    
+    public void notificarLlegadaAErp(Integer idLote) {
+    Lote lote = loteRepo.findById(idLote)
+            .orElseThrow(() -> new RuntimeException("Lote no encontrado"));
+
+    NotificacionDTO noti = new NotificacionDTO();
+    noti.setTitulo("Llegada de lote");
+    noti.setTipo("INFORMACION");
+    noti.setMensaje("El lote " + lote.getNombreLote() + " ha sido registrado en QA");
+    noti.setFechaEnvio(java.time.LocalDateTime.now());
+
+    // Guardar solo si quieres mostrar desde backend luego
+    notificacionesERP.add(noti);
+
+    // Enviar a los suscriptores de ERP (WebSocket)
+    messagingTemplate.convertAndSend("/topic/notificaciones-erp", noti);
+}
 }

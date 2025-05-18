@@ -8,11 +8,23 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
         <meta charset="UTF-8">
         <title>Enterprise Performance Management</title>
         <link rel="stylesheet" href="CSS/principal.css">
+         <link rel="stylesheet" href="CSS/notificaciones.css">
+        <script src="JS/notificaciones.js" defer></script>
+        <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>
     </head>
     <body>
-        <div class="barraSuperior">
-            <img src="img/logo.png" alt="Logo" class="logo">
-            <h1 class="titulo">Enterprise Performance Management</h1>
+     <div class="barraSuperior">
+            <div class="tituloBarra">
+                <img src="img/logo.png" alt="Logo" class="logo">
+                <h1 class="titulo">Cleansify departamento QA</h1>
+            </div>
+
+            <div class="iconosBarra">
+                <a id="iconoNotificaciones" class="iconoNav">
+                    <img src="img/noti.svg" alt="Icono">
+                </a>
+            </div>
         </div>
 
         <div class="pantallaPrincipal">

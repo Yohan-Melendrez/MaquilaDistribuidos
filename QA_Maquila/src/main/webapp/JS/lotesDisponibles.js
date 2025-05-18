@@ -6,134 +6,94 @@ document.addEventListener('DOMContentLoaded', () => {
     const listaLotes = document.getElementById('listaLotes');
 
     fetch('http://localhost:8082/qa/lotes')
-            .then(response => response.json())
-            .then(lotes => {
-                lotes.forEach(lote => {
-                    const item = document.createElement('div');
-                    item.className = 'lote-item';
+        .then(response => response.json())
+        .then(lotes => {
+            lotes.forEach(lote => {
+                const item = document.createElement('div');
+                item.className = 'lote-item';
 
-                    const infoContainer = document.createElement('div');
-                    infoContainer.className = 'lote-info';
-                    infoContainer.style.display = 'flex';
-                    infoContainer.style.alignItems = 'center';
-                    infoContainer.style.gap = '15px';
+                const infoContainer = document.createElement('div');
+                infoContainer.className = 'lote-info';
+                infoContainer.style.display = 'flex';
+                infoContainer.style.alignItems = 'center';
+                infoContainer.style.gap = '15px';
 
-                    const cantidad = document.createElement('span');
-                    const cantidadProducto = lote.productos && lote.productos.length > 0 ? lote.productos[0].cantidad : 0;
-                    cantidad.textContent = `x${cantidadProducto}`;
-                    cantidad.style.color = '#2C5D75';
-                    cantidad.style.fontWeight = 'bold';
-                    cantidad.style.minWidth = '30px';
+                const cantidad = document.createElement('span');
+                const cantidadProducto = lote.productos && lote.productos.length > 0 ? lote.productos[0].cantidad : 0;
+                cantidad.textContent = `x${cantidadProducto}`;
+                cantidad.style.color = '#2C5D75';
+                cantidad.style.fontWeight = 'bold';
+                cantidad.style.minWidth = '30px';
 
-                    const nombre = document.createElement('span');
-                    nombre.textContent = lote.nombreLote;
+                const nombre = document.createElement('span');
+                nombre.textContent = lote.nombreLote;
 
-                    infoContainer.appendChild(cantidad);
-                    infoContainer.appendChild(nombre);
+                infoContainer.appendChild(cantidad);
+                infoContainer.appendChild(nombre);
 
-                    const botonesContainer = document.createElement('div');
-                    botonesContainer.style.display = 'flex';
-                    botonesContainer.style.gap = '10px';
+                const botonesContainer = document.createElement('div');
+                botonesContainer.style.display = 'flex';
+                botonesContainer.style.gap = '10px';
 
-                    const botonNotificar = document.createElement('button');
-                    botonNotificar.className = 'ver-btn';
-                    botonNotificar.textContent = 'Notificar llegada';
+                const botonNotificar = document.createElement('button');
+                botonNotificar.className = 'ver-btn';
+                botonNotificar.textContent = 'Notificar llegada';
 
-                    botonNotificar.addEventListener('click', () => {
-                        botonNotificar.disabled = true;
-                        botonNotificar.textContent = 'Notificando...';
+                // ✅ Nuevo endpoint: notificarLlegada
+                botonNotificar.addEventListener('click', () => {
+                    botonNotificar.disabled = true;
+                    botonNotificar.textContent = 'Notificando...';
 
-                        fetch('http://localhost:8082/qa/guardarNotificacion', {
-                            method: 'POST',
-                            headers: {'Content-Type': 'application/json'},
-                            body: JSON.stringify(lote)
-                        })
-                                .then(response => {
-                                    if (!response.ok)
-                                        throw new Error(`Error en la respuesta: ${response.status}`);
-                                    return response.text();
-                                })
-                                .then(() => {
-                                    const titulo = `Llegada de lote ${lote.nombreLote}`;
-                                    const mensaje = `El lote ${lote.nombreLote} ha sido registrado en el sistema de control de calidad`;
-
-                                    if (window.guardarNotificacion) {
-                                        window.guardarNotificacion(titulo, mensaje, "INFORMACION")
-                                                .then(() => {
-                                                    botonNotificar.disabled = false;
-                                                    botonNotificar.textContent = 'Notificar llegada';
-                                                    mostrarModalConfirmacion(lote.nombreLote);
-                                                })
-                                                .catch(error => {
-                                                    console.error("Error al guardar notificación:", error);
-                                                    botonNotificar.disabled = false;
-                                                    botonNotificar.textContent = 'Notificar llegada';
-                                                    mostrarModalError("Error al crear notificación", error.message);
-                                                });
-                                    } else {
-                                        const notificacionDTO = {
-                                            titulo,
-                                            mensaje,
-                                            tipo: "INFORMACION",
-                                            fechaEnvio: new Date().toISOString()
-                                        };
-
-                                        fetch('http://localhost:8082/qa/guardarNotificacion', {
-                                            method: 'POST',
-                                            headers: {'Content-Type': 'application/json'},
-                                            body: JSON.stringify(notificacionDTO)
-                                        })
-                                                .then(resp => {
-                                                    if (!resp.ok)
-                                                        throw new Error(`Error al guardar notificación: ${resp.status}`);
-                                                    botonNotificar.disabled = false;
-                                                    botonNotificar.textContent = 'Notificar llegada';
-                                                    mostrarModalConfirmacion(lote.nombreLote);
-                                                })
-                                                .catch(error => {
-                                                    console.error("Error al guardar notificación directamente:", error);
-                                                    botonNotificar.disabled = false;
-                                                    botonNotificar.textContent = 'Notificar llegada';
-                                                    mostrarModalError("Error al crear notificación", error.message);
-                                                });
-                                    }
-                                })
-                                .catch(error => {
-                                    console.error('Error al notificar lote:', error);
-                                    botonNotificar.disabled = false;
-                                    botonNotificar.textContent = 'Notificar llegada';
-                                    mostrarModalError("Error al registrar el lote", error.message);
-                                });
+                    fetch(`http://localhost:8082/qa/notificarLlegada/${lote.idLote}`, {
+                        method: 'POST'
+                    })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error(`Error en la respuesta: ${response.status}`);
+                        }
+                        return response.text();
+                    })
+                    .then(() => {
+                        botonNotificar.disabled = false;
+                        botonNotificar.textContent = 'Notificar llegada';
+                        mostrarModalConfirmacion(lote.nombreLote);
+                    })
+                    .catch(error => {
+                        console.error('Error al notificar llegada:', error);
+                        botonNotificar.disabled = false;
+                        botonNotificar.textContent = 'Notificar llegada';
+                        mostrarModalError("Error al registrar la llegada del lote", error.message);
                     });
-
-                    const botonDetalles = document.createElement('button');
-                    botonDetalles.className = 'ver-btn';
-                    botonDetalles.textContent = 'Ver detalles';
-                    botonDetalles.addEventListener('click', () => {
-                        fetch(`http://localhost:8082/qa/lote/${lote.idLote}`) // Supongamos que existe este endpoint
-                                .then(resp => resp.ok ? resp.json() : Promise.reject('No se pudo cargar el lote'))
-                                .then(data => {
-                                    localStorage.setItem('loteSeleccionado', JSON.stringify(data));
-                                    window.location.href = 'detalleLote.html';
-                                })
-                                .catch(err => {
-                                    console.error(err);
-                                    mostrarModalError("Error al cargar el lote", err);
-                                });
-                    });
-
-                    botonesContainer.appendChild(botonNotificar);
-                    botonesContainer.appendChild(botonDetalles);
-
-                    item.appendChild(infoContainer);
-                    item.appendChild(botonesContainer);
-                    listaLotes.appendChild(item);
                 });
-            })
-            .catch(error => {
-                console.error('Error al cargar los lotes:', error);
-                mostrarModalError("Error al cargar los lotes", error.message);
+
+                const botonDetalles = document.createElement('button');
+                botonDetalles.className = 'ver-btn';
+                botonDetalles.textContent = 'Ver detalles';
+                botonDetalles.addEventListener('click', () => {
+                    fetch(`http://localhost:8082/qa/lote/${lote.idLote}`)
+                        .then(resp => resp.ok ? resp.json() : Promise.reject('No se pudo cargar el lote'))
+                        .then(data => {
+                            localStorage.setItem('loteSeleccionado', JSON.stringify(data));
+                            window.location.href = 'detalleLote.html';
+                        })
+                        .catch(err => {
+                            console.error(err);
+                            mostrarModalError("Error al cargar el lote", err);
+                        });
+                });
+
+                botonesContainer.appendChild(botonNotificar);
+                botonesContainer.appendChild(botonDetalles);
+
+                item.appendChild(infoContainer);
+                item.appendChild(botonesContainer);
+                listaLotes.appendChild(item);
             });
+        })
+        .catch(error => {
+            console.error('Error al cargar los lotes:', error);
+            mostrarModalError("Error al cargar los lotes", error.message);
+        });
 
     crearModalNotificacion(); // Asegurarse que el modal exista
 });

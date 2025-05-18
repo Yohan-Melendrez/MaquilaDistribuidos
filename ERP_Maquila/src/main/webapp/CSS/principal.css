@@ -15,13 +15,46 @@ body {
 }
 
 .barraSuperior {
-  background-color: #2f5c6f;
-  color: white;
-  display: flex;
-  align-items: center;
-  padding: 10px 20px;
-  height: 60px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #2C5D75;
+    padding: 10px 30px;
+    color: white;
 }
+
+.tituloBarra {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.tituloBarra img {
+    height: 40px;
+}
+
+.iconosBarra {
+    display: flex;
+    gap: 20px;
+}
+
+.iconoNav img {
+    width: 30px;
+    height: 30px;
+    opacity: 0.6;
+    transition: transform 0.3s, opacity 0.3s;
+}
+
+.iconoNav:hover img {
+    transform: scale(1.1);
+    opacity: 0.8;
+}
+
+.iconoNav.activo img {
+    opacity: 1;
+    filter: drop-shadow(0 0 6px #F5F2EC);
+}
+
 
 .logo {
   height: 40px;
