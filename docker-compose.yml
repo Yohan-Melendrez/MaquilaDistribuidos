@@ -5,15 +5,15 @@ services:
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: rootpass
-      MYSQL_DATABASE: maquilqaqa
+      MYSQL_DATABASE: maquilaqa
       MYSQL_USER: qauser
       MYSQL_PASSWORD: qapass
+     
     ports:
       - "3307:3306"
     volumes:
       - ./mysql:/docker-entrypoint-initdb.d
       - mysql_qa_data:/var/lib/mysql
-
   rabbitmq:
     image: rabbitmq:3-management
     container_name: mq_maquila
@@ -36,12 +36,12 @@ services:
       SPRING_JPA_HIBERNATE_DDL_AUTO: update
       SPRING_JPA_SHOW_SQL: "true"
   #reporte
-  service-reporte:
+  service-inspeccion:
     build:
-      context: ./service-reporte
-    container_name: service_reporte
+      context: ./service-inspeccion
+    container_name: service_inspeccion
     ports:
-      - "8084:8084"
+      - "8083:8083"
     depends_on:
       - mysql
       - rabbitmq
@@ -50,6 +50,7 @@ services:
       SPRING_DATASOURCE_USERNAME: appuser
       SPRING_DATASOURCE_PASSWORD: apppass
       SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      SPRING_RABBITMQ_HOST: rabbitmq
   #erp
   service-erp:
     build:
