@@ -1,0 +1,20 @@
+PRIMERO:
+La carpeta del git que dice certs copiala a tu C:\ 
+SEGUNDO:
+C:\Users\Gabriel\AppData\Roaming\RabbitMQ
+Vas aqui con tu nombre de usuario 
+Abres el advance.config y pones esto
+[
+ {rabbit, [
+    {tcp_listeners, []}, % Desactiva TCP sin SSL
+    {ssl_listeners, [5671]}, % Puerto para SSL
+    {ssl_options, [
+        {certfile, "C:/certs/rabbitmq/server.crt"},
+        {keyfile,  "C:/certs/rabbitmq/server.key"},
+        {cacertfile, "C:/certs/rabbitmq/server.crt"},
+        {verify, verify_none},
+        {fail_if_no_peer_cert, false}
+    ]}
+ ]}
+].
+Luego ya corres el rabbit
