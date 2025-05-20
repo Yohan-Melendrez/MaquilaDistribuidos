@@ -1,4 +1,3 @@
-version: '3.8'
 services:
   mysql:
     image: mysql:8.0
@@ -15,6 +14,13 @@ services:
       - ./mysql:/docker-entrypoint-initdb.d
       - mysql_qa_data:/var/lib/mysql
 
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: mq_maquila
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+  #QA
   servicio-qa:
     build:
       context: ./servicio-qa
@@ -29,6 +35,33 @@ services:
       SPRING_DATASOURCE_PASSWORD: qapass
       SPRING_JPA_HIBERNATE_DDL_AUTO: update
       SPRING_JPA_SHOW_SQL: "true"
-
+  #reporte
+  service-reporte:
+    build:
+      context: ./service-reporte
+    container_name: service_reporte
+    ports:
+      - "8084:8084"
+    depends_on:
+      - mysql
+      - rabbitmq
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/maquila
+      SPRING_DATASOURCE_USERNAME: appuser
+      SPRING_DATASOURCE_PASSWORD: apppass
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+  #erp
+  service-erp:
+    build:
+      context: ./service-erp
+    container_name: service_erp
+    ports:
+      - "8081:8081"
+    depends_on:
+      - mysql
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/maquila
+      SPRING_DATASOURCE_USERNAME: appuser
+      SPRING_DATASOURCE_PASSWORD: apppass
 volumes:
   mysql_qa_data:
