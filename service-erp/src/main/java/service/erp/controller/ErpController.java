@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import service.erp.dtos.CrearLoteDTO;
+import service.erp.dtos.ProductoDTO;
 import service.erp.modelo.Lote;
-import service.erp.modelo.Producto;
 import service.erp.servicio.ErpService;
 
 @RestController
@@ -27,7 +27,7 @@ public class ErpController {
 
     // Obtener todos los productos
     @GetMapping("/productos")
-    public ResponseEntity<List<Producto>> obtenerProductos() {
+    public ResponseEntity<List<ProductoDTO>> obtenerProductos() {
         return ResponseEntity.ok(erpService.obtenerTodosProductos());
     }
 

@@ -34,26 +34,19 @@ public class QAControl {
 //        servicioQA.recibirNotificacionDefecto(lote);
 //        return new ResponseEntity<>("Defecto Recibido", HttpStatus.CREATED);
 //    }
-
     @PutMapping("/asignarNivelAtencion")
     public ResponseEntity<String> asignarNivelAtencion(@RequestBody EvaluacionDefectoDTO dto) {
         servicioQA.asignarNivelAtencion(dto);
         return ResponseEntity.ok("Nivel de atención actualizado");
     }
 
-    @PostMapping("/asignarLote")
-    public ResponseEntity<Map<String, String>> asignarLote(@RequestBody AsignacionLoteDTO dto) {
-        servicioQA.asignarLoteAInspector(dto);
-        return ResponseEntity.ok(Map.of("mensaje", "Lote asignado en QA"));
+        @PostMapping("/asignarLote")
+    public ResponseEntity<String> asignarLote(@RequestBody AsignacionLoteDTO dto) {
+        
+        return ResponseEntity.ok(servicioQA.asignarLoteAInspector(dto));
     }
 
-    // Endpoint para guardar una notificación manual
-    @PostMapping("/guardarNotificacion")
-    public ResponseEntity<String> guardarNotificacion(@RequestBody NotificacionDTO dto) {
-        servicioQA.guardarNotificacion(dto);
-        return new ResponseEntity<>("Notificación guardada", HttpStatus.CREATED);
-    }
-
+// 
     @GetMapping("/lotes")
     public ResponseEntity<List<LotesDTO>> obtenerTodosLotes() {
         List<LotesDTO> lotes = servicioQA.obtenerTodosLosLotes();
@@ -66,17 +59,21 @@ public class QAControl {
         return ResponseEntity.ok(lotes);
     }
 
-    @PostMapping("/externa")
-    public ResponseEntity<String> recibirNotificacionExterna(@RequestBody NotificacionDTO dto) {
-        servicioQA.guardarNotificacion(dto);
-        return ResponseEntity.ok("Notificación recibida y guardada.");
+//    @PostMapping("/externa")
+//    public ResponseEntity<String> recibirNotificacionExterna() {
+//        servicioQA.guardarNotificacion(dto);
+//        return ResponseEntity.ok("Notificación recibida y guardada.");
+//    }
+    @PostMapping(value = "/notificaciones")
+    public ResponseEntity<String> Notificaciones(@RequestBody NotificacionDTO dto) {
+        servicioQA.Notificaciones(dto);
+        return ResponseEntity.ok("Notificación enviada");
     }
-    @GetMapping(value = "/notificaciones", produces = MediaType.APPLICATION_JSON_VALUE)
+    // GET: obtener las notificaciones en memoria
+
+    @GetMapping("/notificaciones")
     public ResponseEntity<List<NotificacionDTO>> obtenerNotificaciones() {
-        return ResponseEntity
-                .ok()
-                .contentType(MediaType.APPLICATION_JSON) // <- explícito
-                .body(servicioQA.obtenerNotificaciones());
+        return ResponseEntity.ok(servicioQA.obtenerNotificaciones());
     }
 
     @GetMapping("/inspectores")
@@ -94,4 +91,15 @@ public class QAControl {
         }
     }
 
+    @PostMapping("/recibirLote")
+    public ResponseEntity<String> recibirLoteDesdeERP(@RequestBody LotesDTO dto) {
+        servicioQA.recibirLoteDesdeERP(dto);
+        return ResponseEntity.ok("Lote recibido correctamente");
+    }
+    
+    @PostMapping("/notificarLlegada/{idLote}")
+public ResponseEntity<String> notificarLlegada(@PathVariable Integer idLote) {
+    servicioQA.notificarLlegadaAErp(idLote);
+    return ResponseEntity.ok("Notificación enviada a ERP");
+}
 }

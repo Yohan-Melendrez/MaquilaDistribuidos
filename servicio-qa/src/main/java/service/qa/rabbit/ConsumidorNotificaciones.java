@@ -25,6 +25,6 @@ public class ConsumidorNotificaciones {
     @RabbitListener(queues = "${rabbitmq.queue.notificaciones}")
     public void recibirNotificacion(NotificacionDTO dto) {
         System.out.println("📨 Notificación recibida: " + dto.getTitulo());
-        servicioQA.guardarNotificacion(dto);
+        servicioQA.Notificaciones(dto);
     }
 }

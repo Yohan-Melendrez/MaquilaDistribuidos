@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Table(name = "productos")
 public class Producto {
 
     @Id

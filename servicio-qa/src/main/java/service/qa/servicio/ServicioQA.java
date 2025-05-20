@@ -1,7 +1,7 @@
 package service.qa.servicio;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
@@ -48,6 +49,10 @@ public class ServicioQA {
     private final InspectorRepositorio inspectorRepo;
     private final NotificacionRepositorio notificacionRepo;
     private final RestTemplate restTemplate;
+    private final List<NotificacionDTO> notificacionesEnMemoria = new ArrayList<>();
+    private final List<NotificacionDTO> notificacionesERP = new ArrayList<>();
+    @Autowired
+    private SimpMessagingTemplate messagingTemplate;
 
     @Value("${erp.integration.enabled:false}")
     private boolean erpIntegrationEnabled;
@@ -96,42 +101,39 @@ public class ServicioQA {
         }
     }
 
-    public void asignarLoteAInspector(AsignacionLoteDTO dto) {
+    public String asignarLoteAInspector(AsignacionLoteDTO dto) {
         if (dto.getIdLote() == null || dto.getIdInspector() == null) {
             throw new IllegalArgumentException("El ID del lote o del inspector no puede ser null");
         }
 
         Lote lote = loteRepo.findById(dto.getIdLote())
                 .orElseThrow(() -> new RuntimeException("No se encontró el lote " + dto.getIdLote()));
+
+        // ✅ Validar si ya tiene inspector asignado
+        if (lote.getInspector()!= null) {
+            return "YA_ASIGNADO";
+        }
+
         Inspector insp = inspectorRepo.findById(dto.getIdInspector())
                 .orElseThrow(() -> new RuntimeException("No se encontró el inspector " + dto.getIdInspector()));
 
-        // Guardar asignación en lote_inspector
         LoteInspector li = new LoteInspector();
         li.setLote(lote);
         li.setInspector(insp.getNombre());
         loteInspectorRepo.save(li);
 
-        // Asignar inspector al lote principal (opcional si quieres guardar última asignación)
         lote.setInspector(insp);
         loteRepo.save(lote);
 
-        // Desactivar inspector
         insp.setActivo(false);
         inspectorRepo.save(insp);
+
+        return "ASIGNACION_EXITOSA";
     }
 
-    public void guardarNotificacion(NotificacionDTO dto) {
-        Notificacion noti = new Notificacion();
-        noti.setTitulo(dto.getTitulo());
-        noti.setMensaje(dto.getMensaje());
-        noti.setTipo(dto.getTipo());
-        noti.setFechaEnvio(dto.getFechaEnvio());
-        if (dto.getIdInspector() != null) {
-            inspectorRepo.findById(dto.getIdInspector())
-                    .ifPresent(noti::setInspector);
-        }
-        notificacionRepo.save(noti);
+    public void Notificaciones(NotificacionDTO dto) {
+        notificacionesEnMemoria.add(dto);
+        messagingTemplate.convertAndSend("/topic/notificaciones", dto);
     }
 
     public List<LotesDTO> obtenerTodosLosLotes() {
@@ -149,15 +151,7 @@ public class ServicioQA {
     }
 
     public List<NotificacionDTO> obtenerNotificaciones() {
-        return notificacionRepo.findAll().stream()
-                .map(n -> new NotificacionDTO(
-                n.getTitulo(),
-                n.getMensaje(),
-                n.getTipo(),
-                n.getFechaEnvio(),
-                n.getInspector() != null ? n.getInspector().getIdInspector() : null
-        ))
-                .collect(Collectors.toList());
+        return notificacionesEnMemoria;
     }
 
     public List<Inspector> obtenerInspectoresActivos() {
@@ -180,31 +174,26 @@ public class ServicioQA {
         List<LoteProducto> productosDelLote = new ArrayList<>();
 
         for (ProductoDTO productoDTO : dto.getProductos()) {
-            // Verificar si el producto ya existe por nombre
             Producto producto = productoRepo.findByNombre(productoDTO.getNombre()).orElse(null);
             if (producto == null) {
                 producto = new Producto();
                 producto.setNombre(productoDTO.getNombre());
-                producto.setDescripcion(""); // O algún valor por defecto
+                producto.setDescripcion("");
                 producto = productoRepo.save(producto);
             }
 
-            // Lista de errores asociados al producto
             List<ErrorProduccion> erroresProducto = new ArrayList<>();
-
             for (ErrorDTO errorDTO : productoDTO.getErrores()) {
-                // Buscar error por descripción y producto
                 ErrorProduccion error = errorRepo.findByDescripcionAndNombre(errorDTO.getDescripcion(), errorDTO.getNombre());
                 if (error == null) {
                     error = new ErrorProduccion();
                     error.setDescripcion(errorDTO.getDescripcion());
-                    error.setNombre(errorDTO.getDescripcion());
+                    error.setNombre(errorDTO.getNombre());
                     error.setCostoUsd(errorDTO.getCosto());
-                    error.setNivelAtencion(null); // Puedes ajustar esto si es necesario
+                    error.setNivelAtencion(null);
                     error = errorRepo.save(error);
                 }
 
-                // Agregar relación error <-> producto si no existe aún
                 if (!producto.getErrores().contains(error)) {
                     producto.getErrores().add(error);
                 }
@@ -216,9 +205,8 @@ public class ServicioQA {
             }
 
             producto.setErrores(erroresProducto);
-            productoRepo.save(producto); // actualizar la relación
+            productoRepo.save(producto);
 
-            // Crear entrada en lote_producto
             LoteProducto lp = new LoteProducto();
             lp.setLote(lote);
             lp.setProducto(producto);
@@ -227,6 +215,32 @@ public class ServicioQA {
         }
 
         lote.setProductos(productosDelLote);
-        loteRepo.save(lote);
+        lote = loteRepo.save(lote); // IMPORTANTE: persistimos para obtener el ID
+
+        // ✅ Enviar notificación STOMP
+        NotificacionDTO noti = new NotificacionDTO();
+        noti.setTitulo("Envio de lote de ERP");
+        noti.setTipo("Lote Nuevo");
+        noti.setMensaje("Nuevo lote recibido: " + lote.getNombreLote());
+        noti.setFechaEnvio(java.time.LocalDateTime.now()); // o formateado si prefieres
+
+        Notificaciones(noti); // Método ya existente que guarda en memoria y envía STOMP
+    }
+
+    public void notificarLlegadaAErp(Integer idLote) {
+        Lote lote = loteRepo.findById(idLote)
+                .orElseThrow(() -> new RuntimeException("Lote no encontrado"));
+
+        NotificacionDTO noti = new NotificacionDTO();
+        noti.setTitulo("Llegada de lote");
+        noti.setTipo("INFORMACION");
+        noti.setMensaje("El lote " + lote.getNombreLote() + " ha sido registrado en QA");
+        noti.setFechaEnvio(java.time.LocalDateTime.now());
+
+        // Guardar solo si quieres mostrar desde backend luego
+        notificacionesERP.add(noti);
+
+        // Enviar a los suscriptores de ERP (WebSocket)
+        messagingTemplate.convertAndSend("/topic/notificaciones-erp", noti);
     }
 }

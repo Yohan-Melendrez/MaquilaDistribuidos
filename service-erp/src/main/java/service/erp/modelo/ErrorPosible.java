@@ -11,6 +11,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import java.math.BigDecimal;
 
 /**
@@ -18,6 +19,7 @@ import java.math.BigDecimal;
  * @author abelc
  */
 @Entity
+@Table(name = "errores")
 public class ErrorPosible {
 
     @Id
@@ -25,7 +27,8 @@ public class ErrorPosible {
     private Integer idError;
 
     private String descripcion;
-    private BigDecimal costo;
+    private BigDecimal costo_usd;
+    private String nombre;
     @ManyToOne
     @JoinColumn(name = "id_producto")
     @JsonBackReference
@@ -56,12 +59,22 @@ public class ErrorPosible {
         this.producto = producto;
     }
 
-    public BigDecimal getCosto() {
-        return costo;
+  
+
+    public BigDecimal getCosto_usd() {
+        return costo_usd;
     }
 
-    public void setCosto(BigDecimal costo) {
-        this.costo = costo;
+    public void setCosto_usd(BigDecimal costo_usd) {
+        this.costo_usd = costo_usd;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
     }
 
     

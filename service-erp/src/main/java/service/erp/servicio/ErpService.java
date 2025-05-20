@@ -11,11 +11,16 @@ import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import service.erp.config.RabbitConfig;
+import org.springframework.web.client.RestTemplate;
 import service.erp.dtos.CrearLoteDTO;
 import service.erp.dtos.ErrorDTO;
 import service.erp.dtos.LoteItemDTO;
+import service.erp.dtos.ProductoDTO;
 import service.erp.modelo.Lote;
 import service.erp.modelo.LoteProducto;
 import service.erp.modelo.LoteProductoId;
@@ -38,6 +43,7 @@ public class ErpService {
     private ObjectMapper objectMapper;
     @Autowired
     private ProductoRepositorio productoRepository;
+    private final RestTemplate restTemplate = new RestTemplate(); // o inyectable
 
     @Transactional
     public Lote crearLote(CrearLoteDTO dto) {
@@ -71,14 +77,17 @@ public class ErpService {
         return loteRepository.findAll();
     }
 
-    public List<Producto> obtenerTodosProductos() {
-        return productoRepository.findAll();
+    public List<ProductoDTO> obtenerTodosProductos() {
+        return productoRepository.findAll()
+                .stream()
+                .map(ProductoDTO::new)
+                .collect(Collectors.toList());
     }
 
     public void enviarLoteAQa(Integer idLote) {
         Lote lote = loteRepository.findById(idLote)
                 .orElseThrow(() -> new RuntimeException("Lote no encontrado: " + idLote));
-       
+
         CrearLoteDTO dto = new CrearLoteDTO();
         dto.setIdLote(lote.getIdLote());
         dto.setNombreLote(lote.getNombreLote());
@@ -96,8 +105,9 @@ public class ErpService {
             List<ErrorDTO> errores = p.getErrores().stream().map(error -> {
                 ErrorDTO err = new ErrorDTO();
                 err.setIdError(error.getIdError());
+                err.setNombre(error.getNombre());
                 err.setDescripcion(error.getDescripcion());
-                err.setCosto(error.getCosto());
+                err.setCosto(error.getCosto_usd());
                 return err;
             }).collect(Collectors.toList());
 
@@ -108,15 +118,19 @@ public class ErpService {
         dto.setProductos(productosDTO);
 
         try {
-            String json = objectMapper.writeValueAsString(dto);
-            rabbitTemplate.convertAndSend(
-                    RabbitConfig.EXCHANGE_NAME,
-                    RabbitConfig.ROUTING_KEY,
-                    json
-            );
-            System.out.println("📤 Lote enviado a QA:\n" + json);
+            String url = "http://localhost:8082/qa/recibirLote"; // QA app URL
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+
+            HttpEntity<CrearLoteDTO> request = new HttpEntity<>(dto, headers);
+            ResponseEntity<Void> response = restTemplate.postForEntity(url, request, Void.class);
+
+            System.out.println("✅ Lote enviado a QA por REST: " + response.getStatusCode());
+
         } catch (Exception e) {
-            throw new RuntimeException("Error al serializar el lote para QA", e);
+            e.printStackTrace();
+            throw new RuntimeException("Error enviando lote a QA por REST", e);
         }
     }
 }
