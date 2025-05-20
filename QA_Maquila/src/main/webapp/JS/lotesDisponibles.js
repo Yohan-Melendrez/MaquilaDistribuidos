@@ -5,7 +5,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     const listaLotes = document.getElementById('listaLotes');
 
-    fetch('http://localhost:8082/qa/lotes')
+    fetch('https://localhost:8082/qa/lotes')
         .then(response => response.json())
         .then(lotes => {
             lotes.forEach(lote => {
@@ -44,7 +44,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     botonNotificar.disabled = true;
                     botonNotificar.textContent = 'Notificando...';
 
-                    fetch(`http://localhost:8082/qa/notificarLlegada/${lote.idLote}`, {
+                    fetch(`https://localhost:8082/qa/notificarLlegada/${lote.idLote}`, {
                         method: 'POST'
                     })
                     .then(response => {
@@ -70,7 +70,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 botonDetalles.className = 'ver-btn';
                 botonDetalles.textContent = 'Ver detalles';
                 botonDetalles.addEventListener('click', () => {
-                    fetch(`http://localhost:8082/qa/lote/${lote.idLote}`)
+                    fetch(`https://localhost:8082/qa/lote/${lote.idLote}`)
                         .then(resp => resp.ok ? resp.json() : Promise.reject('No se pudo cargar el lote'))
                         .then(data => {
                             localStorage.setItem('loteSeleccionado', JSON.stringify(data));

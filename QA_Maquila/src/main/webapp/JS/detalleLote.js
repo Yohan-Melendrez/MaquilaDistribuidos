@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const QA = 'http://localhost:8082/qa';
+    const QA = 'https://localhost:8082/qa';
     let lote = JSON.parse(localStorage.getItem('loteSeleccionado'));
 
     if (!lote)

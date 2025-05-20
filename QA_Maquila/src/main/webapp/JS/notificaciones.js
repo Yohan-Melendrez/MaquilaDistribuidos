@@ -147,7 +147,7 @@ function cargarNotificacionesPendientes() {
 }
 
 function conectarWebSocket() {
-    const socket = new SockJS('http://localhost:8082/ws-notificaciones');
+    const socket = new SockJS('https://localhost:8082/ws-notificaciones');
     stompClient = Stomp.over(socket);
 
     stompClient.connect({}, () => {

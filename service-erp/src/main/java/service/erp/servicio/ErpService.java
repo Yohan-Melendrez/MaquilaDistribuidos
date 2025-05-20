@@ -118,7 +118,7 @@ public class ErpService {
         dto.setProductos(productosDTO);
 
         try {
-            String url = "http://localhost:8082/qa/recibirLote"; // QA app URL
+            String url = "https://localhost:8082/qa/recibirLote"; // QA app URL
 
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);

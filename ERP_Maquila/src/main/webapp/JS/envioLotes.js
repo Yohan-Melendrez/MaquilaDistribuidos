@@ -35,7 +35,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Obtener lotes desde el backend
-    fetch('http://localhost:8081/lotes')
+    fetch('https://localhost:8081/lotes')
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Error al obtener los lotes');
@@ -54,7 +54,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     botonVer.className = 'ver-btn';
                     botonVer.textContent = 'Enviar lote';
                     botonVer.addEventListener('click', () => {
-                        fetch(`http://localhost:8081/lotes/${lote.idLote}/enviar`, {
+                        fetch(`https://localhost:8081/lotes/${lote.idLote}/enviar`, {
                             method: 'POST'
                         })
                                 .then(response => {

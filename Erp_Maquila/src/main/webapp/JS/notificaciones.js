@@ -147,7 +147,7 @@ function cargarNotificacionesPendientes() {
 }
 
 function conectarWebSocket() {
-    const socket = new SockJS('http://localhost:8082/ws-erp');
+    const socket = new SockJS('https://localhost:8082/ws-erp');
     stompClient = Stomp.over(socket);
 
     stompClient.connect({}, () => {

@@ -36,7 +36,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Cargar los lotes con errores
-    fetch("http://localhost:8082/qa/lotesConErrores")
+    fetch("https://localhost:8082/qa/lotesConErrores")
         .then(response => {
             if (!response.ok) {
                 throw new Error(`Error en la respuesta: ${response.status}`);
@@ -95,7 +95,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     };
 
                     // Llamada al endpoint para asignar nivel de atención
-                    fetch("http://localhost:8082/qa/asignarNivelAtencion", {
+                    fetch("https://localhost:8082/qa/asignarNivelAtencion", {
                         method: "PUT",
                         headers: { "Content-Type": "application/json" },
                         body: JSON.stringify(dto)
@@ -248,7 +248,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 idInspector: 1 // ID por defecto del inspector
             };
             
-            fetch('http://localhost:8082/qa/guardarNotificacion', {
+            fetch('https://localhost:8082/qa/guardarNotificacion', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
