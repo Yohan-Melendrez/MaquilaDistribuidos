@@ -1,5 +1,5 @@
 // JS/menuLotes.js
-const API_ROOT    = 'http://localhost:9090';
+const API_ROOT    = 'https://localhost:9090';
 const contenedor  = document.getElementById('lotesContainer');
 const salirBtn    = document.getElementById('salirBtn');
 

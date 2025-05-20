@@ -1,5 +1,5 @@
 // JS/index.js
-const API_ROOT = 'http://localhost:9090';
+const API_ROOT = 'https://localhost:9090';
 const select     = document.getElementById('inspectorSelect');
 const loginBtn   = document.getElementById('loginBtn');
 

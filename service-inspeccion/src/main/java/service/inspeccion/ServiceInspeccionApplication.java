@@ -6,8 +6,11 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class ServiceInspeccionApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(ServiceInspeccionApplication.class, args);
-	}
+    public static void main(String[] args) {
+        System.setProperty("javax.net.ssl.trustStore", "C:\\Users\\Gabriel\\OneDrive\\Desktop\\MaquilaDistribuidos\\truststore.jks");
+        System.setProperty("javax.net.ssl.trustStorePassword", "123456");
+        System.setProperty("javax.net.ssl.trustStoreType", "JKS");
+        SpringApplication.run(ServiceInspeccionApplication.class, args);
+    }
 
 }

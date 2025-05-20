@@ -1,5 +1,5 @@
 // JS/fallasProducto.js
-const API_ROOT = 'http://localhost:9090';
+const API_ROOT = 'https://localhost:9090';
 const contenedor = document.getElementById('fallasContainer');
 const btnReportar = document.getElementById('reportarBtn');
 const btnCancelar = document.getElementById('cancelarBtn');

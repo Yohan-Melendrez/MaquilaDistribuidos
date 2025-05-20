@@ -1,5 +1,5 @@
 // JS/productosLote.js
-const API_ROOT         = 'http://localhost:9090';
+const API_ROOT         = 'https://localhost:9090';
 const contenedor       = document.getElementById('productosContainer');
 const botonReportar    = document.getElementById('reportarBtn');
 const botonCancelar    = document.getElementById('cancelarBtn');

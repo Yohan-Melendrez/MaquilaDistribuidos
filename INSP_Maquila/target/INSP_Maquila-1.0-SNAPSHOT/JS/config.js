@@ -1,2 +1,2 @@
 // config.js
-export const API_BASE = 'http://localhost:9090/inspeccion';
+export const API_BASE = 'https://localhost:9090/inspeccion';
