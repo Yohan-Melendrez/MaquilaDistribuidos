@@ -37,7 +37,7 @@ function disminuirCantidad(index) {
 
 // Carga productos desde el backend
 function cargarProductos() {
-  fetch('http://localhost:8081/productos')
+  fetch('https://localhost:8081/productos')
     .then(response => {
       if (!response.ok) {
         throw new Error("Error al obtener productos");
@@ -79,7 +79,7 @@ function crearLote() {
     productos: productosSeleccionados
   };
 
-  fetch("http://localhost:8081/lotes", {
+  fetch("https://localhost:8081/lotes", {
     method: "POST",
     headers: {
       "Content-Type": "application/json"
