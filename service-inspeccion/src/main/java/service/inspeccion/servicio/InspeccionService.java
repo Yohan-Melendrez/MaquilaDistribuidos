@@ -6,7 +6,9 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.*;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
@@ -17,8 +19,18 @@ import service.inspeccion.dtos.InspectorDTO;
 import service.inspeccion.dtos.NotificacionDTO;
 import service.inspeccion.dtos.ProductoDelLoteDTO;
 import service.inspeccion.dtos.RegistroInspeccionDTO;
-import service.inspeccion.modelo.*;
-import service.inspeccion.repositorio.*;
+import service.inspeccion.modelo.ErrorProduccion;
+import service.inspeccion.modelo.Inspeccion;
+import service.inspeccion.modelo.Inspector;
+import service.inspeccion.modelo.Lote;
+import service.inspeccion.modelo.NivelAtencion;
+import service.inspeccion.modelo.Producto;
+import service.inspeccion.repositorio.ErrorRepositorio;
+import service.inspeccion.repositorio.InspeccionRepositorio;
+import service.inspeccion.repositorio.InspectorRepositorio;
+import service.inspeccion.repositorio.LoteProductoRepositorio;
+import service.inspeccion.repositorio.LoteRepositorio;
+import service.inspeccion.repositorio.ProductoRepositorio;
 
 @Service
 public class InspeccionService {
@@ -38,7 +50,7 @@ public class InspeccionService {
 
     private final RestTemplate restTemplate = new RestTemplate();
 
-    @Value("${qa.service.url:http://localhost:8082/qa}")
+    @Value("${qa.service.url:http://servicio-qa:8082/qa}")
     private String qaServiceUrl;
 
     /**

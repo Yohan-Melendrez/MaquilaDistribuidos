@@ -5,7 +5,7 @@ services:
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: rootpass
-      MYSQL_DATABASE: maquilaqa
+      MYSQL_DATABASE: maquilaQA
       MYSQL_USER: qauser
       MYSQL_PASSWORD: qapass
      
@@ -30,7 +30,7 @@ services:
     depends_on:
       - mysql
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/maquilaqa
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/maquilaQA
       SPRING_DATASOURCE_USERNAME: qauser
       SPRING_DATASOURCE_PASSWORD: qapass
       SPRING_JPA_HIBERNATE_DDL_AUTO: update
@@ -41,16 +41,17 @@ services:
       context: ./service-inspeccion
     container_name: service_inspeccion
     ports:
-      - "8083:8083"
+      - "9090:9090"
     depends_on:
       - mysql
       - rabbitmq
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/maquila
-      SPRING_DATASOURCE_USERNAME: appuser
-      SPRING_DATASOURCE_PASSWORD: apppass
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/maquilaQA
+      SPRING_DATASOURCE_USERNAME: qauser
+      SPRING_DATASOURCE_PASSWORD: qapass
       SPRING_JPA_HIBERNATE_DDL_AUTO: update
       SPRING_RABBITMQ_HOST: rabbitmq
+      SPRING_JPA_SHOW_SQL: "true"
   #erp
   service-erp:
     build:
@@ -64,5 +65,8 @@ services:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/maquila
       SPRING_DATASOURCE_USERNAME: appuser
       SPRING_DATASOURCE_PASSWORD: apppass
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      SPRING_RABBITMQ_HOST: rabbitmq
+      SPRING_JPA_SHOW_SQL: "true"
 volumes:
   mysql_qa_data:

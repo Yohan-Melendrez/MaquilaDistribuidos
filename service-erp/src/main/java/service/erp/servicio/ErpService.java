@@ -4,11 +4,10 @@
  */
 package service.erp.servicio;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
@@ -17,6 +16,10 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import jakarta.transaction.Transactional;
 import service.erp.dtos.CrearLoteDTO;
 import service.erp.dtos.ErrorDTO;
 import service.erp.dtos.LoteItemDTO;
@@ -118,8 +121,7 @@ public class ErpService {
         dto.setProductos(productosDTO);
 
         try {
-            String url = "http://localhost:8082/qa/recibirLote"; // QA app URL
-
+            String url = "http://servicio-qa:8082/qa/recibirLote"; // 👈 usa el nombre del servicio
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
 
