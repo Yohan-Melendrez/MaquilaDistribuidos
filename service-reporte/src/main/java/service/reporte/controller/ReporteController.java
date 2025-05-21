@@ -1,4 +1,4 @@
-    /*
+/*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -41,17 +42,16 @@ public class ReporteController {
         return reporteService.obtenerHistorial();
     }
 
+    @CrossOrigin(origins = "http://127.0.0.1:5500")
     @PostMapping("/generarReporte")
-    public ResponseEntity<?> crearReporte(@RequestBody FiltroReporteDTO filtro) {
-        try {
-            Reporte reporte = reporteService.generarYGuardarReporte(filtro.getInicio(), filtro.getFin(), filtro.getIdError());
-            return ResponseEntity.ok(reporte);
-        } catch (RuntimeException e) {
-            return ResponseEntity
-                    .status(HttpStatus.BAD_REQUEST)
-                    .body(Map.of("error", e.getMessage())); // devolver mensaje como JSON
-        }
+    public ResponseEntity<List<ReporteDTO>> generarReportes(@RequestBody FiltroReporteDTO filtro) {
+        LocalDateTime inicio = filtro.getInicio();
+        LocalDateTime fin = filtro.getFin();
+
+        List<ReporteDTO> reportes = reporteService.generarReportesPorFechas(inicio, fin);
+        return ResponseEntity.ok(reportes);
     }
+
 
     @GetMapping("/errores")
     public List<ErrorDTO> listarErrores() {

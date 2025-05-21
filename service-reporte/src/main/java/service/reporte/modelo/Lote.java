@@ -4,8 +4,9 @@ package service.reporte.modelo;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "lote")
+@Table(name = "lotes")
 public class Lote {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_lote")
@@ -15,6 +16,13 @@ public class Lote {
     private String nombreLote;
 
     private String estado;
+
+    @ManyToOne
+    @JoinColumn(name = "id_inspector")
+    private Inspector inspector;
+
+    @Column(name = "nivel_atencion")
+    private String nivelAtencion;
 
     public Integer getIdLote() {
         return idLote;
