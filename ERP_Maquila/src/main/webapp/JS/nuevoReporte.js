@@ -11,29 +11,12 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 3000);
     }
 
-    // Cargar errores desde el backend
-    fetch('http://localhost:9091/reportes/errores')
-            .then(res => res.json())
-            .then(data => {
-                data.forEach(error => {
-                    const option = document.createElement('option');
-                    option.value = error.id;
-                    option.textContent = error.nombre;
-                    tipoDefectoSelect.appendChild(option);
-                });
-            })
-            .catch(err => {
-                console.error('Error cargando errores:', err);
-                mostrarMensaje('Error al cargar errores.', true);
-            });
-
     form.addEventListener('submit', (e) => {
         e.preventDefault();
-        const errorId = tipoDefectoSelect.value;
         const desde = document.getElementById('fechaDesde').value;
         const hasta = document.getElementById('fechaHasta').value;
 
-        if (!errorId || !desde || !hasta) {
+        if (!desde || !hasta) {
             mostrarMensaje('Por favor, completa todos los campos.', true);
             return;
         }
@@ -41,7 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const url = 'http://localhost:9091/reportes/generarReporte';
         const inicio = `${desde}T00:00:00`;
         const fin = `${hasta}T23:59:00`;
-        const filtro = {inicio, fin, idError: errorId};
+        const filtro = {inicio, fin};
 
         fetch(url, {
             method: 'POST',
@@ -63,6 +46,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 })
                 .then(data => {
                     document.getElementById('modalConfirmacion').style.display = 'flex';
+                    // Guardamos los reportes generados en sessionStorage
+                    sessionStorage.setItem('reportesGenerados', JSON.stringify(data));
+                    // Redirigimos
                     setTimeout(() => window.location.href = 'reportes.html', 1500);
                 })
                 .catch(err => {

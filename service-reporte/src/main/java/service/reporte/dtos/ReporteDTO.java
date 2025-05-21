@@ -16,6 +16,7 @@ public class ReporteDTO {
     private Double costoTotalMxn;
     private String detallesRechazo;
     private String fechaComprendida;
+    private Integer idError;
 
     public ReporteDTO() {
     }
@@ -37,6 +38,14 @@ public class ReporteDTO {
         this.costoTotalMxn = costoTotalMxn;
         this.detallesRechazo = detallesRechazo;
         this.fechaComprendida = fechaComprendida;
+    }
+
+    public Integer getIdError() {
+        return idError;
+    }
+
+    public void setIdError(Integer idError) {
+        this.idError = idError;
     }
 
     public String getFechaComprendida() {

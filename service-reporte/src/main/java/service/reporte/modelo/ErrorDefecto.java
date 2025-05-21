@@ -3,7 +3,7 @@ package service.reporte.modelo;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "error_posible")
+@Table(name = "errores")
 public class ErrorDefecto {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -13,7 +13,7 @@ public class ErrorDefecto {
     private String nombre;
     private String descripcion;
 
-    @Column(name = "costo")
+    @Column(name = "costo_usd")
     private Double costoUsd;
 
     public Integer getIdError() {

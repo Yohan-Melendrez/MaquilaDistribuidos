@@ -1,29 +1,29 @@
-C:\Users\Gabriel\OneDrive\Desktop\MaquilaDistribuidos\service-inspeccion\src\main\java\service\inspeccion\controller\InspeccionController.java
-C:\Users\Gabriel\OneDrive\Desktop\MaquilaDistribuidos\service-inspeccion\src\main\java\service\inspeccion\dtos\AsignarLoteDTO.java
-C:\Users\Gabriel\OneDrive\Desktop\MaquilaDistribuidos\service-inspeccion\src\main\java\service\inspeccion\dtos\ErrorDTO.java
-C:\Users\Gabriel\OneDrive\Desktop\MaquilaDistribuidos\service-inspeccion\src\main\java\service\inspeccion\dtos\InspectorDTO.java
-C:\Users\Gabriel\OneDrive\Desktop\MaquilaDistribuidos\service-inspeccion\src\main\java\service\inspeccion\dtos\NotificacionDTO.java
-C:\Users\Gabriel\OneDrive\Desktop\MaquilaDistribuidos\service-inspeccion\src\main\java\service\inspeccion\dtos\ProductoDelLoteDTO.java
-C:\Users\Gabriel\OneDrive\Desktop\MaquilaDistribuidos\service-inspeccion\src\main\java\service\inspeccion\dtos\RegistroInspeccionDTO.java
-C:\Users\Gabriel\OneDrive\Desktop\MaquilaDistribuidos\service-inspeccion\src\main\java\service\inspeccion\modelo\ErrorProduccion.java
-C:\Users\Gabriel\OneDrive\Desktop\MaquilaDistribuidos\service-inspeccion\src\main\java\service\inspeccion\modelo\Inspeccion.java
-C:\Users\Gabriel\OneDrive\Desktop\MaquilaDistribuidos\service-inspeccion\src\main\java\service\inspeccion\modelo\Inspector.java
-C:\Users\Gabriel\OneDrive\Desktop\MaquilaDistribuidos\service-inspeccion\src\main\java\service\inspeccion\modelo\Lote.java
-C:\Users\Gabriel\OneDrive\Desktop\MaquilaDistribuidos\service-inspeccion\src\main\java\service\inspeccion\modelo\LoteInspector.java
-C:\Users\Gabriel\OneDrive\Desktop\MaquilaDistribuidos\service-inspeccion\src\main\java\service\inspeccion\modelo\LoteProducto.java
-C:\Users\Gabriel\OneDrive\Desktop\MaquilaDistribuidos\service-inspeccion\src\main\java\service\inspeccion\modelo\LoteProductoId.java
-C:\Users\Gabriel\OneDrive\Desktop\MaquilaDistribuidos\service-inspeccion\src\main\java\service\inspeccion\modelo\NivelAtencion.java
-C:\Users\Gabriel\OneDrive\Desktop\MaquilaDistribuidos\service-inspeccion\src\main\java\service\inspeccion\modelo\Notificacion.java
-C:\Users\Gabriel\OneDrive\Desktop\MaquilaDistribuidos\service-inspeccion\src\main\java\service\inspeccion\modelo\Producto.java
-C:\Users\Gabriel\OneDrive\Desktop\MaquilaDistribuidos\service-inspeccion\src\main\java\service\inspeccion\rabbit\ProductorNotificaciones.java
-C:\Users\Gabriel\OneDrive\Desktop\MaquilaDistribuidos\service-inspeccion\src\main\java\service\inspeccion\rabbit\RabbitMQConfig.java
-C:\Users\Gabriel\OneDrive\Desktop\MaquilaDistribuidos\service-inspeccion\src\main\java\service\inspeccion\repositorio\ErrorRepositorio.java
-C:\Users\Gabriel\OneDrive\Desktop\MaquilaDistribuidos\service-inspeccion\src\main\java\service\inspeccion\repositorio\InspeccionRepositorio.java
-C:\Users\Gabriel\OneDrive\Desktop\MaquilaDistribuidos\service-inspeccion\src\main\java\service\inspeccion\repositorio\InspectorRepositorio.java
-C:\Users\Gabriel\OneDrive\Desktop\MaquilaDistribuidos\service-inspeccion\src\main\java\service\inspeccion\repositorio\LoteInspectorRepositorio.java
-C:\Users\Gabriel\OneDrive\Desktop\MaquilaDistribuidos\service-inspeccion\src\main\java\service\inspeccion\repositorio\LoteProductoRepositorio.java
-C:\Users\Gabriel\OneDrive\Desktop\MaquilaDistribuidos\service-inspeccion\src\main\java\service\inspeccion\repositorio\LoteRepositorio.java
-C:\Users\Gabriel\OneDrive\Desktop\MaquilaDistribuidos\service-inspeccion\src\main\java\service\inspeccion\repositorio\ProductoRepositorio.java
-C:\Users\Gabriel\OneDrive\Desktop\MaquilaDistribuidos\service-inspeccion\src\main\java\service\inspeccion\ServiceInspeccionApplication.java
-C:\Users\Gabriel\OneDrive\Desktop\MaquilaDistribuidos\service-inspeccion\src\main\java\service\inspeccion\servicio\CorsConfig.java
-C:\Users\Gabriel\OneDrive\Desktop\MaquilaDistribuidos\service-inspeccion\src\main\java\service\inspeccion\servicio\InspeccionService.java
+C:\Users\USER\Documents\ITSON\Trabajos ITSON\Sexto Semestre\Sistemas Distribuidos\Proyecto\MaquilaDistribuidos\service-inspeccion\src\main\java\service\inspeccion\controller\InspeccionController.java
+C:\Users\USER\Documents\ITSON\Trabajos ITSON\Sexto Semestre\Sistemas Distribuidos\Proyecto\MaquilaDistribuidos\service-inspeccion\src\main\java\service\inspeccion\dtos\AsignarLoteDTO.java
+C:\Users\USER\Documents\ITSON\Trabajos ITSON\Sexto Semestre\Sistemas Distribuidos\Proyecto\MaquilaDistribuidos\service-inspeccion\src\main\java\service\inspeccion\dtos\ErrorDTO.java
+C:\Users\USER\Documents\ITSON\Trabajos ITSON\Sexto Semestre\Sistemas Distribuidos\Proyecto\MaquilaDistribuidos\service-inspeccion\src\main\java\service\inspeccion\dtos\InspectorDTO.java
+C:\Users\USER\Documents\ITSON\Trabajos ITSON\Sexto Semestre\Sistemas Distribuidos\Proyecto\MaquilaDistribuidos\service-inspeccion\src\main\java\service\inspeccion\dtos\NotificacionDTO.java
+C:\Users\USER\Documents\ITSON\Trabajos ITSON\Sexto Semestre\Sistemas Distribuidos\Proyecto\MaquilaDistribuidos\service-inspeccion\src\main\java\service\inspeccion\dtos\ProductoDelLoteDTO.java
+C:\Users\USER\Documents\ITSON\Trabajos ITSON\Sexto Semestre\Sistemas Distribuidos\Proyecto\MaquilaDistribuidos\service-inspeccion\src\main\java\service\inspeccion\dtos\RegistroInspeccionDTO.java
+C:\Users\USER\Documents\ITSON\Trabajos ITSON\Sexto Semestre\Sistemas Distribuidos\Proyecto\MaquilaDistribuidos\service-inspeccion\src\main\java\service\inspeccion\modelo\ErrorProduccion.java
+C:\Users\USER\Documents\ITSON\Trabajos ITSON\Sexto Semestre\Sistemas Distribuidos\Proyecto\MaquilaDistribuidos\service-inspeccion\src\main\java\service\inspeccion\modelo\Inspeccion.java
+C:\Users\USER\Documents\ITSON\Trabajos ITSON\Sexto Semestre\Sistemas Distribuidos\Proyecto\MaquilaDistribuidos\service-inspeccion\src\main\java\service\inspeccion\modelo\Inspector.java
+C:\Users\USER\Documents\ITSON\Trabajos ITSON\Sexto Semestre\Sistemas Distribuidos\Proyecto\MaquilaDistribuidos\service-inspeccion\src\main\java\service\inspeccion\modelo\Lote.java
+C:\Users\USER\Documents\ITSON\Trabajos ITSON\Sexto Semestre\Sistemas Distribuidos\Proyecto\MaquilaDistribuidos\service-inspeccion\src\main\java\service\inspeccion\modelo\LoteInspector.java
+C:\Users\USER\Documents\ITSON\Trabajos ITSON\Sexto Semestre\Sistemas Distribuidos\Proyecto\MaquilaDistribuidos\service-inspeccion\src\main\java\service\inspeccion\modelo\LoteProducto.java
+C:\Users\USER\Documents\ITSON\Trabajos ITSON\Sexto Semestre\Sistemas Distribuidos\Proyecto\MaquilaDistribuidos\service-inspeccion\src\main\java\service\inspeccion\modelo\LoteProductoId.java
+C:\Users\USER\Documents\ITSON\Trabajos ITSON\Sexto Semestre\Sistemas Distribuidos\Proyecto\MaquilaDistribuidos\service-inspeccion\src\main\java\service\inspeccion\modelo\NivelAtencion.java
+C:\Users\USER\Documents\ITSON\Trabajos ITSON\Sexto Semestre\Sistemas Distribuidos\Proyecto\MaquilaDistribuidos\service-inspeccion\src\main\java\service\inspeccion\modelo\Notificacion.java
+C:\Users\USER\Documents\ITSON\Trabajos ITSON\Sexto Semestre\Sistemas Distribuidos\Proyecto\MaquilaDistribuidos\service-inspeccion\src\main\java\service\inspeccion\modelo\Producto.java
+C:\Users\USER\Documents\ITSON\Trabajos ITSON\Sexto Semestre\Sistemas Distribuidos\Proyecto\MaquilaDistribuidos\service-inspeccion\src\main\java\service\inspeccion\rabbit\ProductorNotificaciones.java
+C:\Users\USER\Documents\ITSON\Trabajos ITSON\Sexto Semestre\Sistemas Distribuidos\Proyecto\MaquilaDistribuidos\service-inspeccion\src\main\java\service\inspeccion\rabbit\RabbitMQConfig.java
+C:\Users\USER\Documents\ITSON\Trabajos ITSON\Sexto Semestre\Sistemas Distribuidos\Proyecto\MaquilaDistribuidos\service-inspeccion\src\main\java\service\inspeccion\repositorio\ErrorRepositorio.java
+C:\Users\USER\Documents\ITSON\Trabajos ITSON\Sexto Semestre\Sistemas Distribuidos\Proyecto\MaquilaDistribuidos\service-inspeccion\src\main\java\service\inspeccion\repositorio\InspeccionRepositorio.java
+C:\Users\USER\Documents\ITSON\Trabajos ITSON\Sexto Semestre\Sistemas Distribuidos\Proyecto\MaquilaDistribuidos\service-inspeccion\src\main\java\service\inspeccion\repositorio\InspectorRepositorio.java
+C:\Users\USER\Documents\ITSON\Trabajos ITSON\Sexto Semestre\Sistemas Distribuidos\Proyecto\MaquilaDistribuidos\service-inspeccion\src\main\java\service\inspeccion\repositorio\LoteInspectorRepositorio.java
+C:\Users\USER\Documents\ITSON\Trabajos ITSON\Sexto Semestre\Sistemas Distribuidos\Proyecto\MaquilaDistribuidos\service-inspeccion\src\main\java\service\inspeccion\repositorio\LoteProductoRepositorio.java
+C:\Users\USER\Documents\ITSON\Trabajos ITSON\Sexto Semestre\Sistemas Distribuidos\Proyecto\MaquilaDistribuidos\service-inspeccion\src\main\java\service\inspeccion\repositorio\LoteRepositorio.java
+C:\Users\USER\Documents\ITSON\Trabajos ITSON\Sexto Semestre\Sistemas Distribuidos\Proyecto\MaquilaDistribuidos\service-inspeccion\src\main\java\service\inspeccion\repositorio\ProductoRepositorio.java
+C:\Users\USER\Documents\ITSON\Trabajos ITSON\Sexto Semestre\Sistemas Distribuidos\Proyecto\MaquilaDistribuidos\service-inspeccion\src\main\java\service\inspeccion\ServiceInspeccionApplication.java
+C:\Users\USER\Documents\ITSON\Trabajos ITSON\Sexto Semestre\Sistemas Distribuidos\Proyecto\MaquilaDistribuidos\service-inspeccion\src\main\java\service\inspeccion\servicio\CorsConfig.java
+C:\Users\USER\Documents\ITSON\Trabajos ITSON\Sexto Semestre\Sistemas Distribuidos\Proyecto\MaquilaDistribuidos\service-inspeccion\src\main\java\service\inspeccion\servicio\InspeccionService.java
