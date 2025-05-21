@@ -4,17 +4,18 @@
  */
 package service.login.servicio;
 
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.security.Keys;
+import java.security.Key;
 import java.util.Date;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.Keys;
 import service.login.modelo.Usuario;
 import service.login.repositorio.UsuarioRepositorio;
-
-import java.security.Key;
 /**
  *
  * @author abelc
@@ -31,7 +32,7 @@ public class AuthService {
     // clave secreta de al menos 32 caracteres
     private static final Key SECRET_KEY = Keys.hmacShaKeyFor("clave-secreta-super-segura-1234567890".getBytes());
 
-    public String login(String nombre, String contrasena) {
+    public String login(String nombre, String contrasena, String origenSistema) {
         Usuario usuario = usuarioRepo.findByNombre(nombre)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
@@ -39,11 +40,16 @@ public class AuthService {
             throw new RuntimeException("Contraseña incorrecta");
         }
 
+        if (!usuario.getDepartamento().equalsIgnoreCase(origenSistema)) {
+            throw new RuntimeException("Acceso denegado al sistema: " + origenSistema);
+        }
+
+
         return Jwts.builder()
                 .setSubject(usuario.getNombre())
                 .claim("departamento", usuario.getDepartamento())
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + 86400000)) // 1 día
+                .setExpiration(new Date(System.currentTimeMillis() + 86400000))
                 .signWith(SECRET_KEY, SignatureAlgorithm.HS256)
                 .compact();
     }

@@ -6,6 +6,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "ServiceLoginApplication",
+            "request": "launch",
+            "mainClass": "service.login.ServiceLoginApplication",
+            "projectName": "service-login"
+        },
+        {
+            "type": "java",
             "name": "ServiceReporteApplication",
             "request": "launch",
             "mainClass": "service.reporte.ServiceReporteApplication",

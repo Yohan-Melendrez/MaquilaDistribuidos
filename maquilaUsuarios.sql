@@ -9,5 +9,4 @@ CREATE TABLE usuarios (
 );
 
 INSERT INTO usuarios (nombre, departamento, contrasena) VALUES
-('admin_erp', 'erp', '$2a$10$7J22XHMB3D3UBe0aMHDYpOJPnSdiRRPGmI41dtYdyxYtL34VLXZ2C'),
-('admin_qa', 'qa', '$2a$10$7J22XHMB3D3UBe0aMHDYpOJPnSdiRRPGmI41dtYdyxYtL34VLXZ2C');
+('qa', 'qa', '$2a$10$NNOG3LecMiIRyoY/SF.sGOIBIMbPia4a1udrpy2uRj.JuSs.bBOXW');

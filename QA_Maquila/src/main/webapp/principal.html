@@ -1,47 +1,59 @@
 <!DOCTYPE html>
-<!--
-Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
-Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit this template
--->
 <html lang="es">
-
 <head>
-    <meta charset="UTF-8">
-    <title>Cleansify departamento QA</title>
-    <link rel="stylesheet" href="CSS/principal.css">
-    <link rel="stylesheet" href="CSS/notificaciones.css">
-    <script src="JS/notificaciones.js" defer></script>
-    <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>
+  <meta charset="UTF-8">
+  <title>Cleansify departamento QA</title>
+  <link rel="stylesheet" href="CSS/principal.css">
+  <link rel="stylesheet" href="CSS/notificaciones.css">
+  <script src="JS/notificaciones.js" defer></script>
+  <script src="JS/logout.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>
 </head>
 
 <body>
-
-    <div class="barraSuperior">
-        <div class="tituloBarra">
-            <img src="img/logo.png" alt="Logo" class="logo">
-            <h1 class="titulo">Cleansify departamento QA</h1>
-        </div>
-
-        <div class="iconosBarra">
-            <a id="iconoNotificaciones" class="iconoNav">
-                <img src="img/noti.svg" alt="Icono">
-            </a>
-        </div>
-    </div>
-    <div class="pantallaPrincipal">
-        <div class="botones">
-            <a href="atencionFallos.html" class="btn">
-                NIVEL DE ATENCIÓN A FALLOS
-                <img src="img/fallo.svg" alt="Icono">
-            </a>
-            <a href="lotesDisponibles.html" class="btn">
-                LOTES DISPONIBLES
-                <img src="img/lotes.svg" alt="Icono">
-            </a>
-        </div>
+  <div class="barraSuperior">
+    <div class="tituloBarra">
+      <img src="img/logo.png" alt="Logo" class="logo">
+      <h1 class="titulo">Cleansify departamento QA</h1>
     </div>
 
+    <div class="iconosBarra">
+      <a id="iconoNotificaciones" class="iconoNav">
+        <img src="img/noti.svg" alt="Icono">
+      </a>
+      <button id="logoutBtn" class="logout-btn">Cerrar sesión</button>
+    </div>
+  </div>
+
+  <div class="pantallaPrincipal">
+    <div class="botones">
+      <a href="atencionFallos.html" class="btn">
+        NIVEL DE ATENCIÓN A FALLOS
+        <img src="img/fallo.svg" alt="Icono">
+      </a>
+      <a href="lotesDisponibles.html" class="btn">
+        LOTES DISPONIBLES
+        <img src="img/lotes.svg" alt="Icono">
+      </a>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const token = sessionStorage.getItem("token");
+      const usuario = sessionStorage.getItem("usuario");
+      const departamento = sessionStorage.getItem("departamento");
+
+      console.log("Validando sesión...");
+      if (!token || !usuario || departamento !== "qa") {
+        console.warn("Sesión inválida. Redirigiendo a login...");
+        sessionStorage.clear();
+        window.location.href = "index.html";
+      } else {
+        console.log("Sesión válida ✅");
+      }
+    });
+  </script>
 </body>
-
 </html>

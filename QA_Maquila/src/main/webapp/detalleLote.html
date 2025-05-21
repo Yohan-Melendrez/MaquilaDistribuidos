@@ -11,6 +11,20 @@
         <script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>
     </head>
     <body>
+         <script>
+        // Verificar token
+
+        const token = sessionStorage.getItem('token');
+
+        if (!token) {
+            window.location.href = "index.html";
+        }
+        // Verificar sesión
+        if (!sessionStorage.getItem('usuario') || sessionStorage.getItem('departamento') !== 'qa') {
+            window.location.href = "index.html";
+        }
+    </script>
+
         <!-- Barra superior -->
         <div class="barraSuperior">
             <div class="tituloBarra">
