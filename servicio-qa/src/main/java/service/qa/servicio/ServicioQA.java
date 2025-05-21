@@ -67,8 +67,7 @@ public class ServicioQA {
             LoteRepositorio loteRepo,
             InspectorRepositorio inspectorRepo,
             NotificacionRepositorio notificacionRepo,
-            @Lazy ProductorNotificaciones productor
-    ) {
+            @Lazy ProductorNotificaciones productor) {
         this.loteRepo = loteRepo;
         this.inspectorRepo = inspectorRepo;
         this.notificacionRepo = notificacionRepo;
@@ -110,7 +109,7 @@ public class ServicioQA {
                 .orElseThrow(() -> new RuntimeException("No se encontró el lote " + dto.getIdLote()));
 
         // ✅ Validar si ya tiene inspector asignado
-        if (lote.getInspector()!= null) {
+        if (lote.getInspector() != null) {
             return "YA_ASIGNADO";
         }
 
@@ -138,6 +137,7 @@ public class ServicioQA {
 
     public List<LotesDTO> obtenerTodosLosLotes() {
         return loteRepo.findAll().stream()
+                .filter(lote -> "En proceso".equalsIgnoreCase(lote.getEstado()))
                 .map(LotesDTO::new)
                 .collect(Collectors.toList());
     }
@@ -145,7 +145,7 @@ public class ServicioQA {
     public List<LotesDTO> obtenerLotesConErrores() {
         return loteRepo.findAll().stream()
                 .filter(l -> l.getProductos().stream()
-                .anyMatch(lp -> !lp.getProducto().getErrores().isEmpty()))
+                        .anyMatch(lp -> !lp.getProducto().getErrores().isEmpty()))
                 .map(LotesDTO::new)
                 .collect(Collectors.toList());
     }
@@ -184,7 +184,8 @@ public class ServicioQA {
 
             List<ErrorProduccion> erroresProducto = new ArrayList<>();
             for (ErrorDTO errorDTO : productoDTO.getErrores()) {
-                ErrorProduccion error = errorRepo.findByDescripcionAndNombre(errorDTO.getDescripcion(), errorDTO.getNombre());
+                ErrorProduccion error = errorRepo.findByDescripcionAndNombre(errorDTO.getDescripcion(),
+                        errorDTO.getNombre());
                 if (error == null) {
                     error = new ErrorProduccion();
                     error.setDescripcion(errorDTO.getDescripcion());
@@ -217,12 +218,12 @@ public class ServicioQA {
         lote.setProductos(productosDelLote);
         lote = loteRepo.save(lote); // IMPORTANTE: persistimos para obtener el ID
 
-        // ✅ Enviar notificación STOMP
+        // Enviar notificación STOMP
         NotificacionDTO noti = new NotificacionDTO();
         noti.setTitulo("Envio de lote de ERP");
         noti.setTipo("Lote Nuevo");
         noti.setMensaje("Nuevo lote recibido: " + lote.getNombreLote());
-        noti.setFechaEnvio(java.time.LocalDateTime.now()); // o formateado si prefieres
+        noti.setFechaEnvio(java.time.LocalDateTime.now()); 
 
         Notificaciones(noti); // Método ya existente que guarda en memoria y envía STOMP
     }
