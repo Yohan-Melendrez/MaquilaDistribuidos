@@ -1,18 +1,33 @@
-/* 
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/JavaScript.js to edit this template
- */
 document.querySelector('.login-form').addEventListener('submit', function (e) {
   e.preventDefault();
 
-  // Puedes agregar validación real aquí si gustas
   const usuario = document.getElementById('usuario').value;
   const contrasena = document.getElementById('contrasena').value;
 
-  if (usuario === '1' && contrasena === '1') {
-    window.location.href = 'principal.html'; // Redirige a la pantalla principal
-  } else {
-    alert('Usuario o contraseña incorrectos');
-  }
+  fetch("http://localhost:9093/login?departamento=erp", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      nombre: usuario, contrasena: contrasena
+    })
+  })
+    .then(res => {
+      if (!res.ok) throw new Error("Credenciales Incorrectas");
+      return res.json();
+    })
+
+    .then(data => {
+      sessionStorage.setItem("token", data.token);
+      sessionStorage.setItem("usuario", data.nombre); 
+      sessionStorage.setItem("departamento", "erp");   
+      window.location.href = "principal.html";
+    })
+    .catch(err => {
+      alert(err.message);
+    });
+
+
 });
 
